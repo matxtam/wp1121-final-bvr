@@ -61,7 +61,7 @@ export const gamesTable = pgTable(
     id: serial("id").primaryKey(),
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
     title: varchar("title", { length: 100 }).notNull(),
-    date: date("date"),
+    date: date("date").default(sql`now()`),
     photo: varchar("photo", { length: 1000 }).notNull(),
     hashtag: varchar("hashtag", { length: 100 }).notNull(),
     totalScore: smallint("total_score").default(0).notNull(),
@@ -77,7 +77,7 @@ export const periodsTable = pgTable(
   {
     id: serial("id").primaryKey(),
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
-    gameID: uuid("game_id")
+    gameId: uuid("game_id")
       .notNull()
       .references(() => gamesTable.displayId, {
         onDelete: "cascade",
@@ -100,19 +100,19 @@ export const gamePerformancesTable = pgTable(
   {
     id: serial("id").primaryKey(),
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
-    playerID: uuid("player_id")
+    playerId: uuid("player_id")
       .notNull()
       .references(() => playersTable.displayId, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    gameID: uuid("game_id")
+    gameId: uuid("game_id")
       .notNull()
       .references(() => gamesTable.displayId, {
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    periodID: uuid("period_id")
+    periodId: uuid("period_id")
       .notNull()
       .references(() => periodsTable.displayId, {
         onDelete: "cascade",
@@ -135,17 +135,17 @@ export const gamePerformancesTable = pgTable(
   }),
 );
 
-export const teamsRelations = relations(teamsTable, ({ many }) => ({
-  playersTable: many(playersTable),
-}));
+// export const teamsRelations = relations(teamsTable, ({ many }) => ({
+//   playersTable: many(playersTable),
+// }));
 
-export const GameRelations = relations(gamesTable, ({ many }) => ({
-  periodsTable: many(periodsTable),
-}));
+// export const GameRelations = relations(gamesTable, ({ many }) => ({
+//   periodsTable: many(periodsTable),
+// }));
 
-export const PeriodRelations = relations(periodsTable, ({ many }) => ({
-  gamePerformancesTable: many(gamePerformancesTable),
-}));
+// export const PeriodRelations = relations(periodsTable, ({ many }) => ({
+//   gamePerformancesTable: many(gamePerformancesTable),
+// }));
 
 export const PlayerRelations = relations(playersTable, ({ many }) => ({
   gamePerformancesTable: many(gamePerformancesTable),
@@ -155,15 +155,15 @@ export const GamePerformanceRelations = relations(
   gamePerformancesTable,
   ({ one }) => ({
     player: one(playersTable, {
-      fields: [gamePerformancesTable.playerID],
+      fields: [gamePerformancesTable.playerId],
       references: [playersTable.displayId],
     }),
     game: one(gamesTable, {
-      fields: [gamePerformancesTable.gameID],
+      fields: [gamePerformancesTable.gameId],
       references: [gamesTable.displayId],
     }),
     period: one(periodsTable, {
-      fields: [gamePerformancesTable.periodID],
+      fields: [gamePerformancesTable.periodId],
       references: [periodsTable.displayId],
     }),
   }),
