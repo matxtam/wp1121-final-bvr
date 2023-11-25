@@ -1,8 +1,18 @@
 import { Button } from "@/components/ui/button";
 import Possession from "./_components/possession";
 import InputPlayerBar from "./_components/inputPlayerBar";
+import StartPeriod from "./_components/startPeriod";
+import {createPerformance, getGamePerformances} from "./actions";
+import { get } from "http";
 
-async function GameTimeIdPage() {
+type Props = {
+   params: {
+         gameId: string;
+    };
+}
+
+async function GameTimeIdPage({ params:{gameId} }: Props) {
+    let periodId = "";
     async function handlePossession(gamePossession: string) {
         "use server"
         console.log("Possession");
@@ -11,8 +21,16 @@ async function GameTimeIdPage() {
     }
     const handleAddPlayer = async(inputName: string) => {
         "use server";
-        console.log("Add Player",inputName);
+        console.log("Add Player",inputName); //add a new performance with playerId and gameId and periodId
+        const newPerformanceId = await createPerformance(inputName, gameId, periodId);
     }
+    const handlePeriod = async(isStartPeriod: boolean, gameId: string) => {
+        "use server";
+        console.log("Start Period");
+        //TODO: add a period to the game with gameId, and return the periodId
+        periodId = "1";
+    }
+    const allGamePerformances = await getGamePerformances(gameId, periodId);
 
     return (
       <div>
@@ -31,10 +49,17 @@ async function GameTimeIdPage() {
                     <Possession gamePossession="WE" handlePossession={handlePossession} />
                 </div>
                 <div className="flex gap-2 p-2">
-                    <Button>Start Period</Button>
+                    <StartPeriod gameId="1" handlePeriod={handlePeriod}/>
                     <Button>Finish Game</Button>
-                </div>
-                    
+                </div>     
+            </div>
+            <div>
+                {allGamePerformances.map((performance) => (
+                    <div key={performance.displayId}>
+                        <p>{performance.gameId}</p>
+                        <p>{performance.periodId}</p>
+                    </div>
+                ))}
             </div>
       </div>
     );
