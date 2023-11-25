@@ -129,6 +129,10 @@ export const gamePerformancesTable = pgTable(
     steal: smallint("steal").default(0).notNull(),
     block: smallint("block").default(0).notNull(),
     assist: smallint("assist").default(0).notNull(),
+    defReb: smallint("def_reb").default(0).notNull(),
+    offReb: smallint("off_reb").default(0).notNull(),
+    turnover: smallint("turnover").default(0).notNull(),
+    point: smallint("point").default(0).notNull(),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),

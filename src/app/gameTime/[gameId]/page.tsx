@@ -4,7 +4,7 @@ import InputPlayerBar from "./_components/inputPlayerBar";
 import StartPeriod from "./_components/startPeriod";
 import {createPerformance, getGamePerformances} from "./actions";
 import { get } from "http";
-
+import DashBoard from "./dashBoard";
 type Props = {
    params: {
          gameId: string;
@@ -12,23 +12,24 @@ type Props = {
 }
 
 async function GameTimeIdPage({ params:{gameId} }: Props) {
-    let periodId = "";
+    let periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
     async function handlePossession(gamePossession: string) {
         "use server"
         console.log("Possession");
         //TODO: change the game possession, can get ID from URL
         //if possession is WE, change to OP and vice versa
     }
+        const handlePeriod = async(isStartPeriod: boolean, gameId: string) => {
+        "use server";
+        console.log("Start Period");
+        //TODO: add a period to the game with gameId, and return the periodId
+        const periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
+    }
+    console.log('periodId',periodId)
     const handleAddPlayer = async(inputName: string) => {
         "use server";
         console.log("Add Player",inputName); //add a new performance with playerId and gameId and periodId
         const newPerformanceId = await createPerformance(inputName, gameId, periodId);
-    }
-    const handlePeriod = async(isStartPeriod: boolean, gameId: string) => {
-        "use server";
-        console.log("Start Period");
-        //TODO: add a period to the game with gameId, and return the periodId
-        periodId = "1";
     }
     const allGamePerformances = await getGamePerformances(gameId, periodId);
 
@@ -56,10 +57,10 @@ async function GameTimeIdPage({ params:{gameId} }: Props) {
             <div>
                 {allGamePerformances.map((performance) => (
                     <div key={performance.displayId}>
-                        <p>{performance.gameId}</p>
-                        <p>{performance.periodId}</p>
+                        <DashBoard gamePerformance={performance} />
                     </div>
                 ))}
+                {/* <DashBoard gamePerformance={allGamePerformances} /> */}
             </div>
       </div>
     );

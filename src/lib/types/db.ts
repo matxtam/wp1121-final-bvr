@@ -45,10 +45,11 @@ export type Period = {
 };
 
 export type GamePerformance = {
-  id: string;
-  playerID: string; //球員
-  gameID: string; //哪場比賽
-  periodID: string; //哪節
+  id:number;
+  displayId: string;
+  playerId: string; //球員
+  gameId: string; //哪場比賽
+  periodId: string; //哪節
   nowPlay: boolean; //是否正在場上
   twoPt: number; //兩分球數
   inTwoPt: number; //兩分球進球數
