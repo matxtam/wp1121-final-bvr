@@ -2,35 +2,57 @@ import { Button } from "@/components/ui/button";
 import Possession from "./_components/possession";
 import InputPlayerBar from "./_components/inputPlayerBar";
 import StartPeriod from "./_components/startPeriod";
-import {createPerformance, getGamePerformances} from "./actions";
+import {createPerformance, getGamePerformances, updateGamePerformance} from "./actions";
 import { get } from "http";
-
+import AddShooting from "./_components/addShooting";
+import { redirect } from "next/navigation";
+import OnTimeRecord from "./_components/onTimeRecord";
+// import DashBoard from "./dashBoard";
 type Props = {
    params: {
          gameId: string;
     };
+    searchParams: {
+        URLperiodId?: string;
+    };
 }
 
-async function GameTimeIdPage({ params:{gameId} }: Props) {
-    let periodId = "";
+async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: Props) {
+    // let periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
     async function handlePossession(gamePossession: string) {
         "use server"
         console.log("Possession");
         //TODO: change the game possession, can get ID from URL
         //if possession is WE, change to OP and vice versa
     }
-    const handleAddPlayer = async(inputName: string) => {
-        "use server";
-        console.log("Add Player",inputName); //add a new performance with playerId and gameId and periodId
-        const newPerformanceId = await createPerformance(inputName, gameId, periodId);
-    }
     const handlePeriod = async(isStartPeriod: boolean, gameId: string) => {
         "use server";
         console.log("Start Period");
-        //TODO: add a period to the game with gameId, and return the periodId
-        periodId = "1";
+        const URLperiodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
+        //TODO: add a period to the game with gameId, and return the periodId   
+        const params = new URLSearchParams();
+        params.set("URLperiodId", URLperiodId);
+        redirect(`/gameTime/${gameId}/?${params.toString()}`);
+    } 
+
+    const handleAddPlayer = async(inputName: string) => {
+        "use server";
+        console.log("Add Player",inputName); //add a new performance with playerId and gameId and periodId
+        const newPerformanceId = await createPerformance(inputName, gameId);
     }
-    const allGamePerformances = await getGamePerformances(gameId, periodId);
+    const allGamePerformances = await getGamePerformances(gameId);
+
+    const handleAddShooting = async(selectedItem: string, performanceId: string, change: number) => {
+        "use server";
+        console.log("Add Shooting", URLperiodId);
+        if(URLperiodId === null || URLperiodId === undefined){
+            console.log("URLperiodId is null");
+            return;
+        }
+        updateGamePerformance(selectedItem, performanceId, change, URLperiodId);
+        //TODO: add a shooting to the performance with performanceId
+        //TODO: change the total score of the period
+    }
 
     return (
       <div>
@@ -53,13 +75,43 @@ async function GameTimeIdPage({ params:{gameId} }: Props) {
                     <Button>Finish Game</Button>
                 </div>     
             </div>
-            <div>
-                {allGamePerformances.map((performance) => (
-                    <div key={performance.displayId}>
-                        <p>{performance.gameId}</p>
-                        <p>{performance.periodId}</p>
+            <div className="grid grid-cols-3 gap-4">
+                {allGamePerformances
+                .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1)).sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
+                .map((performance, index) => (
+                    <div key={index} className="rounded-lg border-2 border-blue-100 m-5 p-3">
+                        <p>{performance.player.name}</p>
+                        <p>{performance.player.number}</p>
+                        <AddShooting
+                            performanceId={performance.displayId}                            
+                            twoPt={performance.twoPt}
+                            threePt={performance.threePt}
+                            ft={performance.ft}
+                            inTwoPt={performance.inTwoPt}
+                            inThreePt={performance.inThreePt}
+                            inFt={performance.inFt}
+                            handleAddShooting={handleAddShooting}
+                        />
                     </div>
                 ))}
+                {/* here for trying display */}
+                <div className="rounded-lg border-2 border-blue-100 m-5 p-3">
+                    <div>
+                        <p>陳千蕙</p>
+                        <p>Number: 3</p>
+                    </div>
+                    <AddShooting
+                            performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
+                            twoPt={20}
+                            threePt={30}
+                            ft={10}
+                            inTwoPt={2}
+                            inThreePt={3}
+                            inFt={1}
+                            handleAddShooting={handleAddShooting}
+                        />
+                    {/* <AddShooting /> */}
+                </div>
             </div>
       </div>
     );
