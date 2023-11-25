@@ -112,13 +112,18 @@ export const gamePerformancesTable = pgTable(
         onDelete: "cascade",
         onUpdate: "cascade",
       }),
-    periodId: uuid("period_id")
-      .notNull()
-      .references(() => periodsTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-    nowPlay: boolean("now_play").notNull(),
+    // periodId: uuid("period_id")
+    //   .notNull()
+    //   .references(() => periodsTable.displayId, {
+    //     onDelete: "cascade",
+    //     onUpdate: "cascade",
+    //   }),
+    onP1: boolean("on_p1").default(false).notNull(),
+    onP2: boolean("on_p2").default(false).notNull(),
+    onP3: boolean("on_p3").default(false).notNull(),
+    onP4: boolean("on_p4").default(false).notNull(),
+    onOt: boolean("on_ot").default(false).notNull(),
+    nowPlay: boolean("now_play").default(false).notNull(),
     twoPt: smallint("two_pt").default(0).notNull(),
     inTwoPt: smallint("in_two_pt").default(0).notNull(),
     threePt: smallint("three_pt").default(0).notNull(),
@@ -129,6 +134,10 @@ export const gamePerformancesTable = pgTable(
     steal: smallint("steal").default(0).notNull(),
     block: smallint("block").default(0).notNull(),
     assist: smallint("assist").default(0).notNull(),
+    defReb: smallint("def_reb").default(0).notNull(),
+    offReb: smallint("off_reb").default(0).notNull(),
+    turnover: smallint("turnover").default(0).notNull(),
+    point: smallint("point").default(0).notNull(),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
@@ -162,9 +171,9 @@ export const GamePerformanceRelations = relations(
       fields: [gamePerformancesTable.gameId],
       references: [gamesTable.displayId],
     }),
-    period: one(periodsTable, {
-      fields: [gamePerformancesTable.periodId],
-      references: [periodsTable.displayId],
-    }),
+    // period: one(periodsTable, {
+    //   fields: [gamePerformancesTable.periodId],
+    //   references: [periodsTable.displayId],
+    // }),
   }),
 );
