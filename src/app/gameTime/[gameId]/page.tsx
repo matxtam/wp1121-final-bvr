@@ -12,7 +12,7 @@ type Props = {
 }
 
 async function GameTimeIdPage({ params:{gameId} }: Props) {
-    let periodId = "";
+    let periodId = "07367510-3aa6-4bfd-bd57-74b7639d620d";
     async function handlePossession(gamePossession: string) {
         "use server"
         console.log("Possession");
