@@ -9,7 +9,7 @@ export type Player = {
   id: string;
   name: string;
   photo: string;
-  number: number; //背號
+  number: string; //背號 
   position: string; //位置
   useable: boolean; //是否可用
   personalValue: number; //個人價值(不知需不需要)
