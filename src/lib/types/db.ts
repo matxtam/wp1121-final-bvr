@@ -6,7 +6,8 @@ export type team = {
 };
 
 export type Player = {
-  id: string;
+  id: number;
+  displayId: string;
   name: string;
   photo: string;
   number: string; //背號 

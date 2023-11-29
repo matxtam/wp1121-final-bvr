@@ -24,7 +24,7 @@ export default function RootLayout({
           <h1>
             We Need a Brand Name
           </h1>
-          <Button variant="outline" className="rounded-full w-12 h-12 border-2 border-black">
+          <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
             <Users2 size={20} strokeWidth={2}></Users2>
           </Button>
         </header>

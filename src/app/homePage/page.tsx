@@ -1,35 +1,64 @@
+import { db } from "@/db";
+import { playersTable, gamesTable } from "@/db/schema";
+
 import { Button } from "@/components/ui/button"
 import NewGameBtn from "./_components/NewGameBtn"
 import { Player, Game } from "@/lib/types/db";
 import Image from "next/image";
 import Link from "next/link";
 import ShowPlayer from "./_components/ShowPlayers";
+import { Dialog, DialogTrigger, DialogContent, DialogClose } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
-
-
-export default function HomePage() {
-  const players:Player[] = [{
-    id: "1",
-    name: "Betty Cheng",
-    photo: "",
-    number: 13,
-    position: "",
-    useable: true,
-    personal2pt: 0,
-    personal3pt: 0,
-    personalAssist: 0,
-    personalDefReb: 0,
-    personalIn2pt: 0,
-    personalIn3pt: 0,
-    personalOffReb: 0,
-    personalSteal: 0,
-    personalValue: 0,
-  }];
-  const games:Game[] = [];
+export default async function HomePage() {
+  const players = await db
+    .select()
+    .from(playersTable)
+    .execute();
+  const games = await db
+    .select()
+    .from(gamesTable)
+    .execute();
   return (
   <>
     <h3>Players</h3>
-    <section className="flex flex-row">
+    <section className="flex flex-row gap-3">
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button>
+            create player(test)
+          </Button>
+        </DialogTrigger>
+        <form
+        action = {
+          async (e) => {
+            "use server";
+            try{
+            await db.insert(playersTable)
+              .values({
+                number: e.get("number")?.toString() ?? "",
+                name: e.get("name")?.toString() ?? "",
+                position: e.get("position")?.toString() ?? "",
+                photo: "",
+              })
+              .execute();
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        }
+      >
+        <DialogContent className = "gap-3">
+        
+        <Input name="number" placeholder="number"></Input>
+        <Input name="name" placeholder="name"></Input>
+        <Input name="position" placeholder="position"></Input>
+        <DialogClose>
+          <Button type="submit">Create</Button>
+        </DialogClose>
+      </DialogContent>
+      </form>
+      </Dialog>
       <ShowPlayer players={players}/>
     </section>
 
@@ -37,11 +66,10 @@ export default function HomePage() {
     <section className="flex flex-row">
       <NewGameBtn/>
       {games.map((game) => (
-      <Link key={game.id} href={`../history/${game.id}`}>
-
+      <Link key={game.id} href={`../history/${game.displayId}`}>
         <h4>{game.title}</h4>
         <div>
-          <p>{game.date.toString()}</p>
+          <p>{game.date?.toString()}</p>
           <p>{game.hashtag}</p>
         </div>
       </Link>
