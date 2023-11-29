@@ -1,15 +1,21 @@
-export type team = {
+// export type team = {
+//   id: string;
+//   account: string;
+//   password: string;
+//   teamName: string;
+// };
+export type User = {
   id: string;
-  account: string;
-  password: string;
-  teamName: string;
+  name: string;
+  email: string;
+  provider: "github" | "credentials";
 };
 
 export type Player = {
   id: string;
   name: string;
   photo: string;
-  number: number; //背號
+  number: string; //背號 
   position: string; //位置
   useable: boolean; //是否可用
   personalValue: number; //個人價值(不知需不需要)
