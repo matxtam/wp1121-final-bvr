@@ -40,3 +40,9 @@ git push -u origin <branch-name>
 
 然後去gitHub上的brach頁面應該可以看到
 如果確定沒問題可以自己把自己的PR merge進去 (gitHub會有自動檢查有無conflict的功能)
+
+### install package for login/logout
+```bash
+npm i bcryptjs
+yarn add next-auth@beta
+```

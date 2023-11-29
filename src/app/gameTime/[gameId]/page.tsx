@@ -5,6 +5,7 @@ import StartPeriod from "./_components/startPeriod";
 import {createPerformance, getGamePerformances, updateGamePerformance} from "./actions";
 import { get } from "http";
 import AddShooting from "./_components/addShooting";
+import AddOther from "./_components/addOther";
 import { redirect } from "next/navigation";
 import OnTimeRecord from "./_components/onTimeRecord";
 // import DashBoard from "./dashBoard";
@@ -79,37 +80,58 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 {allGamePerformances
                 .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1)).sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
                 .map((performance, index) => (
-                    <div key={index} className="rounded-lg border-2 border-blue-100 m-5 p-3">
-                        <p>{performance.player.name}</p>
-                        <p>{performance.player.number}</p>
-                        <AddShooting
-                            performanceId={performance.displayId}                            
-                            twoPt={performance.twoPt}
-                            threePt={performance.threePt}
-                            ft={performance.ft}
-                            inTwoPt={performance.inTwoPt}
-                            inThreePt={performance.inThreePt}
-                            inFt={performance.inFt}
-                            handleAddShooting={handleAddShooting}
-                        />
+                    <div key={index} className="rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">
+                        <div>
+                            <p>{performance.player.name}</p>
+                            <p>{performance.player.number}</p>
+                            {/* <OnTimeRecord /> */}
+                        </div>
+                        <div>
+                            <AddShooting
+                                performanceId={performance.displayId}                            
+                                twoPt={performance.twoPt}
+                                threePt={performance.threePt}
+                                ft={performance.ft}
+                                inTwoPt={performance.inTwoPt}
+                                inThreePt={performance.inThreePt}
+                                inFt={performance.inFt}
+                                handleAddShooting={handleAddShooting}
+                            />
+                        </div>    
+                        
+                        {/* <AddOther/> */}
+                        
                     </div>
                 ))}
                 {/* here for trying display */}
-                <div className="rounded-lg border-2 border-blue-100 m-5 p-3">
-                    <div>
-                        <p>陳千蕙</p>
-                        <p>Number: 3</p>
-                    </div>
-                    <AddShooting
-                            performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
-                            twoPt={20}
-                            threePt={30}
-                            ft={10}
-                            inTwoPt={2}
-                            inThreePt={3}
-                            inFt={1}
-                            handleAddShooting={handleAddShooting}
+                <div className="rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">
+                    <div className="m-2">
+                        <div>
+                            <p>陳千蕙</p>
+                            <p>Number: 3</p>
+                        </div>
+                        <OnTimeRecord />
+                        <AddShooting
+                                performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
+                                twoPt={20}
+                                threePt={30}
+                                ft={10}
+                                inTwoPt={2}
+                                inThreePt={3}
+                                inFt={1}
+                                handleAddShooting={handleAddShooting}
                         />
+                    </div>
+                    <AddOther
+                        performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
+                        twoPt={20}
+                        threePt={30}
+                        ft={10}
+                        inTwoPt={2}
+                        inThreePt={3}
+                        inFt={1}
+                        handleAddShooting={handleAddShooting}
+                    />
                     {/* <AddShooting /> */}
                 </div>
             </div>

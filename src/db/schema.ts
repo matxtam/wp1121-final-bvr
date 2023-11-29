@@ -15,20 +15,46 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-export const teamsTable = pgTable(
-  "teams",
+// export const 
+
+
+// sTable = pgTable(
+//   "teams",
+//   {
+//     id: serial("id").primaryKey(),
+//     displayId: uuid("display_id").defaultRandom().notNull().unique(),
+//     account: varchar("account", { length: 100 }).notNull(),
+//     password: varchar("password", { length: 100 }).notNull(),
+//     teamName: varchar("team_name", { length: 100 }).notNull(),
+//   },
+//   (table) => ({
+//     displayIdIndex: index("display_id_index").on(table.displayId),
+//     accountIndex: index("account_index").on(table.account),
+//   }),
+// );
+
+export const usersTable = pgTable(
+  "users",
   {
     id: serial("id").primaryKey(),
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
-    account: varchar("account", { length: 100 }).notNull(),
-    password: varchar("password", { length: 100 }).notNull(),
-    teamName: varchar("team_name", { length: 100 }).notNull(),
+    // username: varchar("username", { length: 100 }).notNull(),
+    name: varchar("name", { length: 100 }).notNull(),
+    email: varchar("email", { length: 100 }).notNull().unique(),
+    hashedPassword: varchar("hashed_password", { length: 100 }),
+    provider: varchar("provider", {
+      length: 100,
+      enum: ["github", "credentials"],
+    })
+      .notNull()
+      .default("credentials"),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
-    accountIndex: index("account_index").on(table.account),
+    emailIndex: index("email_index").on(table.email),
   }),
 );
+
 
 export const playersTable = pgTable(
   "players",
@@ -39,7 +65,7 @@ export const playersTable = pgTable(
     photo: varchar("photo", { length: 100 }).notNull(),
     number: varchar("number", { length: 100 }).notNull(),
     position: varchar("position", { length: 100 }).notNull(),
-    useable: boolean("useable").default(true).notNull(),
+    useable: boolean("useable").notNull(),
     personalValue: smallint("personal_value").default(0).notNull(),
     personal2pt: smallint("personal_2pt").default(0).notNull(),
     personalIn2pt: smallint("personal_in2pt").default(0).notNull(),
@@ -163,7 +189,7 @@ export const PlayerRelations = relations(playersTable, ({ many }) => ({
 export const GamePerformanceRelations = relations(
   gamePerformancesTable,
   ({ one }) => ({
-    players: one(playersTable, {
+    player: one(playersTable, {
       fields: [gamePerformancesTable.playerId],
       references: [playersTable.displayId],
     }),

@@ -1,8 +1,14 @@
-export type team = {
+// export type team = {
+//   id: string;
+//   account: string;
+//   password: string;
+//   teamName: string;
+// };
+export type User = {
   id: string;
-  account: string;
-  password: string;
-  teamName: string;
+  name: string;
+  email: string;
+  provider: "github" | "credentials";
 };
 
 export type Player = {
