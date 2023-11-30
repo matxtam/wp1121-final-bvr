@@ -21,8 +21,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider>
+          <SessionProvider>
+          <header className={"fixed h-20 flex flex-row justify-between items-center px-12 w-full bg-indigo-300"}>
+            <h1>
+              We Need a Brand Name
+            </h1>
+            <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
+              <Users2 size={20} strokeWidth={2}></Users2>
+            </Button>
+          </header>
+          <main className="fixed top-20 w-full">
           {children}
+          </main>
           <Toaster />
         </SessionProvider>
       </body>
