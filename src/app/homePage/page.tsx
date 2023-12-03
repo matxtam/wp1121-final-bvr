@@ -9,6 +9,7 @@ import Link from "next/link";
 import ShowPlayer from "./_components/ShowPlayers";
 import { Dialog, DialogTrigger, DialogContent, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { ChevronsUpDown } from "lucide-react";
 
 export default async function HomePage() {
   const players = await db
@@ -29,6 +30,8 @@ export default async function HomePage() {
             create player(test)
           </Button>
         </DialogTrigger>
+        <DialogContent className = "gap-3">
+        
         <form
         action = {
           async (e) => {
@@ -61,16 +64,15 @@ export default async function HomePage() {
         }
       }
       >
-        <DialogContent className = "gap-3">
-        
+
         <Input name="number" placeholder="number"></Input>
         <Input name="name" placeholder="name"></Input>
         <Input name="position" placeholder="position"></Input>
-        <DialogClose>
-          <Button type="submit">Create</Button>
+        <DialogClose type="submit">
+          Create
         </DialogClose>
+        </form>
       </DialogContent>
-      </form>
       </Dialog>
       <ShowPlayer players={players}/>
     </section>
