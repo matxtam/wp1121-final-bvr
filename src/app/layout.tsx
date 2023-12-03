@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
+import { Button } from "@/components/ui/button";
+import { Users2 } from "lucide-react";
 
 import { Toaster } from "@/components/ui/toaster";
 
@@ -20,17 +22,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className + "flex grow overflow-hidden"}>
           <SessionProvider>
-          <header className={"fixed h-20 flex flex-row justify-between items-center px-12 w-full bg-indigo-300"}>
+          <header className={"sticky flex flex-row justify-between items-center px-8 py-4 w-full bg-indigo-300"}>
             <h1>
               We Need a Brand Name
             </h1>
             <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
-              <Users2 size={20} strokeWidth={2}></Users2>
+              <Users2 size={20} strokeWidth={2} color="#ffffff"></Users2>
             </Button>
           </header>
-          <main className="fixed top-20 w-full">
+          <main className= "w-full overflow-y-scroll">
           {children}
           </main>
           <Toaster />
