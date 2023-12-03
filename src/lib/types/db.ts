@@ -24,6 +24,8 @@ export type Player = {
   personalIn2pt: number; //個人兩分球進球數
   personal3pt: number; //個人三分球數
   personalIn3pt: number; //個人三分球進球數
+  personalFt: number; //個人罰球數
+  personalInFt: number; //個人罰球進球數
   personalDefReb: number; //個人防守籃板數
   personalOffReb: number; //個人進攻籃板數
   personalSteal: number; //個人抄截數
