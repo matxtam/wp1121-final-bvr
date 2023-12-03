@@ -13,7 +13,7 @@ type Props = {
   playersOfTheGame: performanceWithPlayer[]
 }
 
-export default function ({playersOfTheGame}:Props) {
+export default function History ({playersOfTheGame}:Props) {
   const titles = ["#", "name", "on time", "2pt", "3pt", "ft", "foul", "steal", "block", "assist", "defReb", "offReb", "turnover", "point"]
   const contents :{title: string, state: [boolean, Dispatch<SetStateAction<boolean>>|undefined] }[] = [];
   for(let i in titles){

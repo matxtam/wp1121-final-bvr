@@ -4,7 +4,7 @@ import { Shuffle } from 'lucide-react';
 import { useState } from "react";
 type Props = {
     gamePossession: string;
-    handlePossession: (gamePossession: string) => void;
+    handlePossession: (possession: string) => void;
 }
 
 export default function Possession({ gamePossession, handlePossession }: Props) {
@@ -15,8 +15,10 @@ export default function Possession({ gamePossession, handlePossession }: Props) 
             className="rounded bg-sky-500 text-slate-50 shadow-sm hover:bg-sky-200/80 flex w-25 items-center hover:text-black"
             onClick={() => {
                 setPossession(possession === "WE" ? "OP" : "WE");
-                console.log("click Possession");
-                handlePossession(gamePossession);
+                let newPossession = possession === "WE" ? "OP" : "WE";
+                console.log("click Possession", newPossession);
+                handlePossession(newPossession);
+                console.log('finish Possession')
             }}
             >
                 <div className= "flex items-center gap-1 py-1.5 px-2 transition-colors duration-300 hover:bg-brand/10">
