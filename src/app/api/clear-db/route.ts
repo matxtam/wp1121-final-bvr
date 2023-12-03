@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server";
 
 import { db } from "@/db";
-import { projectsTable, tasksTable, usersTable } from "@/db/schema";
+// import { projectsTable, tasksTable, usersTable } from "@/db/schema";
+import { usersTable } from "@/db/schema";
 
 export const GET = async () => {
   try {
-    const deletedProjects = await db.delete(projectsTable).returning();
+    // const deletedProjects = await db.delete(projectsTable).returning();
     const deletedUsers = await db.delete(usersTable).returning();
-    const deletedTasks = await db.delete(tasksTable).returning();
-    console.log("Deleted Projects:", deletedProjects);
+    // const deletedTasks = await db.delete(tasksTable).returning();
+    // console.log("Deleted Projects:", deletedProjects);
     console.log("Deleted Users: ", deletedUsers);
-    console.log("Deleted Tasks: ", deletedTasks);
+    // console.log("Deleted Tasks: ", deletedTasks);
 
     return NextResponse.json(
       { message: "Database cleared successfully." },
