@@ -65,7 +65,7 @@ export const playersTable = pgTable(
     photo: varchar("photo", { length: 100 }).notNull(),
     number: varchar("number", { length: 100 }).notNull(),
     position: varchar("position", { length: 100 }).notNull(),
-    useable: boolean("useable").notNull(),
+    useable: boolean("useable").default(true).notNull(),
     personalValue: smallint("personal_value").default(0).notNull(),
     personal2pt: smallint("personal_2pt").default(0).notNull(),
     personalIn2pt: smallint("personal_in2pt").default(0).notNull(),

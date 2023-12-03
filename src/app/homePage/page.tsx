@@ -34,6 +34,7 @@ export default async function HomePage() {
           async (e) => {
             "use server";
             try{
+            console.log(e);
             await db.insert(playersTable)
               .values({
                 number: e.get("number")?.toString() ?? "",

@@ -43,6 +43,11 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     }
     const allGamePerformances = await getGamePerformances(gameId);
 
+    const handleChangeOnTime = async(performanceId: string, item: string, newStatus: boolean) => {
+        "use server";
+        console.log("Change OnTime");
+    }
+
     const handleAddShooting = async(selectedItem: string, performanceId: string, change: number) => {
         "use server";
         console.log("Add Shooting", URLperiodId);
@@ -54,6 +59,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         //TODO: add a shooting to the performance with performanceId
         //TODO: change the total score of the period
     }
+    
 
     return (
       <div>
@@ -110,7 +116,14 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                             <p>陳千蕙</p>
                             <p>Number: 3</p>
                         </div>
-                        <OnTimeRecord />
+                        <OnTimeRecord 
+                            onP1={true}
+                            onP2={true}
+                            onP3={false}
+                            onP4={false}
+                            onOt={false}
+                            handleChangeOnTime={handleChangeOnTime}
+                        />
                         <AddShooting
                                 performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
                                 twoPt={20}

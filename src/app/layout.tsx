@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
-
+import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
+import { Users2 } from 'lucide-react';
 
 import "./globals.css";
 
