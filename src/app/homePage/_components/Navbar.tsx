@@ -29,7 +29,7 @@ export default async function Navbar() {
         </div>
         <SignOutButton />
         <Link href="/settings">settings link for test</Link>
-        <Link href="/gameTime/07367510-3aa6-4bfd-bd57-74b7639d620c">gameTime link for test</Link>      
+        <Link href="/gameTime/294d90c3-6da1-4e25-a4ff-9163fed52b61">gameTime link for test</Link>      
       </div>
     </nav>
   );

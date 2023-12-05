@@ -9,34 +9,68 @@ type Props = {
     inTwoPt: number;
     inThreePt: number;
     inFt: number;
-    handleAddShooting: (selectedItem: string, performanceId: string, change: number) => void;
+    handleAddShooting: (selectedItem: string, performanceId: string, newStatus: number) => void;
 }
+type ButtonType = 'twoPt' | 'threePt' | 'ft';
 
 export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt, inThreePt, inFt, handleAddShooting }: Props) {
     const [selectedButton, setSelectedButton] = useState("twoPt");
-    const handleButtonClick = (buttonType:string) => {
-        // Toggle the selected button
-        setSelectedButton(buttonType);
+    const [inSelectedButton, setInSelectedButton] = useState("inTwoPt");
+    // const handleButtonClick = (buttonType:string) => {
+    //     // Toggle the selected button
+    //     setSelectedButton(buttonType);
+    //     if(buttonType==="twoPt"){
+    //         setCount(twoPt)
+    //         setInCount(inTwoPt)
+    //         setInSelectedButton("inTwoPt")
+    //     }
+    //     if(buttonType==="threePt"){
+    //         setCount(threePt)
+    //         setInCount(inThreePt)
+    //         setInSelectedButton("inThreePt")
+    //     }
+    //     if(buttonType==="ft"){
+    //         setCount(ft)
+    //         setInCount(inFt)
+    //         setInSelectedButton("inFt")
+    //     }
+    //   };
+    const buttonTypeMappings: Record<ButtonType, { count: number; inCount: number; inSelectedButton: string }> = {
+        twoPt: { count: twoPt, inCount: inTwoPt, inSelectedButton: "inTwoPt" },
+        threePt: { count: threePt, inCount: inThreePt, inSelectedButton: "inThreePt" },
+        ft: { count: ft, inCount: inFt, inSelectedButton: "inFt" },
       };
+      
+      const handleButtonClick = (buttonType: ButtonType) => {
+        if (buttonTypeMappings.hasOwnProperty(buttonType)) {
+          const { count, inCount, inSelectedButton } = buttonTypeMappings[buttonType];
+          console.log("buttonType", buttonType);
+          setSelectedButton(buttonType);
+          setCount(count);
+          setInCount(inCount);
+          setInSelectedButton(inSelectedButton);
+        }
+      };
+
     
-    const [count, setCount] = useState<number>(0);//set with twoPt
-    const [inCount, setInCount] = useState<number>(0);//set with inTwoPt
+    
+    const [count, setCount] = useState<number>(twoPt);//set with twoPt
+    const [inCount, setInCount] = useState<number>(inTwoPt);//set with inTwoPt
     const handleIncrement = () => {
         setCount((prevNumber) => prevNumber + 1);
-        handleAddShooting(selectedButton, performanceId, 1);
-    };
-    
+        handleAddShooting(selectedButton, performanceId, count+1);
+    };    
     const handleDecrement = () => {
         setCount((prevNumber) => prevNumber - 1);
-        handleAddShooting(selectedButton, performanceId, -1);
+        handleAddShooting(selectedButton, performanceId, count-1);
     };
     const handleInIncrement = () => {
         setInCount((prevNumber) => prevNumber + 1);
-        handleAddShooting(selectedButton, performanceId, 1);
+        handleAddShooting(inSelectedButton, performanceId, inCount+1);
     }
     const handleInDecrement = () => {
         setInCount((prevNumber) => prevNumber - 1);
-        handleAddShooting(selectedButton, performanceId, -1);
+        handleAddShooting(inSelectedButton, performanceId, inCount-1);
     }
 
 

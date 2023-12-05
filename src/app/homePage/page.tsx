@@ -36,31 +36,32 @@ export default async function HomePage() {
         action = {
           async (e) => {
             "use server";
+            try {
             console.log('start add player');
-            // await db.insert(playersTable)
-            //   .values({
-            //     number: e.get("number")?.toString() ?? "",
-            //     name: e.get("name")?.toString() ?? "",
-            //     position: e.get("position")?.toString() ?? "",
-            //     photo: "",
-            //   })
-            //   .execute();
-            // } catch (error) {
-            //   console.log(error);
-            // }
-            const res = await fetch("/api/player", {
-              method: "POST",
-              body: JSON.stringify({
+            await db.insert(playersTable)
+              .values({
                 number: e.get("number")?.toString() ?? "",
                 name: e.get("name")?.toString() ?? "",
                 position: e.get("position")?.toString() ?? "",
                 photo: "",
-              }),
-            });
-            if (!res.ok) {
-              return;
+              })
+              .execute();
+            } catch (error) {
+              console.log(error);
             }
-            await res.json();
+            // const res = await fetch("/api/player", {
+            //   method: "POST",
+            //   body: JSON.stringify({
+            //     number: e.get("number")?.toString() ?? "",
+            //     name: e.get("name")?.toString() ?? "",
+            //     position: e.get("position")?.toString() ?? "",
+            //     photo: "",
+            //   }),
+            // });
+            // if (!res.ok) {
+            //   return;
+            // }
+            // await res.json();
         }
       }
       >

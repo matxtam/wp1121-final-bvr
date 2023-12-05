@@ -6,12 +6,15 @@ import {createPerformance, getGamePerformances, updateGamePerformance} from "./a
 import { get } from "http";
 import AddShooting from "./_components/addShooting";
 import AddOther from "./_components/addOther";
+import PlayNowButton from "./_components/playNowButton";
 import { redirect } from "next/navigation";
 import OnTimeRecord from "./_components/onTimeRecord";
 import { db } from "@/db";
-import { gamesTable, periodsTable } from "@/db/schema";
+import { gamesTable, periodsTable, gamePerformancesTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { title } from "process";
+import { revalidatePath } from "next/cache";
+
 // import DashBoard from "./dashBoard";
 type Props = {
    params: {
@@ -88,21 +91,74 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     const handleChangeOnTime = async(performanceId: string, item: string, newStatus: boolean) => {
         "use server";
         console.log("Change OnTime");
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                [item]: newStatus,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        // redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
 
-    const handleAddShooting = async(selectedItem: string, performanceId: string, change: number) => {
+    const handleNowPlay = async(performanceId: string, newStatus: boolean) => {
         "use server";
-        console.log("Add Shooting", URLperiodId);
+        console.log("Change PlayNow");
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                nowPlay: newStatus,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        //BUG!!
+    }
+
+    const handleAddShooting = async(selectedItem: string, performanceId: string, newStatus: number) => {
+        "use server";
+        console.log("Add Shooting", selectedItem);
         if(URLperiodId === null || URLperiodId === undefined){
             console.log("URLperiodId is null");
             return;
         }
-        updateGamePerformance(selectedItem, performanceId, change, URLperiodId);
+        // updateGamePerformance(selectedItem, performanceId, change, URLperiodId);
         //TODO: add a shooting to the performance with performanceId
         //TODO: change the total score of the period
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                [selectedItem]: newStatus,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        // redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+    }
+    const handleAddOther = async(selectedItem: string, performanceId: string, newStatus: number) => {
+        "use server";
+        console.log("Add Other", selectedItem);
+        if(URLperiodId === null || URLperiodId === undefined){
+            console.log("URLperiodId is null");
+            return;
+        }
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                [selectedItem]: newStatus,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        // redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
     
-
     return (
       <div>
         {/* <nav className=" sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">GameTime [ID] Page</nav> */}
@@ -126,33 +182,59 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             </div>
             <div className="grid grid-cols-3 gap-4">
                 {allGamePerformances
-                .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1)).sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
+                .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
                 .map((performance, index) => (
-                    <div key={index} className="rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">
-                        <div>
-                            <p>{performance.player.name}</p>
-                            <p>{performance.player.number}</p>
-                            {/* <OnTimeRecord /> */}
-                        </div>
-                        <div>
-                            <AddShooting
-                                performanceId={performance.displayId}                            
-                                twoPt={performance.twoPt}
-                                threePt={performance.threePt}
-                                ft={performance.ft}
-                                inTwoPt={performance.inTwoPt}
-                                inThreePt={performance.inThreePt}
-                                inFt={performance.inFt}
-                                handleAddShooting={handleAddShooting}
+                    <div key={index} className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">                    
+                        <div className="w-full my-2 mx-4 flex flex-wrap justify-between items-center">
+                            <div>
+                                <p><b>{performance.player.name}</b></p>
+                            </div>
+                            <div>
+                                <p>{performance.player.number}</p>
+                            </div>
+                            <OnTimeRecord 
+                                performanceId={performance.displayId}
+                                onP1={performance.onP1}
+                                onP2={performance.onP2}
+                                onP3={performance.onP3}
+                                onP4={performance.onP4}
+                                onOt={performance.onOt}
+                                handleChangeOnTime={handleChangeOnTime}
                             />
-                        </div>    
-                        
-                        {/* <AddOther/> */}
+                            <PlayNowButton
+                                performanceId={performance.displayId}
+                                nowPlay={performance.nowPlay}
+                                handlePlayNow={handleNowPlay}
+                            />
+                        </div>
+                        <div className="m-2 flex justify-between items-center ">
+                            <AddShooting
+                                    performanceId={performance.displayId}                            
+                                    twoPt={performance.twoPt}
+                                    threePt={performance.threePt}
+                                    ft={performance.ft}
+                                    inTwoPt={performance.inTwoPt}
+                                    inThreePt={performance.inThreePt}
+                                    inFt={performance.inFt}
+                                    handleAddShooting={handleAddShooting}
+                            />
+                            <AddOther
+                                performanceId={performance.displayId}                            
+                                foul={performance.foul}
+                                block={performance.block}
+                                turnover={performance.turnover}
+                                steal={performance.steal}
+                                assist={performance.assist}
+                                defReb={performance.defReb}
+                                offReb={performance.offReb}
+                                handleAddOther={handleAddOther}
+                            />
+                        </div>
                         
                     </div>
                 ))}
                 {/* here for trying display */}
-                <div className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">
+                {/* <div className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">
                     <div className="m-2 flex flex-wrap justify-between items-center">
                         <div>
                             <p>陳千蕙</p>
@@ -193,7 +275,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                             handleAddShooting={handleAddShooting}
                         />
                     </div>
-                </div>
+                </div> */}
             </div>
       </div>
     );

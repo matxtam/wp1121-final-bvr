@@ -978,8 +978,6 @@
   dependencies:
     tslib "^2.4.0"
 
-<<<<<<< HEAD
-=======
 "@tanstack/react-table@^8.10.7":
   version "8.10.7"
   resolved "https://registry.npmjs.org/@tanstack/react-table/-/react-table-8.10.7.tgz"
@@ -992,7 +990,6 @@
   resolved "https://registry.npmjs.org/@tanstack/table-core/-/table-core-8.10.7.tgz"
   integrity sha512-KQk5OMg5OH6rmbHZxuNROvdI+hKDIUxANaHlV+dPlNN7ED3qYQ/WkpY2qlXww1SIdeMlkIhpN/2L00rof0fXFw==
 
->>>>>>> d68b2f754a4e0b7d129bb8a45b609909f6bf1bc2
 "@trivago/prettier-plugin-sort-imports@^4.3.0":
   version "4.3.0"
   resolved "https://registry.npmjs.org/@trivago/prettier-plugin-sort-imports/-/prettier-plugin-sort-imports-4.3.0.tgz"

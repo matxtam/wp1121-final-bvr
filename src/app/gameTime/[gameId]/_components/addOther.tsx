@@ -10,25 +10,38 @@ type Props = {
     assist: number;
     defReb: number;
     offReb: number;
-    handleAddShooting: (selectedItem: string, performanceId: string, change: number) => void;
+    handleAddOther: (selectedItem: string, performanceId: string, newStatus: number) => void;
 }
+type ButtonType = 'foul' | 'block' | 'turnover' | 'steal' | 'assist' | 'defReb' | 'offReb';
 
-export default function AddOther({ performanceId, foul, block, turnover, steal, assist, defReb, offReb, handleAddShooting }: Props) {
+export default function AddOther({ performanceId, foul, block, turnover, steal, assist, defReb, offReb, handleAddOther }: Props) {
     const [selectedButton, setSelectedButton] = useState("foul");
-    const handleButtonClick = (buttonType:string) => {
-        // Toggle the selected button
-        setSelectedButton(buttonType);
+    const buttonTypeMappings: Record<ButtonType, { count: number }> = {
+        foul: { count: foul },
+        block: { count: block },
+        turnover: { count: turnover },
+        steal: { count: steal },
+        assist: { count: assist },
+        defReb: { count: defReb },
+        offReb: { count: offReb },
+      };    
+    const handleButtonClick = (buttonType:ButtonType) => {
+        if (buttonTypeMappings.hasOwnProperty(buttonType)) {
+          const { count } = buttonTypeMappings[buttonType];
+          setSelectedButton(buttonType);
+          setCount(count);
+        }
       };
     
-    const [count, setCount] = useState<number>(0);//set with foul
+    const [count, setCount] = useState<number>(foul);//set with foul
     const handleIncrement = () => {
         setCount((prevNumber) => prevNumber + 1);
-        handleAddShooting(selectedButton, performanceId, 1);
+        handleAddOther(selectedButton, performanceId, count+1);
     };
     
     const handleDecrement = () => {
         setCount((prevNumber) => prevNumber - 1);
-        handleAddShooting(selectedButton, performanceId, -1);
+        handleAddOther(selectedButton, performanceId, count-1);
     };
 
     return (
@@ -37,58 +50,58 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('foul')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'foul' ? 'bg-blue-400 text-white' : ''
+                    selectedButton === 'foul' ? 'bg-indigo-400 text-white' : ''
                     }`}
                 >
-                    foul
+                    FOUL
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('block')}
                     className={`bg-gray-300 m-2 px-4 py-2 ${
-                    selectedButton === 'block' ? 'bg-blue-400 text-white' : ''
+                    selectedButton === 'block' ? 'bg-indigo-400 text-white' : ''
                     }`}
                 >
-                    block
+                    BLOCK
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('assist')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'assist' ? 'bg-blue-400 text-white' : ''
+                    selectedButton === 'assist' ? 'bg-indigo-400 text-white' : ''
                     }`}
                 >
-                    assist
+                    ASS
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('steal')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'steal' ? 'bg-blue-400 text-white' : ''
+                    selectedButton === 'steal' ? 'bg-indigo-400 text-white' : ''
                     }`}
                 >
-                    steal
+                    STL
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('turnover')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'turnover' ? 'bg-blue-400 text-white' : ''
+                    selectedButton === 'turnover' ? 'bg-indigo-400 text-white' : ''
                     }`}
                 >
-                    turnover
+                    TO
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('offReb')}
                     className={`bg-gray-300 m-2 px-4 py-2 ${
-                    selectedButton === 'offReb' ? 'bg-blue-400 text-white' : ''
+                    selectedButton === 'offReb' ? 'bg-indigo-400 text-white' : ''
                     }`}
                 >
-                    offReb
+                    OFFREB
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('defReb')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'defReb' ? 'bg-blue-400 text-white' : ''
+                    selectedButton === 'defReb' ? 'bg-indigo-400 text-white' : ''
                     }`}
                 >
-                    defReb
+                    DEFREB
                 </Button>
             </div>
 
@@ -99,7 +112,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <button onClick={handleDecrement} className="p-2 m-2 bg-gray-300">
                     -
                 </button>
-                <div className="p-4 bg-blue-100 m-2">{count}</div>
+                <div className="p-4 bg-indigo-100 m-2">{count}</div>
                 <button onClick={handleIncrement} className="p-2 m-2 bg-gray-300">
                     +
                 </button>
