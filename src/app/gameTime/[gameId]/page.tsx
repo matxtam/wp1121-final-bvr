@@ -115,7 +115,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         //BUG!!
     }
 
@@ -156,7 +156,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        // redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        // revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
     
     return (

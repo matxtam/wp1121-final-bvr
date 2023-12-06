@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Props = {
     performanceId: string;
@@ -18,6 +18,21 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
     const [onP3Now, setOnP3Now] = useState(onP3);
     const [onP4Now, setOnP4Now] = useState(onP4);
     const [onOtNow, setOnOtNow] = useState(onOt);
+    useEffect(() => {
+        setOnP1Now(onP1);
+      },[onP1]);
+    useEffect(() => {
+        setOnP2Now(onP2);
+      },[onP2]);
+    useEffect(() => {
+        setOnP3Now(onP3);
+      },[onP3]);
+    useEffect(() => {
+        setOnP4Now(onP4);
+      },[onP4]);
+    useEffect(() => {
+        setOnOtNow(onOt);
+      },[onOt]);
     
     
     return (
