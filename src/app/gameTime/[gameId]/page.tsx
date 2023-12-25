@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Possession from "./_components/possession";
+import AddOp from "./_components/addOp";
 import InputPlayerBar from "./_components/inputPlayerBar";
 import StartPeriod from "./_components/startPeriod";
 import {createPerformance, getGamePerformances, updateGamePerformance} from "./actions";
@@ -15,6 +16,8 @@ import { eq } from "drizzle-orm";
 import { title } from "process";
 import { revalidatePath } from "next/cache";
 import  ScoreBoard  from "./_components/scoreBoard";
+import FinishGame from "./_components/FinishButton";
+import { publicEnv } from "@/lib/env/public";
 // import DashBoard from "./dashBoard";
 type Props = {
    params: {
@@ -28,6 +31,11 @@ type Props = {
 async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: Props) {
     // let periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
     // let nowPeriod = null;
+    if(URLperiodId === null || URLperiodId === undefined){
+        console.log("URLperiodId is null");
+        return;
+    }
+
     const gameData = await db
         .select({
             title: gamesTable.title,
@@ -147,10 +155,6 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     const handleAddShooting = async(selectedItem: string, performanceId: string, newStatus: number, action: number) => {
         "use server";
         console.log("Add Shooting", selectedItem);
-        if(URLperiodId === null || URLperiodId === undefined){
-            console.log("URLperiodId is null");
-            return;
-        }
         // updateGamePerformance(selectedItem, performanceId, change, URLperiodId);
         //TODO: add a shooting to the performance with performanceId
         //TODO: change the total score of the period
@@ -206,6 +210,50 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         }
         revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
+    const handleAddOpScore = async(periodId: string, action: number) => {
+        "use server";
+        console.log("Add Op Score");
+        await db
+            .update(periodsTable)
+            .set({
+                totalOpScore: nowPeriod[0].totalOpScore + action
+            })
+            .where(
+                eq(periodsTable.displayId, periodId)
+            )
+            .execute();
+        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+    }
+    const handleAddOpFoul = async(periodId: string, action: number) => {
+        "use server";
+        console.log("Add Op Foul");
+        await db
+            .update(periodsTable)
+            .set({
+                totalOpFoul: nowPeriod[0].totalOpFoul + action
+            })
+            .where(
+                eq(periodsTable.displayId, periodId)
+            )
+            .execute();
+        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+    }
+
+    const handleFinish = async() => {
+        "use server";
+        console.log("Finish Game");
+        const totalScore = allPeriod.reduce((a, b) => a + b.totalScore, 0);
+        await db
+            .update(gamesTable)
+            .set({
+                totalScore: totalScore,
+            })
+            .where(
+                eq(gamesTable.displayId, gameId)
+            )
+            .execute();
+        redirect(`/history/${gameId}`);
+    }
     
     return (
       <div>
@@ -219,13 +267,14 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 <p className="text-lg">Date: {gameData[0].date}</p>
             </div>
             <div className="flex items-center justify-between px-2">
-                <div className="flex gap-2 p-2">
+                <div className="flex items-center gap-2 p-2">
                     <InputPlayerBar handleAddPlayer={handleAddPlayer}/>
                     <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
+                    <AddOp periodId={URLperiodId} handleAddOpScore={handleAddOpScore} handleAddOpFoul={handleAddOpFoul}/>
                 </div>
                 <div className="flex gap-2 p-2">
                     <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
-                    <Button>Finish Game</Button>
+                    <FinishGame handleFinish={handleFinish}/>
                 </div>     
             </div>
             <div className="grid grid-cols-3 gap-4">
