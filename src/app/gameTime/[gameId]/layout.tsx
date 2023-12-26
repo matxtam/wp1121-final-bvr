@@ -4,7 +4,7 @@ type Props = {
   
   function GameTimeIdLayout({ children }: Props) {
     return (
-      <main>
+      <main className="h-screen w-full">
         <div>{children}</div>
       </main>
     );

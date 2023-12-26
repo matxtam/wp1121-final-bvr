@@ -9,6 +9,7 @@ import Link from "next/link";
 import ShowPlayer from "./_components/ShowPlayers";
 import { Dialog, DialogTrigger, DialogContent, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { ChevronsUpDown } from "lucide-react";
 
 export default async function HomePage() {
   const players = await db
@@ -29,12 +30,14 @@ export default async function HomePage() {
             create player(test)
           </Button>
         </DialogTrigger>
+        <DialogContent className = "gap-3">
+        
         <form
         action = {
           async (e) => {
             "use server";
-            try{
-            console.log(e);
+            try {
+            console.log('start add player');
             await db.insert(playersTable)
               .values({
                 number: e.get("number")?.toString() ?? "",
@@ -46,19 +49,31 @@ export default async function HomePage() {
             } catch (error) {
               console.log(error);
             }
-          }
+            // const res = await fetch("/api/player", {
+            //   method: "POST",
+            //   body: JSON.stringify({
+            //     number: e.get("number")?.toString() ?? "",
+            //     name: e.get("name")?.toString() ?? "",
+            //     position: e.get("position")?.toString() ?? "",
+            //     photo: "",
+            //   }),
+            // });
+            // if (!res.ok) {
+            //   return;
+            // }
+            // await res.json();
         }
+      }
       >
-        <DialogContent className = "gap-3">
-        
+
         <Input name="number" placeholder="number"></Input>
         <Input name="name" placeholder="name"></Input>
         <Input name="position" placeholder="position"></Input>
-        <DialogClose>
-          <Button type="submit">Create</Button>
+        <DialogClose type="submit">
+          Create
         </DialogClose>
+        </form>
       </DialogContent>
-      </form>
       </Dialog>
       <ShowPlayer players={players}/>
     </section>

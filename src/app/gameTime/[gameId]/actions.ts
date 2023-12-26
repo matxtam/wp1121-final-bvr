@@ -3,6 +3,7 @@ import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { playersTable, gamePerformancesTable, GamePerformanceRelations } from "@/db/schema";
 import { GamePerformance } from '@/lib/types/db';
+import { revalidatePath } from "next/cache";
 
 export const createPerformance = async (playerName: string, gameId: string) => {
     console.log("[createPerformance]");
@@ -11,8 +12,8 @@ export const createPerformance = async (playerName: string, gameId: string) => {
     .from(playersTable)
     .where(and(eq(playersTable.name, playerName), eq(playersTable.useable, true)))
     .execute();
-
-    if (!AddPlayerId || AddPlayerId[0].displayId.length === 0) {
+    console.log("AddPlayerId",AddPlayerId);
+    if (!AddPlayerId || AddPlayerId.length === 0) {
         throw new Error("Player not found or not useable");
         return;
     }
@@ -31,7 +32,7 @@ export const createPerformance = async (playerName: string, gameId: string) => {
         newPerformanceId: gamePerformancesTable.displayId,
     })
     .execute();
-
+    revalidatePath(`http://localhost:3000//gametimes/${gameId}`);
     return newPerformanceId;
 }
 

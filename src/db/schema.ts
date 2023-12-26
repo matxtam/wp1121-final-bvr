@@ -71,6 +71,8 @@ export const playersTable = pgTable(
     personalIn2pt: smallint("personal_in2pt").default(0).notNull(),
     personal3pt: smallint("personal_3pt").default(0).notNull(),
     personalIn3pt: smallint("personal_in3pt").default(0).notNull(),
+    personalFt: smallint("personal_ft").default(0).notNull(),
+    personalInFt: smallint("personal_in_ft").default(0).notNull(),
     personalDefReb: smallint("personal_def_reb").default(0).notNull(),
     personalOffReb: smallint("personal_off_reb").default(0).notNull(),
     personalSteal: smallint("personal_steal").default(0).notNull(),
@@ -91,7 +93,8 @@ export const gamesTable = pgTable(
     photo: varchar("photo", { length: 1000 }).notNull(),
     hashtag: varchar("hashtag", { length: 100 }).notNull(),
     totalScore: smallint("total_score").default(0).notNull(),
-    possession: varchar("possession", { length: 100 }).notNull(),//WE or OP
+    possession: varchar("possession", { length: 100 }).default("WE").notNull(),//WE or OP
+    periodsNumber: smallint("periodsNumber").default(0).notNull(),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
@@ -110,7 +113,7 @@ export const periodsTable = pgTable(
         onUpdate: "cascade",
       }),
     number: varchar("number", { length: 100 }).notNull(),
-    title: varchar("title", { length: 100 }).notNull(),
+    // title: varchar("title", { length: 100 }).notNull(),
     totalScore: smallint("total_score").default(0).notNull(),
     totalOpScore: smallint("total_op_score").default(0).notNull(),
     totalOpFoul: smallint("total_op_foul").default(0).notNull(),

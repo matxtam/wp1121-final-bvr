@@ -41,7 +41,7 @@ export default function NewGameBtn({className}:NewGameBtnProps) {
                   photo: "",
                   hashtag: hashtag?.toString() ?? "",
                   totalScore: 0,
-                  possession:"",
+                  possession:"WE",
                 })
                 .returning();
               redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/gameTime/${newGame.displayId}`)
