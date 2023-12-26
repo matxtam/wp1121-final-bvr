@@ -1,4 +1,6 @@
 "use client";
+import React from "react";
+
 import { SetStateAction, useState } from "react";
 import { GamePerformance } from "@/lib/types/db";
 
@@ -35,35 +37,36 @@ export default function History ({playersOfTheGame}:Props) {
     <div className="grid grid-cols-14 w-3/4 gap-1">
 
     {contents.map((content) => (
-      content.state[0] && <p key={content.title}>{content.title}</p>
+      content.state[0] ? <p key={content.title+"table"}>{content.title}</p> : <div key={content.title+"table"}></div>
     ))}
 
     {playersOfTheGame.map((player) => (
-    <>
-      <p key={player.player.name}>{player.player.number}</p>
-      <p key={player.player.name}>{player.player.name}  </p>
-      {contents[2] .state[0] && <p key={player.player.name}>{"player on?"}   </p>}
-      {contents[3] .state[0] && <p key={player.player.name}>{player.twoPt}   </p>}
-      {contents[4] .state[0] && <p key={player.player.name}>{player.threePt} </p>}
-      {contents[5] .state[0] && <p key={player.player.name}>{player.ft}      </p>}
-      {contents[6] .state[0] && <p key={player.player.name}>{player.foul}    </p>}
-      {contents[7] .state[0] && <p key={player.player.name}>{player.steal}   </p>}
-      {contents[8] .state[0] && <p key={player.player.name}>{player.block}   </p>}
-      {contents[9] .state[0] && <p key={player.player.name}>{player.assist}  </p>}
-      {contents[10].state[0] && <p key={player.player.name}>{player.defReb}  </p>}
-      {contents[11].state[0] && <p key={player.player.name}>{player.offReb}  </p>}
-      {contents[12].state[0] && <p key={player.player.name}>{player.turnover}</p>}
-      {contents[13].state[0] && <p key={player.player.name}>{player.point}   </p>}
-    </>))}
+    <React.Fragment key={player.player.name}>
+      <p> {player.player.number}</p>
+      <p> {player.player.name}  </p>
+      {contents[2] .state[0] ? <p> {"player on?"}   </p> : <div></div>}
+      {contents[3] .state[0] ? <p> {player.twoPt}   </p> : <div></div>}
+      {contents[4] .state[0] ? <p> {player.threePt} </p> : <div></div>}
+      {contents[5] .state[0] ? <p> {player.ft}      </p> : <div></div>}
+      {contents[6] .state[0] ? <p> {player.foul}    </p> : <div></div>}
+      {contents[7] .state[0] ? <p> {player.steal}   </p> : <div></div>}
+      {contents[8] .state[0] ? <p> {player.block}   </p> : <div></div>}
+      {contents[9] .state[0] ? <p> {player.assist}  </p> : <div></div>}
+      {contents[10].state[0] ? <p> {player.defReb}  </p> : <div></div>}
+      {contents[11].state[0] ? <p> {player.offReb}  </p> : <div></div>}
+      {contents[12].state[0] ? <p> {player.turnover}</p> : <div></div>}
+      {contents[13].state[0] ? <p> {player.point}   </p> : <div></div>}
+      </React.Fragment>))}
     </div>
     <div className="flex flex-col w-1/4">
 
       {contents.map((content) => (
         (content.state[1] !== undefined) &&
-        <div className="flex flex-row items-center p-1 gap-3" key={content.title}>
+        <div className="flex flex-row items-center p-1 gap-3" key={content.title+"switch"}>
           <Switch
             defaultChecked={content.state[0]}
-            onCheckedChange={() => content.state[1]? content.state[1](!content.state[0]) : {}}
+            onCheckedChange={() => {content.state[1] ? content.state[1](!content.state[0]) : {};
+          console.log(content.title, content.state[0])}}
           />
           <label>{content.title}</label>
         </div>
