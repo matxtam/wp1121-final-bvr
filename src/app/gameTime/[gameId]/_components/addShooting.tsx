@@ -9,7 +9,7 @@ type Props = {
     inTwoPt: number;
     inThreePt: number;
     inFt: number;
-    handleAddShooting: (selectedItem: string, performanceId: string, newStatus: number) => void;
+    handleAddShooting: (selectedItem: string, performanceId: string, newStatus: number, action:number) => void;
 }
 type ButtonType = 'twoPt' | 'threePt' | 'ft';
 
@@ -98,57 +98,57 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
     const handleIncrement = () => {
         if(selectedButton==="twoPt"){
             setCountTwoPt((prevNumber) => prevNumber + 1);
-            handleAddShooting(selectedButton, performanceId, countTwoPt+1);
+            handleAddShooting(selectedButton, performanceId, countTwoPt+1, 2);
         }
         if(selectedButton==="threePt"){
             setCountThreePt((prevNumber) => prevNumber + 1);
-            handleAddShooting(selectedButton, performanceId, countThreePt+1);
+            handleAddShooting(selectedButton, performanceId, countThreePt+1, 3);
         }
         if(selectedButton==="ft"){
             setCountFt((prevNumber) => prevNumber + 1);
-            handleAddShooting(selectedButton, performanceId, countFt+1);
+            handleAddShooting(selectedButton, performanceId, countFt+1, 1);
         }
     };    
     const handleDecrement = () => {
         if(selectedButton==="twoPt"){
             setCountTwoPt((prevNumber) => prevNumber - 1);
-            handleAddShooting(selectedButton, performanceId, countTwoPt-1);
+            handleAddShooting(selectedButton, performanceId, countTwoPt-1, -2);
         }
         if(selectedButton==="threePt"){
             setCountThreePt((prevNumber) => prevNumber - 1);
-            handleAddShooting(selectedButton, performanceId, countThreePt-1);
+            handleAddShooting(selectedButton, performanceId, countThreePt-1, -3);
         }
         if(selectedButton==="ft"){
             setCountFt((prevNumber) => prevNumber - 1);
-            handleAddShooting(selectedButton, performanceId, countFt-1);
+            handleAddShooting(selectedButton, performanceId, countFt-1, -1);
         }
     };
     const handleInIncrement = () => {
         if(inSelectedButton==="inTwoPt"){
             setInCountTwoPt((prevNumber) => prevNumber + 1);
-            handleAddShooting(inSelectedButton, performanceId, inCountTwoPt+1);
+            handleAddShooting(inSelectedButton, performanceId, inCountTwoPt+1, 2);
         }
         if(inSelectedButton==="inThreePt"){
             setInCountThreePt((prevNumber) => prevNumber + 1);
-            handleAddShooting(inSelectedButton, performanceId, inCountThreePt+1);
+            handleAddShooting(inSelectedButton, performanceId, inCountThreePt+1, 3);
         }
         if(inSelectedButton==="inFt"){
             setInCountFt((prevNumber) => prevNumber + 1);
-            handleAddShooting(inSelectedButton, performanceId, inCountFt+1);
+            handleAddShooting(inSelectedButton, performanceId, inCountFt+1, 1);
         }
     }
     const handleInDecrement = () => {
         if(inSelectedButton==="inTwoPt"){
             setInCountTwoPt((prevNumber) => prevNumber - 1);
-            handleAddShooting(inSelectedButton, performanceId, inCountTwoPt-1);
+            handleAddShooting(inSelectedButton, performanceId, inCountTwoPt-1, -2);
         }
         if(inSelectedButton==="inThreePt"){
             setInCountThreePt((prevNumber) => prevNumber - 1);
-            handleAddShooting(inSelectedButton, performanceId, inCountThreePt-1);
+            handleAddShooting(inSelectedButton, performanceId, inCountThreePt-1, -3);
         }
         if(inSelectedButton==="inFt"){
             setInCountFt((prevNumber) => prevNumber - 1);
-            handleAddShooting(inSelectedButton, performanceId, inCountFt-1);
+            handleAddShooting(inSelectedButton, performanceId, inCountFt-1, -1);
         }
     }
 

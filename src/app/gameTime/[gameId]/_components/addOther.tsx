@@ -11,7 +11,7 @@ type Props = {
     assist: number;
     defReb: number;
     offReb: number;
-    handleAddOther: (selectedItem: string, performanceId: string, newStatus: number) => void;
+    handleAddOther: (selectedItem: string, performanceId: string, newStatus: number, action: number) => void;
 }
 type ButtonType = 'foul' | 'block' | 'turnover' | 'steal' | 'assist' | 'defReb' | 'offReb';
 
@@ -110,62 +110,62 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
     const handleIncrement = () => {
         if(selectedButton==="foul"){
             setCountFoul((prevNumber) => prevNumber + 1);
-            handleAddOther(selectedButton, performanceId, countFoul+1);
+            handleAddOther(selectedButton, performanceId, countFoul+1, 1);
         }
         if(selectedButton==="block"){
             setCountBlock((prevNumber) => prevNumber + 1);
-            handleAddOther(selectedButton, performanceId, countBlock+1);
+            handleAddOther(selectedButton, performanceId, countBlock+1, 1);
         }
         if(selectedButton==="turnover"){
             setCountTurnover((prevNumber) => prevNumber + 1);
-            handleAddOther(selectedButton, performanceId, countTurnover+1);
+            handleAddOther(selectedButton, performanceId, countTurnover+1, 1);
         }
         if(selectedButton==="steal"){
             setCountSteal((prevNumber) => prevNumber + 1);
-            handleAddOther(selectedButton, performanceId, countSteal+1);
+            handleAddOther(selectedButton, performanceId, countSteal+1, 1);
         }
         if(selectedButton==="assist"){
             setCountAssist((prevNumber) => prevNumber + 1);
-            handleAddOther(selectedButton, performanceId, countAssist+1);
+            handleAddOther(selectedButton, performanceId, countAssist+1, 1);
         }
         if(selectedButton==="defReb"){
             setCountDefReb((prevNumber) => prevNumber + 1);
-            handleAddOther(selectedButton, performanceId, countDefReb+1);
+            handleAddOther(selectedButton, performanceId, countDefReb+1, 1);
         }
         if(selectedButton==="offReb"){
             setCountOffReb((prevNumber) => prevNumber + 1);
-            handleAddOther(selectedButton, performanceId, countOffReb+1);
+            handleAddOther(selectedButton, performanceId, countOffReb+1, 1);
         }
         // router.refresh();
     };
     const handleDecrement = () => {
         if(selectedButton==="foul"){
             setCountFoul((prevNumber) => prevNumber - 1);
-            handleAddOther(selectedButton, performanceId, countFoul-1);
+            handleAddOther(selectedButton, performanceId, countFoul-1, -1);
         }
         if(selectedButton==="block"){
             setCountBlock((prevNumber) => prevNumber - 1);
-            handleAddOther(selectedButton, performanceId, countBlock-1);
+            handleAddOther(selectedButton, performanceId, countBlock-1, -1);
         }
         if(selectedButton==="turnover"){
             setCountTurnover((prevNumber) => prevNumber - 1);
-            handleAddOther(selectedButton, performanceId, countTurnover-1);
+            handleAddOther(selectedButton, performanceId, countTurnover-1, -1);
         }
         if(selectedButton==="steal"){
             setCountSteal((prevNumber) => prevNumber - 1);
-            handleAddOther(selectedButton, performanceId, countSteal-1);
+            handleAddOther(selectedButton, performanceId, countSteal-1, -1);
         }
         if(selectedButton==="assist"){
             setCountAssist((prevNumber) => prevNumber - 1);
-            handleAddOther(selectedButton, performanceId, countAssist-1);
+            handleAddOther(selectedButton, performanceId, countAssist-1, -1);
         }
         if(selectedButton==="defReb"){
             setCountDefReb((prevNumber) => prevNumber - 1);
-            handleAddOther(selectedButton, performanceId, countDefReb-1);
+            handleAddOther(selectedButton, performanceId, countDefReb-1, -1);
         }
         if(selectedButton==="offReb"){
             setCountOffReb((prevNumber) => prevNumber - 1);
-            handleAddOther(selectedButton, performanceId, countOffReb-1);
+            handleAddOther(selectedButton, performanceId, countOffReb-1, -1);
         }
         // router.refresh();
     }
