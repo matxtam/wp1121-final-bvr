@@ -3,7 +3,7 @@ import Possession from "./_components/possession";
 import AddOp from "./_components/addOp";
 import InputPlayerBar from "./_components/inputPlayerBar";
 import StartPeriod from "./_components/startPeriod";
-import {createPerformance, getGamePerformances, updateGamePerformance} from "./actions";
+import {createPerformance, getGamePerformances, updateGamePerformance, finishGame} from "./actions";
 import { get } from "http";
 import AddShooting from "./_components/addShooting";
 import AddOther from "./_components/addOther";
@@ -118,7 +118,10 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         "use server";
         console.log("Add Player",inputName); //add a new performance with playerId and gameId and periodId
         const newPerformanceId = await createPerformance(inputName, gameId);
+        console.log("newPerformanceId", newPerformanceId);
+        return newPerformanceId?.toString()||"0";
     }
+    
     const allGamePerformances = await getGamePerformances(gameId);
     
     const handleChangeOnTime = async(performanceId: string, item: string, newStatus: boolean) => {
@@ -239,20 +242,21 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
 
-    const handleFinish = async() => {
-        "use server";
+    const handleFinish = async(nowGameId:string) => {
+        "use server"
         console.log("Finish Game");
         const totalScore = allPeriod.reduce((a, b) => a + b.totalScore, 0);
-        await db
-            .update(gamesTable)
-            .set({
-                totalScore: totalScore,
-            })
-            .where(
-                eq(gamesTable.displayId, gameId)
-            )
-            .execute();
-        redirect(`/history/${gameId}`);
+        finishGame(nowGameId, totalScore);
+        // await db
+        //     .update(gamesTable)
+        //     .set({
+        //         totalScore: totalScore,
+        //     })
+        //     .where(
+        //         eq(gamesTable.displayId, nowGameId)
+        //     )
+        //     .execute();
+        // redirect(`/history/${gameId}`);
     }
     
     return (
@@ -274,7 +278,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 </div>
                 <div className="flex gap-2 p-2">
                     <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
-                    <FinishGame handleFinish={handleFinish}/>
+                    <FinishGame gameId={gameId} handleFinish={handleFinish}/>
                 </div>     
             </div>
             <div className="grid grid-cols-3 gap-4">

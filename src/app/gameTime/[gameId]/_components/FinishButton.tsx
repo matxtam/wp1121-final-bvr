@@ -2,14 +2,15 @@
 import { Button } from "@/components/ui/button";
 
 type Props = {
-    handleFinish: () => void;
+    gameId: string;
+    handleFinish: (nowGameId:string) => void;
 }
 
-export default function FinishGame({ handleFinish}: Props) {    
+export default function FinishGame({ gameId, handleFinish}: Props) {    
     return (
         <div> 
             <Button onClick={() => {
-                handleFinish();
+                handleFinish(gameId);
             }}>
                 Finish Game
             </Button>
