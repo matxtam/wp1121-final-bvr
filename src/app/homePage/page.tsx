@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { playersTable, gamesTable } from "@/db/schema";
+import { playersTable, gamesTable, userToGameTable } from "@/db/schema";
 import UploadPhoto from "./_components/UploadPhoto";
 import { Button } from "@/components/ui/button"
 import NewGameBtn from "./_components/NewGameBtn"
@@ -10,18 +10,48 @@ import ShowPlayer from "./_components/ShowPlayers";
 import { Dialog, DialogTrigger, DialogContent, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ChevronsUpDown } from "lucide-react";
+import { auth } from "@/lib/auth";
+import { eq } from "drizzle-orm";
 // const photo = document.querySelector("#photo")
 
 export default async function HomePage() {
-  
+  const session = await auth();
+  if (!session?.user?.id) {
+    return null;
+  }
+  const user = session.user;
+  const userId = user.id;
   const players = await db
     .select()
     .from(playersTable)
     .execute();
-  const games = await db
-    .select()
-    .from(gamesTable)
-    .execute();
+
+  const games = await db.query.userToGameTable.findMany({
+    where: eq(userToGameTable.userId, userId),
+    with: {
+      game:{
+        columns:{
+          id: true,
+          title: true,
+          date: true,
+          photo: true,
+          hashtag: true,
+          displayId: true,
+          totalScore: true,
+          periodsNumber: true,
+          possession: true,
+        },
+        }
+      }
+    },
+  );
+
+
+
+  // const games = await db
+  //   .select()
+  //   .from(gamesTable)
+  //   .execute();
   
   return (
   <>
@@ -112,7 +142,7 @@ export default async function HomePage() {
     <h3>Game History</h3>
     <section className="flex flex-row">
       <NewGameBtn/>
-      {games.map((game) => (
+      {/* {games.game.map((game) => (
       <Link key={game.id} href={`../history/${game.displayId}`}>
         <h4>{game.title}</h4>
         <div>
@@ -120,6 +150,15 @@ export default async function HomePage() {
           <p>{game.hashtag}</p>
         </div>
       </Link>
+      ))} */}
+      {games.map((game) => (
+        <Link key={game.id} href={`../history/${game.game.displayId}`}>
+          <h4>{game.game.title}</h4>
+          <div>
+            <p>{game.game.date?.toString()}</p>
+            <p>{game.game.hashtag}</p>
+          </div>
+        </Link>
       ))}
     </section>
   </>)
