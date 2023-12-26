@@ -27,6 +27,7 @@ function InputPlayerBar({ handleAddPlayer }: Props) {
                 if(result === "1") {
                     alert('Player already exists');
                 }
+                inputRef.current!.value = "";
                 }}>
                 <PlusCircle />
             </button>

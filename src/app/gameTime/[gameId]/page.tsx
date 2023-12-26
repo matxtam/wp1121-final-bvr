@@ -31,6 +31,7 @@ type Props = {
 async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: Props) {
     // let periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
     // let nowPeriod = null;
+    let gameTotalScore = 0;
     if(URLperiodId === null || URLperiodId === undefined){
         console.log("URLperiodId is null");
         return;
@@ -121,7 +122,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         console.log("newPerformanceId", newPerformanceId);
         return newPerformanceId?.toString()||"0";
     }
-    
+
     const allGamePerformances = await getGamePerformances(gameId);
     
     const handleChangeOnTime = async(performanceId: string, item: string, newStatus: boolean) => {
@@ -241,22 +242,21 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .execute();
         revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
-
+    gameTotalScore = allPeriod.reduce((a, b) => (a + b.totalScore), 0);
     const handleFinish = async(nowGameId:string) => {
-        "use server"
+        "use server";
         console.log("Finish Game");
-        const totalScore = allPeriod.reduce((a, b) => a + b.totalScore, 0);
-        finishGame(nowGameId, totalScore);
-        // await db
-        //     .update(gamesTable)
-        //     .set({
-        //         totalScore: totalScore,
-        //     })
-        //     .where(
-        //         eq(gamesTable.displayId, nowGameId)
-        //     )
-        //     .execute();
-        // redirect(`/history/${gameId}`);
+        finishGame(nowGameId, gameTotalScore);
+        await db
+            .update(gamesTable)
+            .set({
+                totalScore: gameTotalScore,
+            })
+            .where(
+                eq(gamesTable.displayId, nowGameId)
+            )
+            .execute();
+        redirect(`/history/${gameId}`);
     }
     
     return (
