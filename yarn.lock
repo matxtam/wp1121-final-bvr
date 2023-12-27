@@ -2752,7 +2752,7 @@ natural-compare@^1.4.0:
 
 next-auth@^5.0.0-beta.4:
   version "5.0.0-beta.4"
-  resolved "https://registry.npmjs.org/next-auth/-/next-auth-5.0.0-beta.4.tgz"
+  resolved "https://registry.yarnpkg.com/next-auth/-/next-auth-5.0.0-beta.4.tgz#3be1ca3a89626e993e04bfc5129a8f8e0afb161b"
   integrity sha512-vgocjvwPA8gxd/zrIP/vr9lJ/HeNe+C56lPP1D3sdyenHt8KncQV6ro7q0xCsDp1fcOKx7WAWVZH5o8aMxDzgw==
   dependencies:
     "@auth/core" "0.18.4"
@@ -3180,10 +3180,10 @@ prelude-ls@^1.2.1:
   resolved "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   integrity sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==
 
-prettier-plugin-tailwindcss@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.npmjs.org/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.5.7.tgz"
-  integrity sha512-4v6uESAgwCni6YF6DwJlRaDjg9Z+al5zM4JfngcazMy4WEf/XkPS5TEQjbD+DZ5iNuG6RrKQLa/HuX2SYzC3kQ==
+prettier-plugin-tailwindcss@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmjs.org/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.5.9.tgz"
+  integrity sha512-9x3t1s2Cjbut2QiP+O0mDqV3gLXTe2CgRlQDgucopVkUdw26sQi53p/q4qvGxMLBDfk/dcTV57Aa/zYwz9l8Ew==
 
 prettier@^3.0, prettier@^3.1.0, "prettier@2.x - 3.x":
   version "3.1.0"

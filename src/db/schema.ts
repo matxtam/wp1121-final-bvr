@@ -14,6 +14,7 @@ import {
   unique,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { Economica } from "next/font/google";
 
 export const usersTable = pgTable(
   "users",
@@ -106,6 +107,7 @@ export const usersToPlayersRelations = relations(
   }),
 );
 
+
 export const gamesTable = pgTable(
   "games",
   {
@@ -116,6 +118,7 @@ export const gamesTable = pgTable(
     photo: varchar("photo", { length: 1000 }).notNull(),
     hashtag: varchar("hashtag", { length: 100 }).notNull(),
     totalScore: smallint("total_score").default(0).notNull(),
+    totalOpScore: smallint("total_op_score").default(0).notNull(),
     possession: varchar("possession", { length: 100 }).default("WE").notNull(),//WE or OP
     periodsNumber: smallint("periodsNumber").default(0).notNull(),
   },
@@ -123,6 +126,8 @@ export const gamesTable = pgTable(
     displayIdIndex: index("display_id_index").on(table.displayId),
   }),
 );
+
+
 
 export const periodsTable = pgTable(
   "periods",
@@ -196,6 +201,47 @@ export const gamePerformancesTable = pgTable(
   }),
 );
 
+
+export const userRelations = relations(usersTable, ({ many }) => ({
+  userToGameTable: many(userToGameTable),
+}));
+
+
+export const PlayerRelations = relations(playersTable, ({ many }) => ({
+  gamePerformancesTable: many(gamePerformancesTable),
+}));
+
+export const GameRelations = relations(gamesTable, ({ many }) => ({
+  userToGameTable: many(userToGameTable),
+}));
+
+export const userToGameTable = pgTable(
+  "user_to_games",
+  {
+    id: serial("id").primaryKey(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => usersTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    gameId: uuid("game_id")
+      .notNull()
+      .references(() => gamesTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+  },
+  (table) => ({
+    userAndGameIndex: index("user_and_game_index").on(
+      table.userId,
+      table.gameId,
+    ),
+    // gameIdIndex: index("game_id_index").on(table.gameId),
+    uniqCombination: unique().on(table.gameId, table.userId),
+  }),
+);
+
 // export const teamsRelations = relations(teamsTable, ({ many }) => ({
 //   playersTable: many(playersTable),
 // }));
@@ -212,6 +258,21 @@ export const PlayerRelations = relations(playersTable, ({ many }) => ({
   usersToPlayersTable: many(usersToPlayersTable),  
   gamePerformancesTable: many(gamePerformancesTable),
 }));
+
+export const UserToGameRelations = relations(
+  userToGameTable,
+  ({ one }) => ({
+    game: one(gamesTable, {
+      fields: [userToGameTable.gameId],
+      references: [gamesTable.displayId],
+    }),
+    user: one(usersTable, {
+      fields: [userToGameTable.userId],
+      references: [usersTable.displayId],
+    }),
+}),
+);
+
 
 export const GamePerformanceRelations = relations(
   gamePerformancesTable,
@@ -230,3 +291,17 @@ export const GamePerformanceRelations = relations(
     // }),
   }),
 );
+
+// export const userToGameRelations = relations(
+//   userToGameTable, 
+//   ({ one }) => ({
+//   user: one(usersTable, {
+//     fields: [userToGameRelations.userId],
+//     references: [usersTable.displayId],
+//   }),
+//   game: one(gamesTable, {
+//     fields: [userToGameRelations.gameId],
+//     references: [gamesTable.displayId],
+//   }),
+// }),
+// );

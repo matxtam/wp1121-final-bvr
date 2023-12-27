@@ -1,7 +1,7 @@
 "use server"
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { playersTable, gamePerformancesTable, GamePerformanceRelations } from "@/db/schema";
+import { playersTable, gamePerformancesTable, GamePerformanceRelations, gamesTable } from "@/db/schema";
 import { GamePerformance } from '@/lib/types/db';
 import { revalidatePath } from "next/cache";
 
@@ -13,10 +13,29 @@ export const createPerformance = async (playerName: string, gameId: string) => {
     .where(and(eq(playersTable.name, playerName), eq(playersTable.useable, true)))
     .execute();
     console.log("AddPlayerId",AddPlayerId);
+
     if (!AddPlayerId || AddPlayerId.length === 0) {
-        throw new Error("Player not found or not useable");
-        return;
+        // alert("Player not found or not useable");
+        // throw new Error("Player not found or not useable");
+        const newPerformanceId = "0"
+        return newPerformanceId;
     }
+    const allPlayerInGame = await db
+    .select({playerId: gamePerformancesTable.playerId})
+    .from(gamePerformancesTable)
+    .where(eq(gamePerformancesTable.gameId, gameId))
+    .execute();
+
+    if (allPlayerInGame.length > 0) {
+        for (let i = 0; i < allPlayerInGame.length; i++) {
+            if (allPlayerInGame[i].playerId === AddPlayerId[0].displayId) {
+                const newPerformanceId = "1"
+                return newPerformanceId;
+            }
+        }
+    }
+
+
     if (!gameId ||gameId === "" ) {
         throw new Error("gameId is empty");
         return;
@@ -108,6 +127,18 @@ export const updateGamePerformance = async (selectedItem:string , performanceId:
     return updateGamePerformance;
 }
 
+export const finishGame = async (gameId: string, totalScore:number) => {
+    await db
+        .update(gamesTable)
+        .set({
+            totalScore: totalScore,
+        })
+        .where(
+            eq(gamesTable.displayId, gameId)
+        )
+        .execute();
+    return finishGame;
+}
 
 // const oldNum = await db.select({
     //     : gamePerformancesTable.`${selectedItem}` 

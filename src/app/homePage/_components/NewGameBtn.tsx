@@ -4,19 +4,26 @@ import { redirect } from "next/navigation";
 import { publicEnv } from "@/lib/env/public";
 
 import { db } from "@/db";
-import { gamesTable } from "@/db/schema";
+import { gamesTable, periodsTable, userToGameTable } from "@/db/schema";
 
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react"
+import { eq } from "drizzle-orm";
+import { auth } from "@/lib/auth";
 
 type NewGameBtnProps = {
   className?: string;
 }
 
-export default function NewGameBtn({className}:NewGameBtnProps) {
-
+export default async function NewGameBtn({className}:NewGameBtnProps) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return null;
+  }
+  const user = session.user;
+  const userId = user.id;
 
   return (
     <Dialog>
@@ -44,7 +51,34 @@ export default function NewGameBtn({className}:NewGameBtnProps) {
                   possession:"WE",
                 })
                 .returning();
-              redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/gameTime/${newGame.displayId}`)
+              
+              const [{newPeriodId}]= await db
+              .insert(periodsTable)
+              .values({
+                  gameId: newGame.displayId,
+                  number: "1",
+              })
+              .returning({
+                  newPeriodId: periodsTable.displayId,
+                })
+              .execute();
+              await db
+              .update(gamesTable)
+              .set({
+                  periodsNumber: 1,
+              })
+              .where(
+                  eq(gamesTable.displayId, newGame.displayId)
+              )
+              await db.insert(userToGameTable).values({
+                userId: userId,
+                gameId: newGame.displayId,
+              }).execute();
+
+              const params = new URLSearchParams();
+              params.set("URLperiodId", newPeriodId);
+              redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/gameTime/${newGame.displayId}/?${params.toString()}`);
+              // redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/gameTime/${newGame.displayId}`)
             }
           }
           className="flex flex-col gap-3"
