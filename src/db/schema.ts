@@ -206,11 +206,6 @@ export const userRelations = relations(usersTable, ({ many }) => ({
   userToGameTable: many(userToGameTable),
 }));
 
-
-export const PlayerRelations = relations(playersTable, ({ many }) => ({
-  gamePerformancesTable: many(gamePerformancesTable),
-}));
-
 export const GameRelations = relations(gamesTable, ({ many }) => ({
   userToGameTable: many(userToGameTable),
 }));

@@ -14,7 +14,6 @@ export default async function Navbar() {
   if (!userId || !session?.user) {
     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
   }
-  // const projects = await getProjects(userId);
   return (
     <nav className="flex min-w-fit flex-col justify-between gap-2 overflow-hidden bg-gray-100">
       <div className="flex w-full items-center justify-between gap-8 px-4 py-2">
