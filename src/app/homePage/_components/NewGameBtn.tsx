@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { publicEnv } from "@/lib/env/public";
 
 import { db } from "@/db";
-import { gamesTable, periodsTable, userToGameTable } from "@/db/schema";
+import { gamesTable, periodsTable } from "@/db/schema";
 
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -49,6 +49,7 @@ export default async function NewGameBtn({className}:NewGameBtnProps) {
                   hashtag: hashtag?.toString() ?? "",
                   totalScore: 0,
                   possession:"WE",
+                  userId: userId,
                 })
                 .returning();
               
@@ -70,10 +71,10 @@ export default async function NewGameBtn({className}:NewGameBtnProps) {
               .where(
                   eq(gamesTable.displayId, newGame.displayId)
               )
-              await db.insert(userToGameTable).values({
-                userId: userId,
-                gameId: newGame.displayId,
-              }).execute();
+              // await db.insert(userToGameTable).values({
+              //   userId: userId,
+              //   gameId: newGame.displayId,
+              // }).execute();
 
               const params = new URLSearchParams();
               params.set("URLperiodId", newPeriodId);

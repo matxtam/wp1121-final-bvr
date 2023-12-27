@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { playersTable, gamesTable, userToGameTable } from "@/db/schema";
+import { playersTable, gamesTable } from "@/db/schema";
 import UploadPhoto from "./_components/UploadPhoto";
 import { Button } from "@/components/ui/button"
 import NewGameBtn from "./_components/NewGameBtn"
@@ -11,7 +11,10 @@ import { Dialog, DialogTrigger, DialogContent, DialogClose } from "@/components/
 import { Input } from "@/components/ui/input";
 import { ChevronsUpDown } from "lucide-react";
 import { auth } from "@/lib/auth";
-import { eq } from "drizzle-orm";
+import { eq, like, and } from "drizzle-orm";
+import SearchBar from "./_components/SearchBar";
+import { revalidatePath } from "next/cache";
+import { publicEnv } from "@/lib/env/public";
 // const photo = document.querySelector("#photo")
 
 export default async function HomePage() {
@@ -25,26 +28,75 @@ export default async function HomePage() {
     .select()
     .from(playersTable)
     .execute();
+  // let displayGame = null;
 
-  const games = await db.query.userToGameTable.findMany({
-    where: eq(userToGameTable.userId, userId),
-    with: {
-      game:{
-        columns:{
-          id: true,
-          title: true,
-          date: true,
-          photo: true,
-          hashtag: true,
-          displayId: true,
-          totalScore: true,
-          periodsNumber: true,
-          possession: true,
-        },
-        }
-      }
-    },
-  );
+  // const games = await db.query.userToGameTable.findMany({
+  //   where: eq(userToGameTable.userId, userId),
+  //   with: {
+  //     game:{
+  //       columns:{
+  //         id: true,
+  //         title: true,
+  //         date: true,
+  //         photo: true,
+  //         hashtag: true,
+  //         displayId: true,
+  //         totalScore: true,
+  //         periodsNumber: true,
+  //         possession: true,
+  //       },
+  //       }
+  //     }
+  //   },
+  // );
+  // displayGame = games;
+  // const games = await db.query.userToGameTable.findMany({
+  //   where:(eq(userToGameTable.userId, userId)) ,
+  //   with: {
+  //     game: {
+  //       where: (like(game.title, `%${inputTitle ?? ""}%`)) ,
+        
+  //     },
+  //     }
+  //   },
+  // );
+
+  const handleSearch = async (inputTitle: string) => {
+    "use server"
+    await db
+      .update(gamesTable)
+      .set({
+        display: false,
+      })
+      .where(eq(gamesTable.userId, userId))
+      .execute();
+    await db
+      .update(gamesTable)
+        .set({
+          display: true,
+      })
+      .where (and(eq(gamesTable.userId, userId), like(gamesTable.title, `%${inputTitle ?? ""}%`))) 
+      .execute();
+    revalidatePath(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+  } 
+
+  const handleClear = async () => {
+    "use server"
+    await db
+      .update(gamesTable)
+      .set({
+        display: true,
+      })
+      .where(eq(gamesTable.userId, userId))
+      .execute();
+    revalidatePath(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+  }
+
+  const displayGame = await db
+    .select()
+    .from(gamesTable)
+    .where(and(eq(gamesTable.display, true), eq(gamesTable.userId, userId)))
+    .execute();
 
 
 
@@ -140,6 +192,7 @@ export default async function HomePage() {
     </section>
 
     <h3>Game History</h3>
+    <SearchBar handleSearch={handleSearch} handleClear={handleClear}/>
     <section className="flex flex-row">
       <NewGameBtn/>
       {/* {games.game.map((game) => (
@@ -151,12 +204,12 @@ export default async function HomePage() {
         </div>
       </Link>
       ))} */}
-      {games.map((game) => (
-        <Link key={game.id} href={`../history/${game.game.displayId}`}>
-          <h4>{game.game.title}</h4>
-          <div>
-            <p>{game.game.date?.toString()}</p>
-            <p>{game.game.hashtag}</p>
+      {displayGame.map((game) => (
+        <Link key={game.id} href={`../history/${game.displayId}`} className="game box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap" >
+          <h4>{game.title}</h4>
+          <div className="px-4">
+            <p>{game.date?.toString()}</p>
+            <p>{game.hashtag}</p>
           </div>
         </Link>
       ))}

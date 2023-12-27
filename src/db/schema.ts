@@ -100,6 +100,13 @@ export const gamesTable = pgTable(
     totalOpScore: smallint("total_op_score").default(0).notNull(),
     possession: varchar("possession", { length: 100 }).default("WE").notNull(),//WE or OP
     periodsNumber: smallint("periodsNumber").default(0).notNull(),
+    display: boolean("display").default(true).notNull(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => usersTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
@@ -181,71 +188,71 @@ export const gamePerformancesTable = pgTable(
 );
 
 
-export const userRelations = relations(usersTable, ({ many }) => ({
-  userToGameTable: many(userToGameTable),
-}));
+// export const userRelations = relations(usersTable, ({ many }) => ({
+//   userToGameTable: many(userToGameTable),
+// }));
 
 
 export const PlayerRelations = relations(playersTable, ({ many }) => ({
   gamePerformancesTable: many(gamePerformancesTable),
 }));
 
-export const GameRelations = relations(gamesTable, ({ many }) => ({
-  userToGameTable: many(userToGameTable),
-}));
+// export const GameRelations = relations(gamesTable, ({ many }) => ({
+//   userToGameTable: many(userToGameTable),
+// }));
 
-export const userToGameTable = pgTable(
-  "user_to_games",
-  {
-    id: serial("id").primaryKey(),
-    userId: uuid("user_id")
-      .notNull()
-      .references(() => usersTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-    gameId: uuid("game_id")
-      .notNull()
-      .references(() => gamesTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-  },
-  (table) => ({
-    userAndGameIndex: index("user_and_game_index").on(
-      table.userId,
-      table.gameId,
-    ),
-    // gameIdIndex: index("game_id_index").on(table.gameId),
-    uniqCombination: unique().on(table.gameId, table.userId),
-  }),
-);
+// export const userToGameTable = pgTable(
+//   "user_to_games",
+//   {
+//     id: serial("id").primaryKey(),
+//     userId: uuid("user_id")
+//       .notNull()
+//       .references(() => usersTable.displayId, {
+//         onDelete: "cascade",
+//         onUpdate: "cascade",
+//       }),
+//     gameId: uuid("game_id")
+//       .notNull()
+//       .references(() => gamesTable.displayId, {
+//         onDelete: "cascade",
+//         onUpdate: "cascade",
+//       }),
+//   },
+//   (table) => ({
+//     userAndGameIndex: index("user_and_game_index").on(
+//       table.userId,
+//       table.gameId,
+//     ),
+//     // gameIdIndex: index("game_id_index").on(table.gameId),
+//     uniqCombination: unique().on(table.gameId, table.userId),
+//   }),
+// );
 
 // export const teamsRelations = relations(teamsTable, ({ many }) => ({
 //   playersTable: many(playersTable),
 // }));
 
-// export const GameRelations = relations(gamesTable, ({ many }) => ({
-//   periodsTable: many(periodsTable),
-// }));
+export const GameRelations = relations(gamesTable, ({ many }) => ({
+  periodsTable: many(periodsTable),
+}));
 
-// export const PeriodRelations = relations(periodsTable, ({ many }) => ({
-//   gamePerformancesTable: many(gamePerformancesTable),
-// }));
+export const PeriodRelations = relations(periodsTable, ({ many }) => ({
+  gamePerformancesTable: many(gamePerformancesTable),
+}));
 
-export const UserToGameRelations = relations(
-  userToGameTable,
-  ({ one }) => ({
-    game: one(gamesTable, {
-      fields: [userToGameTable.gameId],
-      references: [gamesTable.displayId],
-    }),
-    user: one(usersTable, {
-      fields: [userToGameTable.userId],
-      references: [usersTable.displayId],
-    }),
-}),
-);
+// export const UserToGameRelations = relations(
+//   userToGameTable,
+//   ({ one }) => ({
+//     game: one(gamesTable, {
+//       fields: [userToGameTable.gameId],
+//       references: [gamesTable.displayId],
+//     }),
+//     user: one(usersTable, {
+//       fields: [userToGameTable.userId],
+//       references: [usersTable.displayId],
+//     }),
+// }),
+// );
 
 
 export const GamePerformanceRelations = relations(

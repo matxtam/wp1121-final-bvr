@@ -39,7 +39,9 @@ export type Game = {
   photo: string;
   hashtag: string; //友誼賽、北電、大電
   totalScore: number; //總得分
+  totalOpScore: number; //總對手得分
   possession: number; //球權
+  display: boolean; //是否顯示
 };
 
 export type Period = {
