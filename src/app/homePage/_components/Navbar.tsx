@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
 
-import SignOutButton from "./SignOutButton";
 
 export default async function Navbar() {
   const session = await auth();
@@ -27,8 +26,6 @@ export default async function Navbar() {
             }
           </span>
         </div>
-        <SignOutButton />
-        <Link href="/settings">settings link for test</Link>
         <Link href="/gameTime/294d90c3-6da1-4e25-a4ff-9163fed52b61">gameTime link for test</Link>      
       </div>
     </nav>

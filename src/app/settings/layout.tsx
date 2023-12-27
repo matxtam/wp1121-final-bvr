@@ -3,7 +3,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-function SettingsLayout({ children }: Props) {
+export default function SettingsLayout({ children }: Props) {
   return (
     <main>
       {/* <TeamProfile /> */}
@@ -11,5 +11,3 @@ function SettingsLayout({ children }: Props) {
     </main>
   );
 }
-
-export default SettingsLayout;

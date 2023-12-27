@@ -4,8 +4,10 @@ import { Inter } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { Users2 } from 'lucide-react';
+import SignOutButton from "./homePage/_components/SignOutButton";
 
 import "./globals.css";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -27,9 +29,12 @@ export default function RootLayout({
             <h1>
               We Need a Brand Name
             </h1>
-            <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
-              <Users2 size={20} strokeWidth={2} color="#ffffff"></Users2>
-            </Button>
+            <SignOutButton />
+            <Link href="/settings">
+              <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
+                <Users2 size={20} strokeWidth={2} color="#ffffff"></Users2>
+              </Button>
+            </Link>
           </header>
           <main className= "w-full overflow-y-scroll">
           {children}
