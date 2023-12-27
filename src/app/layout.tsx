@@ -21,6 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <html lang="en">
       <body className="bg-gray-100 flex flex-col h-screen overflow-hidden">
           <SessionProvider>
           <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-indigo-300">
@@ -42,5 +43,6 @@ export default function RootLayout({
           <Toaster />
         </SessionProvider>
       </body>
+    </html>
   );
 }

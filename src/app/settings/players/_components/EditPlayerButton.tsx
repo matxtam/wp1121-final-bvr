@@ -104,7 +104,12 @@ export default function EditPlayerButton({ playerId, name, photo, position, numb
                   type="file"
                   className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded-md border-black-600"
                   // value={editPlayerphoto} onChange={(e) => setEditPlayerphoto(e.target.value)} placeholder="url"
-                  onChange={(e) => setEditPlayerphoto(e.target.value)}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setEditPlayerphoto(file.name);
+                    }
+                  }}
                 />
                 </div>
               <div/>
