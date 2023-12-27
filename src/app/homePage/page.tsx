@@ -194,7 +194,7 @@ export default async function HomePage() {
       {/* {players.map((player) => (
         <ShowPlayer key={player.displayId} players={player} />
       ))} */}
-      {/* <ShowPlayer players={players}/> */}
+      <ShowPlayer players={players}/>
     </section>
 
     <h3>Game History</h3>

@@ -12,7 +12,7 @@ export type Player = {
   photo: string;
   number: string; //背號 
   position: string; //位置
-  useable: boolean; //是否可用
+  usable: boolean; //是否可用
   personalValue: number; //個人價值(不知需不需要)
   personal2pt: number; //個人兩分球數
   personalIn2pt: number; //個人兩分球進球數
