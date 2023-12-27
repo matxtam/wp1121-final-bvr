@@ -34,9 +34,9 @@ export default function RootLayout({
               <Users2 size={20} strokeWidth={2} color="#ffffff"></Users2>
             </Button>
           </header>
-          <main className="h-full w-full overflow-y-scroll">
+
           {children}
-          </main>
+
           <Toaster />
         </SessionProvider>
       </body>
