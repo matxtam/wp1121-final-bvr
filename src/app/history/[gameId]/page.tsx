@@ -1,10 +1,12 @@
 import { db } from "@/db";
-import { eq } from "drizzle-orm";
-import { gamesTable, gamePerformancesTable } from "@/db/schema";
+import { eq, asc } from "drizzle-orm";
+import { gamesTable, gamePerformancesTable, periodsTable } from "@/db/schema";
 import HistoryTable from "./_components/HistoryTable";
 import { redirect } from "next/navigation";
 import { publicEnv } from "@/lib/env/public";
-
+import React from "react";
+import { Crown } from "lucide-react";
+import { cn } from "@/lib/utils/shadcn";
 
 import Image from "next/image";
 
@@ -21,7 +23,12 @@ export default async function ({ params }:{ params: { gameId:string } }){
   if (!games){
     alert("The game does not exist (but why?)");
     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/homePage`);
+    return;
   }
+  const periods = await db.query.periodsTable.findMany({
+    where: eq(periodsTable.gameId, games.displayId),
+    orderBy: asc(periodsTable.number),
+  });
 
   return (<>
     <aside className="flex flex-col items-center h-screen w-1/5 bg-indigo-100">
@@ -39,6 +46,20 @@ export default async function ({ params }:{ params: { gameId:string } }){
         <span>{games.hashtag}</span>
       </div>
       <a>youtube link</a>
+      <p>Results</p>
+      <div className="grid grid-cols-3">
+        <p className="col-start-2">We</p>
+        <p>opponent</p>
+        {periods.map(period => (<React.Fragment key={period.displayId}>
+          <p>{(period.number === "OT") ? "OT":`P${period.number}`}</p>
+          <p>{period.totalScore}</p>
+          <p>{period.totalOpScore}</p>
+        </React.Fragment>))}
+        <p className="font-bold">total</p>
+        <p className="font-bold">{games.totalScore}</p>
+        <p className="font-bold">{games.totalOpScore}</p>
+        <Crown className={cn("col-start-3", (games.totalScore >= games.totalOpScore) && "col-start-2")}></Crown>
+      </div>
     </aside>
     <section className="flex flex-col items-center w-4/5">
       <h2 className="px-12 pt-6">{games.title}</h2>

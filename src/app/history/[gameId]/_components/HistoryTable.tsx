@@ -39,7 +39,7 @@ export default function History ({playersOfTheGame}:Props) {
     <div className="grid grid-cols-14 w-3/4 gap-1">
 
     {contents.map((content, index) => {
-      if(index === 2) return (<div className="flex flex-col w-max" key={content.title+"table"}>
+      if(index === 2 && content.state[0]) return (<div className="flex flex-col w-max" key={content.title+"table"}>
       <p className="">{content.title}</p>
       <p className="">P1 P2 P3 P4 OT</p>
       </div>);
