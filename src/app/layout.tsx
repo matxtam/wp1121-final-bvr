@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { Users2 } from 'lucide-react';
+import Link from "next/link";
+
 
 import "./globals.css";
 
@@ -21,17 +23,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className + "flex grow overflow-hidden"}>
+      {/* <body className={inter.className}> */}
+      <body className="bg-gray-100 flex flex-col h-screen overflow-hidden">
           <SessionProvider>
-          <header className={"sticky flex flex-row justify-between items-center px-8 py-4 w-full bg-indigo-300"}>
-            <h1>
+          <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-indigo-300">
+            <Link href="/homePage">
               We Need a Brand Name
-            </h1>
+            </Link>
             <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
               <Users2 size={20} strokeWidth={2} color="#ffffff"></Users2>
             </Button>
           </header>
-          <main className= "w-full overflow-y-scroll">
+          <main className="h-full w-full overflow-y-scroll">
           {children}
           </main>
           <Toaster />
