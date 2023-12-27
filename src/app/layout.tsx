@@ -37,9 +37,9 @@ export default function RootLayout({
               </Button>
             </Link>
           </header>
-          <main className="h-full w-full overflow-y-scroll">
+
           {children}
-          </main>
+
           <Toaster />
         </SessionProvider>
       </body>
