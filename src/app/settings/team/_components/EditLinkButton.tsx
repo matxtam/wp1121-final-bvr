@@ -14,7 +14,7 @@ import { User } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
-
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from "@/components/ui/label"
 import { updateUser } from "../actions";
 
@@ -37,7 +37,22 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
   const [editUserigLink, setEditUserigLink] = useState<User["igLink"]>(igLink);
   const [editUserytLink, setEditUserytLink] = useState<User["ytLink"]>(ytLink);
   const [editUsercloudLink, setEditUsercloudLink] = useState<User["cloudLink"]>(cloudLink);
-  console.log("edit", editUsername);
+  const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // 'result' contains the data URL representing the file's data
+        const imageDataURL = reader.result;
+        setEditUserphoto(imageDataURL as string);
+        setPreviewImage(imageDataURL);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
 
   const handleEditClick = async () => {
     try {
@@ -61,6 +76,7 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
         });
       }
     }
+    setPreviewImage(null);
   };
 
   return (
@@ -105,14 +121,25 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
               </div>
               <div/>
               <div className="col-span-2">Photo:</div>
-              <div className="col-span-6">
-                <Input
-                  id="picture"
-                  type="file"
-                  className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded-md border-black-600"
-                />
-              </div>
+                <div className="col-span-6">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded-md border-black-600"
+                    // onChange={(e) => setEditPlayerphoto(e.target.value)}
+                    onChange={handleFileChange}
+                  />
+                </div>
               <div/>
+              <div className="col-span-2">Preview:</div>
+                <div className="col-span-6">
+                  {previewImage && (
+                      <Avatar>
+                          <AvatarImage src={previewImage as string} alt="Preview" />
+                          <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                  )}
+              </div>
             </div>
           </div>
         </div>
