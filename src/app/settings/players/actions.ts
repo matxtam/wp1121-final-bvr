@@ -14,14 +14,13 @@ import type { Player, User } from "@/lib/types/db";
 
 const createPlayerSchema = z.object({
   name: z.string().min(1).max(100),
-  photo: z.string().min(1).max(100),
   number: z.string().min(1).max(100),
   position: z.string().min(1).max(100),
 });
 
 export async function createPlayer(
   name: Player["name"],
-  photo: Player["photo"],
+  // photo: Player["photo"],
   number: Player["number"],
   position: Player["position"],
 ) {
@@ -33,11 +32,10 @@ export async function createPlayer(
     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
   }
 
-  // Validate input
+  //TODO: Validate input
   try {
     createPlayerSchema.parse({
       name: name,
-      photo: photo,
       number: number,
       position: position,
     });
@@ -52,7 +50,7 @@ export async function createPlayer(
       .insert(playersTable)
       .values({
         name: name,
-        photo: photo,
+        // photo: photo,
         number: number,
         position: position,
       })
@@ -131,7 +129,7 @@ export async function deletePlayer(playerId: string) {
 const updatePlayerSchema = z.object({
   playerId: z.string(),
   name: z.string().min(1).max(100),
-  photo: z.string().min(1).max(100),
+  photo: z.string().min(1),
   number: z.string().min(1).max(100),
   position: z.string().min(1).max(100),
 });
@@ -148,15 +146,7 @@ export async function updatePlayer(
   const userId = session?.user?.id;
   if (!userId) {
     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
-  }
-  console.log("photo", photo);
-  const multer  = require('multer')
-  const storage = multer.diskStorage({
-    destination: 'public/uploads/',
-    filename: photo,
-  })
-  const upload = multer({ storage: storage });
-  const photo_data = upload.single('photo');
+  }  
 
   // Validate input
   try {
@@ -259,3 +249,30 @@ export async function getPlayers(userId: User["id"]) {
   }));
   return players;
 }
+
+
+
+// toggle player usable
+// export async function PlayerUsable(
+//   playerId: string,
+//   usable: boolean,
+//   ) {
+//   // Check if user is logged in
+//   const session = await auth();
+//   const userId = session?.user?.id;
+//   if (!userId) {
+//     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+//   } 
+//   console.log("playerId", playerId);
+
+//   await db.transaction(async (trx) => {
+//     await trx
+//       .update(playersTable)
+//       .set({
+//         usable: usable,
+//       })
+//       .where(eq(playersTable.displayId, playerId))
+//       .returning();
+//   });
+//   revalidatePath(`/settings`);
+// }

@@ -22,8 +22,6 @@ import { Input } from "@/components/ui/input"
 
 import { Label } from "@/components/ui/label"
 import { createPlayer } from "../actions";
-
-import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 export default function CreatePlayerDialog() {
@@ -31,16 +29,11 @@ export default function CreatePlayerDialog() {
   const [addPlayerphoto, setAddPlayerphoto] = useState<Player["photo"]>("");
   const [addPlayerposition, setAddPlayerposition] = useState<Player["position"]>("");
   const [addPlayernumber, setAddPlayernumber] = useState<Player["number"]>("");
-  const router = useRouter();
 
   const handleAddClick = async () => {
     console.log("add");
     try {
-      const newPlayer = await createPlayer(addPlayername, addPlayerposition, addPlayernumber, addPlayerphoto);
-      console.log(addPlayername);
-
-      // router.push(`/players`)
-
+      await createPlayer(addPlayername, addPlayerposition, addPlayernumber);
     } catch (error) {
       console.log("error is", error);
       if (error instanceof Error) {
@@ -96,10 +89,6 @@ export default function CreatePlayerDialog() {
                 <Input value={addPlayerposition} onChange={(e) => setAddPlayerposition(e.target.value)} placeholder="position"/>
               </div>
               <div/>
-              <div className="col-span-2">Photo:</div>
-              <div className="col-span-6">
-                <Input value={addPlayerphoto} onChange={(e) => setAddPlayerphoto(e.target.value)} placeholder="url"/>
-              </div>
               <div/>
             </div>
           </div>

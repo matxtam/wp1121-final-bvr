@@ -4,6 +4,7 @@ import PlayerPage from "./players/page";
 // import CreatePlayerButton from "./players/_components/CreatePlayerButton";
 
 export default async function SettingsPage() {
+  
   return (
     <div>
       <TeamProfile />
