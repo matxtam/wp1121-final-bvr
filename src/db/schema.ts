@@ -97,6 +97,7 @@ export const gamesTable = pgTable(
     photo: varchar("photo", { length: 1000 }).notNull(),
     hashtag: varchar("hashtag", { length: 100 }).notNull(),
     totalScore: smallint("total_score").default(0).notNull(),
+    totalOpScore: smallint("total_op_score").default(0).notNull(),
     possession: varchar("possession", { length: 100 }).default("WE").notNull(),//WE or OP
     periodsNumber: smallint("periodsNumber").default(0).notNull(),
   },

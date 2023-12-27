@@ -32,6 +32,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     // let periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
     // let nowPeriod = null;
     let gameTotalScore = 0;
+    let gameTotalOpScore = 0;
     if(URLperiodId === null || URLperiodId === undefined){
         console.log("URLperiodId is null");
         return;
@@ -43,6 +44,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             date: gamesTable.date,
             hashtag: gamesTable.hashtag,
             totalScore: gamesTable.totalScore,
+            totalOpScore: gamesTable.totalOpScore,
             possession: gamesTable.possession,
             periodsNumber: gamesTable.periodsNumber,
         })
@@ -137,7 +139,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        // redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
 
     const handleNowPlay = async(performanceId: string, newStatus: boolean) => {
@@ -243,6 +245,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
     gameTotalScore = allPeriod.reduce((a, b) => (a + b.totalScore), 0);
+    gameTotalOpScore = allPeriod.reduce((a, b) => (a + b.totalOpScore), 0);
     const handleFinish = async(nowGameId:string) => {
         "use server";
         console.log("Finish Game");
@@ -251,6 +254,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .update(gamesTable)
             .set({
                 totalScore: gameTotalScore,
+                totalOpScore: gameTotalOpScore,
             })
             .where(
                 eq(gamesTable.displayId, nowGameId)
@@ -283,6 +287,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             </div>
             <div className="grid grid-cols-3 gap-4">
                 {allGamePerformances
+                .sort((a, b) => a.id - b.id)
                 .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
                 .map((performance, index) => (
                     <div key={index} className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">                    
@@ -301,12 +306,14 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 onP4={performance.onP4}
                                 onOt={performance.onOt}
                                 handleChangeOnTime={handleChangeOnTime}
-                            />
-                            <PlayNowButton
-                                performanceId={performance.displayId}
                                 nowPlay={performance.nowPlay}
                                 handlePlayNow={handleNowPlay}
                             />
+                            {/* <PlayNowButton
+                                performanceId={performance.displayId}
+                                nowPlay={performance.nowPlay}
+                                handlePlayNow={handleNowPlay}
+                            /> */}
                         </div>
                         <div className="m-2 flex justify-between items-center ">
                             <AddShooting
@@ -334,49 +341,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                         
                     </div>
                 ))}
-                {/* here for trying display */}
-                {/* <div className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">
-                    <div className="m-2 flex flex-wrap justify-between items-center">
-                        <div>
-                            <p>陳千蕙</p>
-                        </div>
-                        <div>
-                            <p>Number: 3</p>
-                        </div>
-                        <OnTimeRecord 
-                            performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}   
-                            onP1={true}
-                            onP2={true}
-                            onP3={false}
-                            onP4={false}
-                            onOt={false}
-                            handleChangeOnTime={handleChangeOnTime}
-                        />
-                    </div>
-                    <div className="m-2 flex flex-wrap justify-between items-center ">
-                        <AddShooting
-                                performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
-                                twoPt={20}
-                                threePt={30}
-                                ft={10}
-                                inTwoPt={2}
-                                inThreePt={3}
-                                inFt={1}
-                                handleAddShooting={handleAddShooting}
-                        />
-                        <AddOther
-                            performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
-                            foul={2}
-                            block={3}
-                            turnover={1}
-                            steal={0}
-                            assist={0}
-                            defReb={2}
-                            offReb={3}
-                            handleAddShooting={handleAddShooting}
-                        />
-                    </div>
-                </div> */}
+                
                 <div>
                 <b>ScoreBoard</b>
                     <table>
@@ -411,5 +376,6 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             </div>
       </div>
     );
+    revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
   }
   export default GameTimeIdPage;
