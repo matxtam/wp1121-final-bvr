@@ -7,6 +7,8 @@ import { GamePerformance } from "@/lib/types/db";
 import Switch from "@/components/ui/switch";
 import { type Dispatch } from "react";
 
+import { cn } from "@/lib/utils/shadcn";
+
 interface performanceWithPlayer extends GamePerformance{
   player: {name: string; number:string; }
 }
@@ -36,15 +38,28 @@ export default function History ({playersOfTheGame}:Props) {
   return (<div className="flex flex-row w-full px-12 py-6">
     <div className="grid grid-cols-14 w-3/4 gap-1">
 
-    {contents.map((content) => (
-      content.state[0] ? <p key={content.title+"table"}>{content.title}</p> : <div key={content.title+"table"}></div>
-    ))}
+    {contents.map((content, index) => {
+      if(index === 2 && content.state[0]) return (<div className="flex flex-col w-max" key={content.title+"table"}>
+      <p className="">{content.title}</p>
+      <p className="">P1 P2 P3 P4 OT</p>
+      </div>);
+      else return (
+      content.state[0] ? 
+        <p className="w-max" key={content.title+"table"}>{content.title}</p> 
+      : <div className="w-max" key={content.title+"table"}></div>
+    )})}
 
     {playersOfTheGame.map((player) => (
     <React.Fragment key={player.player.name}>
       <p> {player.player.number}</p>
       <p> {player.player.name}  </p>
-      {contents[2] .state[0] ? <p> {"player on?"}   </p> : <div></div>}
+      {contents[2] .state[0] ? (<div className="flex flex-row w-full">
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP1 && "bg-indigo-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP2 && "bg-indigo-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP3 && "bg-indigo-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP4 && "bg-indigo-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onOt && "bg-indigo-200")}></div>
+      </div>) : <div></div>}
       {contents[3] .state[0] ? <p> {player.twoPt}   </p> : <div></div>}
       {contents[4] .state[0] ? <p> {player.threePt} </p> : <div></div>}
       {contents[5] .state[0] ? <p> {player.ft}      </p> : <div></div>}
@@ -56,7 +71,7 @@ export default function History ({playersOfTheGame}:Props) {
       {contents[11].state[0] ? <p> {player.offReb}  </p> : <div></div>}
       {contents[12].state[0] ? <p> {player.turnover}</p> : <div></div>}
       {contents[13].state[0] ? <p> {player.point}   </p> : <div></div>}
-      </React.Fragment>))}
+    </React.Fragment>))}
     </div>
     <div className="flex flex-col w-1/4">
 

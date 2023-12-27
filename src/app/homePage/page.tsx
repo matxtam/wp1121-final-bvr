@@ -15,6 +15,8 @@ import { eq, like, and } from "drizzle-orm";
 import SearchBar from "./_components/SearchBar";
 import { revalidatePath } from "next/cache";
 import { publicEnv } from "@/lib/env/public";
+import { get } from "http";
+import { getPlayers } from "../settings/players/actions";
 // const photo = document.querySelector("#photo")
 
 export default async function HomePage() {
@@ -28,6 +30,7 @@ export default async function HomePage() {
     .select()
     .from(playersTable)
     .execute();
+  // const players = await getPlayers(userId);
   // let displayGame = null;
 
   // const games = await db.query.userToGameTable.findMany({
@@ -188,7 +191,10 @@ export default async function HomePage() {
         </form>
       </DialogContent>
       </Dialog>
-      <ShowPlayer players={players}/>
+      {/* {players.map((player) => (
+        <ShowPlayer key={player.displayId} players={player} />
+      ))} */}
+      {/* <ShowPlayer players={players}/> */}
     </section>
 
     <h3>Game History</h3>
