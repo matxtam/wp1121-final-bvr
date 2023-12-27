@@ -1,13 +1,17 @@
 import { db } from "@/db";
 import { eq, asc } from "drizzle-orm";
 import { gamesTable, gamePerformancesTable, periodsTable } from "@/db/schema";
-import HistoryTable from "./_components/HistoryTable";
+
 import { redirect } from "next/navigation";
 import { publicEnv } from "@/lib/env/public";
+import { revalidatePath } from "next/cache";
+
 import React from "react";
 import { Crown } from "lucide-react";
 import { cn } from "@/lib/utils/shadcn";
 
+import HistoryTable from "./_components/HistoryTable";
+import YtLink from "./_components/YtLink";
 import Image from "next/image";
 
 export default async function ({ params }:{ params: { gameId:string } }){
@@ -30,6 +34,16 @@ export default async function ({ params }:{ params: { gameId:string } }){
     orderBy: asc(periodsTable.number),
   });
 
+
+  const handleSave = async (link:string) => {
+    "use server";
+    await db
+      .update(gamesTable)
+      .set({ video: link })
+      .where(eq(gamesTable.displayId, games.displayId));
+    revalidatePath(`/history/${params.gameId}`);
+  }
+
   return (<>
     <aside className="flex flex-col items-center h-screen w-1/5 bg-indigo-100">
       <figure>
@@ -45,7 +59,7 @@ export default async function ({ params }:{ params: { gameId:string } }){
         <p>{games.date?.toString()}</p>
         <span>{games.hashtag}</span>
       </div>
-      <a>youtube link</a>
+      <YtLink link={games.video ?? ""} handleSave={handleSave}/>
       <p>Results</p>
       <div className="grid grid-cols-3">
         <p className="col-start-2">We</p>
