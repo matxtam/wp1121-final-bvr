@@ -11,13 +11,16 @@ import PlayNowButton from "./_components/playNowButton";
 import { redirect } from "next/navigation";
 import OnTimeRecord from "./_components/onTimeRecord";
 import { db } from "@/db";
-import { gamesTable, periodsTable, gamePerformancesTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { GoBackTable, gamesTable, periodsTable, gamePerformancesTable } from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
 import { title } from "process";
 import { revalidatePath } from "next/cache";
 import  ScoreBoard  from "./_components/scoreBoard";
+import  UndoButton  from "./_components/undoButton";
 import FinishGame from "./_components/FinishButton";
 import { publicEnv } from "@/lib/env/public";
+import { performance } from "perf_hooks";
+import OpenCalculator from "./_components/openCalculator";
 // import DashBoard from "./dashBoard";
 type Props = {
    params: {
@@ -27,6 +30,11 @@ type Props = {
         URLperiodId?: string;
     };
 }
+interface GamePerformancesTable {
+    id: number;
+    [key: string]: any;
+}
+
 
 async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: Props) {
     // let periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
@@ -78,6 +86,13 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         .where(
             eq(gamesTable.displayId, gameId)
         )
+        await db
+            .delete(GoBackTable)
+            .where(
+                eq(GoBackTable.periodId, URLperiodId)
+            )
+            .execute();
+
         const [{newPeriodId}]= await db
             .insert(periodsTable)
             .values({
@@ -88,10 +103,12 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 newPeriodId: periodsTable.displayId,
               })
             .execute();
+        
+        redirect(`/gameTime/${gameId}/?URLperiodId=${newPeriodId}`);        
         const params = new URLSearchParams();
         params.set("URLperiodId", newPeriodId);
-        redirect(`/gameTime/${gameId}/?${params.toString()}`);
-        
+        // redirect(`/gameTime/${gameId}/?${params.toString()}`);
+        redirect(`/gameTime/${gameId}/?URLperiodId=${newPeriodId}`);
     } 
     
     const getPeriod = async(gameId: string) => {
@@ -139,6 +156,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
+        
         redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
 
@@ -162,8 +180,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         "use server";
         console.log("Add Shooting", selectedItem);
         // updateGamePerformance(selectedItem, performanceId, change, URLperiodId);
-        //TODO: add a shooting to the performance with performanceId
-        //TODO: change the total score of the period
+
         await db
             .update(gamePerformancesTable)
             .set({
@@ -173,6 +190,33 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
+        if(action>0){
+            await db
+                .insert(GoBackTable)
+                .values({
+                    gameId: gameId,
+                    periodId: URLperiodId,
+                    performanceId: performanceId,
+                    actionString: selectedItem,
+                    undoAction: action,
+                    originalValue: newStatus - 1,
+                    })
+                .execute();  
+        }  
+        if(action<0){
+            await db
+                .insert(GoBackTable)
+                .values({
+                    gameId: gameId,
+                    periodId: URLperiodId,
+                    performanceId: performanceId,
+                    actionString: selectedItem,
+                    undoAction: action,
+                    originalValue: newStatus + 1,
+                    })
+                .execute();  
+        }
+
         if(selectedItem === "inTwoPt" || selectedItem === "inThreePt" || selectedItem === "inFt"){
             await db
                 .update(periodsTable)
@@ -184,7 +228,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 )
                 .execute();
         }        
-        
+       
         redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
     const handleAddOther = async(selectedItem: string, performanceId: string, newStatus: number, action: number) => {
@@ -203,6 +247,17 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
+        await db
+            .insert(GoBackTable)
+            .values({
+                gameId: gameId,
+                periodId: URLperiodId,
+                performanceId: performanceId,
+                actionString: selectedItem,
+                undoAction: action,
+                originalValue: newStatus - action,
+                })
+            .execute();  
         if(selectedItem === "foul"){
             await db
                 .update(periodsTable)
@@ -262,7 +317,95 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .execute();
         redirect(`/history/${gameId}`);
     }
-    
+    const handleUndo = async() => {
+        "use server";
+        const undoData = await db
+            .select()
+            .from(GoBackTable)
+            .where(
+                eq(GoBackTable.gameId, gameId)
+            )
+            .orderBy(desc(GoBackTable.id)) 
+            .limit(1)
+            .execute();
+        console.log("undoDate", undoData); 
+         if(undoData.length === 0){
+              console.log("No undoData");
+              return;
+         }
+        const selectedItem = undoData[0].actionString;
+        const originalValue = undoData[0].originalValue;
+        const undoAction = undoData[0].undoAction;
+        const performanceId = undoData[0].performanceId;
+        if(selectedItem === null || selectedItem === undefined){
+            console.log("selectedItem is null");
+            return;
+        }
+        if(originalValue === null || originalValue === undefined){
+            console.log("originalValue is null");
+            return;
+        }
+        if(undoAction === null || undoAction === undefined){
+            console.log("undoAction is null");
+            return;
+        }
+        if(performanceId === null || performanceId === undefined){
+            console.log("performanceId is null");
+            return;
+        }
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                [selectedItem]: originalValue,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        if(selectedItem === "inTwoPt" || selectedItem === "inThreePt" || selectedItem === "inFt"){
+            await db
+                .update(periodsTable)
+                .set({
+                    totalScore: nowPeriod[0].totalScore - undoAction
+                })
+                .where(
+                    eq(periodsTable.displayId, URLperiodId)
+                )
+                .execute();
+        }
+        if(selectedItem === "foul"){
+            await db
+                .update(periodsTable)
+                .set({
+                    totalFoul: nowPeriod[0].totalFoul - undoAction
+                })
+                .where(
+                    eq(periodsTable.displayId, URLperiodId)
+                )
+                .execute();
+        }
+        await db
+            .delete(GoBackTable)
+            .where(
+                eq(GoBackTable.id, undoData[0].id)
+            )
+            .execute();
+        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);        
+    }
+
+    const handleOpenCalculator = async(performanceId:string,openOrNot:boolean) => {
+        "use server";
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                openCalculator: openOrNot,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+    }
     return (
       <div>
         {/* <nav className=" sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">GameTime [ID] Page</nav> */}
@@ -279,6 +422,9 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     <InputPlayerBar handleAddPlayer={handleAddPlayer}/>
                     <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
                     <AddOp periodId={URLperiodId} handleAddOpScore={handleAddOpScore} handleAddOpFoul={handleAddOpFoul}/>
+                    <UndoButton 
+                        handleUndo={handleUndo}
+                    />
                 </div>
                 <div className="flex gap-2 p-2">
                     <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
@@ -309,6 +455,11 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 nowPlay={performance.nowPlay}
                                 handlePlayNow={handleNowPlay}
                             />
+                            <OpenCalculator 
+                                performanceId={performance.displayId}
+                                openOrNot={performance.openCalculator}
+                                handleOpenCalculator={handleOpenCalculator}
+                            />
                             {/* <PlayNowButton
                                 performanceId={performance.displayId}
                                 nowPlay={performance.nowPlay}
@@ -324,6 +475,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                     inTwoPt={performance.inTwoPt}
                                     inThreePt={performance.inThreePt}
                                     inFt={performance.inFt}
+                                    openCalculator={performance.openCalculator}
                                     handleAddShooting={handleAddShooting}
                             />
                             <AddOther
@@ -335,6 +487,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 assist={performance.assist}
                                 defReb={performance.defReb}
                                 offReb={performance.offReb}
+                                openCalculator={performance.openCalculator}
                                 handleAddOther={handleAddOther}
                             />
                         </div>
