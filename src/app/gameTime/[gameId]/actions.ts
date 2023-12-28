@@ -10,7 +10,7 @@ export const createPerformance = async (playerName: string, gameId: string) => {
     const AddPlayerId = await db
     .select({displayId: playersTable.displayId})
     .from(playersTable)
-    .where(and(eq(playersTable.name, playerName), eq(playersTable.useable, true)))
+    .where(and(eq(playersTable.name, playerName), eq(playersTable.usable, true)))
     .execute();
     console.log("AddPlayerId",AddPlayerId);
 
