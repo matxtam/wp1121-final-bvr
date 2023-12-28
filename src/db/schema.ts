@@ -42,9 +42,38 @@ export const usersTable = pgTable(
   }),
 );
 
-export const usersRelations = relations(usersTable, ({ many }) => ({
-  usersToPlayersTable: many(usersToPlayersTable),
-}));
+
+export const gamesTable = pgTable(
+  "games",
+  {
+    id: serial("id").primaryKey(),
+    displayId: uuid("display_id").defaultRandom().notNull().unique(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => usersTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    title: varchar("title", { length: 100 }).notNull(),
+    date: date("date").default(sql`now()`),
+    photo: varchar("photo", { length: 1000 }).notNull(),
+    video: varchar("video", { length: 200 }),
+    hashtag: varchar("hashtag", { length: 100 }).notNull(),
+    totalScore: smallint("total_score").default(0).notNull(),
+    totalOpScore: smallint("total_op_score").default(0).notNull(),
+    possession: varchar("possession", { length: 100 }).default("WE").notNull(),//WE or OP
+    periodsNumber: smallint("periodsNumber").default(0).notNull(),
+    display: boolean("display").default(true).notNull(),
+    
+  },
+  (table) => ({
+    displayIdIndex: index("display_id_index").on(table.displayId),
+  }),
+);
+
+
+
+
 
 export const playersTable = pgTable(
   "players",
@@ -103,34 +132,6 @@ export const usersToPlayersRelations = relations(
       fields: [usersToPlayersTable.userId],
       references: [usersTable.displayId],
     }),
-  }),
-);
-
-
-export const gamesTable = pgTable(
-  "games",
-  {
-    id: serial("id").primaryKey(),
-    displayId: uuid("display_id").defaultRandom().notNull().unique(),
-    title: varchar("title", { length: 100 }).notNull(),
-    date: date("date").default(sql`now()`),
-    photo: varchar("photo", { length: 1000 }).notNull(),
-    video: varchar("video", { length: 200 }),
-    hashtag: varchar("hashtag", { length: 100 }).notNull(),
-    totalScore: smallint("total_score").default(0).notNull(),
-    totalOpScore: smallint("total_op_score").default(0).notNull(),
-    possession: varchar("possession", { length: 100 }).default("WE").notNull(),//WE or OP
-    periodsNumber: smallint("periodsNumber").default(0).notNull(),
-    display: boolean("display").default(true).notNull(),
-    userId: uuid("user_id")
-      .notNull()
-      .references(() => usersTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-  },
-  (table) => ({
-    displayIdIndex: index("display_id_index").on(table.displayId),
   }),
 );
 
@@ -213,6 +214,17 @@ export const gamePerformancesTable = pgTable(
 //   userToGameTable: many(userToGameTable),
 // }));
 
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  gamesTable: many(gamesTable),
+}));
+
+export const GameRelations = relations(gamesTable, ({one}) => ({
+  user: one(usersTable, {
+    fields: [gamesTable.userId],
+    references: [usersTable.displayId],
+  }),
+}));
+
 
 export const PlayerRelations = relations(playersTable, ({ many }) => ({
   gamePerformancesTable: many(gamePerformancesTable),
@@ -254,13 +266,15 @@ export const PlayerRelations = relations(playersTable, ({ many }) => ({
 //   playersTable: many(playersTable),
 // }));
 
-export const GameRelations = relations(gamesTable, ({ many }) => ({
-  periodsTable: many(periodsTable),
-}));
 
-export const PeriodRelations = relations(periodsTable, ({ many }) => ({
-  gamePerformancesTable: many(gamePerformancesTable),
-}));
+// export const PeriodRelations = relations(periodsTable, ({ many }) => ({
+//   gamePerformancesTable: many(gamePerformancesTable),
+// }));
+
+// export const GamePeriodRelations = relations(gamesTable, 
+//   ({ many }) => ({
+//   periodsTable: many(periodsTable),
+// }));
 
 
 export const GamePerformanceRelations = relations(
@@ -278,41 +292,6 @@ export const GamePerformanceRelations = relations(
     //   fields: [gamePerformancesTable.periodId],
     //   references: [periodsTable.displayId],
     // }),
-  }),
-);
-
-export const GoBackTable = pgTable( 
-  "go_back",
-  {
-    id: serial("id").primaryKey(),
-    displayId: uuid("display_id").defaultRandom().notNull().unique(),
-    gameId: uuid("game_id")
-      .notNull()
-      .references(() => gamesTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-    periodId: uuid("period_id")
-      .references(() => periodsTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-    playerId: uuid("player_id")
-      .references(() => playersTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-    performanceId: uuid("performance_id")
-      .references(() => gamePerformancesTable.displayId, {
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      }),
-    actionString: varchar("action_string", { length: 100 }).notNull(),
-    undoAction: smallint("undo_action").default(0).notNull(),
-
-  },
-  (table) => ({
-    displayIdIndex: index("display_id_index").on(table.displayId),
   }),
 );
 
