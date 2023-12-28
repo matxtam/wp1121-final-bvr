@@ -11,6 +11,7 @@ import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import DeletePlayerButton from "./_components/DeletePlayerButton";
+import UsableButton from "./_components/UsableButton";
 
 export default async function PlayerPage() {
     const session = await auth();
@@ -63,6 +64,9 @@ export default async function PlayerPage() {
                     </TableCell>
                     <TableCell align="center">
                       <DeletePlayerButton displayId={player.displayId} />
+                    </TableCell>
+                    <TableCell align="center">
+                      {/* <UsableButton displayId={player.displayId} usable={player.usable} /> */}
                     </TableCell>
                   </TableRow>
                 );

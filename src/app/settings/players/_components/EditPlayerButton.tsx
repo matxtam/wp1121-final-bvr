@@ -14,6 +14,7 @@ import { Player } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // export type PlayerDialogProps = {
 //     open: boolean;
@@ -25,6 +26,8 @@ import { updatePlayer } from "../actions";
 
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
+import { set } from "zod";
+import ImageUploader from "./ImageUploader";
 
 type EditPlayerButtonProps = {
   playerId: string;
@@ -39,8 +42,24 @@ export default function EditPlayerButton({ playerId, name, photo, position, numb
   const [editPlayerphoto, setEditPlayerphoto] = useState<Player["photo"]>(photo);
   const [editPlayerposition, setEditPlayerposition] = useState<Player["position"]>(position);
   const [editPlayernumber, setEditPlayernumber] = useState<Player["number"]>(number);      
+  const [previewImage, setPreviewImage] = useState<string | ArrayBuffer | null>(null);
 
-  const handleeditClick = async () => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // 'result' contains the data URL representing the file's data
+        const imageDataURL = reader.result;
+        setEditPlayerphoto(imageDataURL as string);
+        setPreviewImage(imageDataURL);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const handleEditClick = async () => {
     console.log("edit");
     try {
       await updatePlayer( playerId, editPlayername, editPlayerphoto, editPlayernumber, editPlayerposition);
@@ -61,6 +80,7 @@ export default function EditPlayerButton({ playerId, name, photo, position, numb
         });
       }
     }
+    setPreviewImage(null);
   };
 
   return (
@@ -97,28 +117,31 @@ export default function EditPlayerButton({ playerId, name, photo, position, numb
               </div>
               <div/>
               <div className="col-span-2">Photo:</div>
-              <div className="col-span-6">
-                {/* <Input value={editPlayerphoto} onChange={(e) => setEditPlayerphoto(e.target.value)} placeholder="url"/> */}
-                <Input
-                  id="picture"
-                  type="file"
-                  className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded-md border-black-600"
-                  // value={editPlayerphoto} onChange={(e) => setEditPlayerphoto(e.target.value)} placeholder="url"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setEditPlayerphoto(file.name);
-                    }
-                  }}
-                />
+                <div className="col-span-6">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded-md border-black-600"
+                    // onChange={(e) => setEditPlayerphoto(e.target.value)}
+                    onChange={handleFileChange}
+                  />
                 </div>
               <div/>
-            </div>
+              <div className="col-span-2">Preview:</div>
+                <div className="col-span-6">
+                  {previewImage && (
+                      <Avatar>
+                          <AvatarImage src={previewImage as string} alt="Preview" />
+                          <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                  )}
+                </div>
+              </div>
           </div>
         </div>
         <DialogFooter className="sm:justify-end">
           <DialogClose asChild>
-            <Button type="button" variant="secondary" onClick={handleeditClick}>
+            <Button type="button" variant="secondary" onClick={handleEditClick}>
               confirm
             </Button>
           </DialogClose>
