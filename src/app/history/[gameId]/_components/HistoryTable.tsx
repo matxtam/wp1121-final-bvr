@@ -54,11 +54,11 @@ export default function History ({playersOfTheGame}:Props) {
       <p> {player.player.number}</p>
       <p> {player.player.name}  </p>
       {contents[2] .state[0] ? (<div className="flex flex-row w-full">
-        <div className={cn("w-1/4 h-full bg-gray-100", player.onP1 && "bg-indigo-200")}></div>
-        <div className={cn("w-1/4 h-full bg-gray-100", player.onP2 && "bg-indigo-200")}></div>
-        <div className={cn("w-1/4 h-full bg-gray-100", player.onP3 && "bg-indigo-200")}></div>
-        <div className={cn("w-1/4 h-full bg-gray-100", player.onP4 && "bg-indigo-200")}></div>
-        <div className={cn("w-1/4 h-full bg-gray-100", player.onOt && "bg-indigo-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP1 && "bg-batra-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP2 && "bg-batra-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP3 && "bg-batra-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onP4 && "bg-batra-200")}></div>
+        <div className={cn("w-1/4 h-full bg-gray-100", player.onOt && "bg-batra-200")}></div>
       </div>) : <div></div>}
       {contents[3] .state[0] ? <p> {player.twoPt}   </p> : <div></div>}
       {contents[4] .state[0] ? <p> {player.threePt} </p> : <div></div>}
