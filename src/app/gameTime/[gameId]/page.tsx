@@ -19,6 +19,8 @@ import  ScoreBoard  from "./_components/scoreBoard";
 import  UndoButton  from "./_components/undoButton";
 import FinishGame from "./_components/FinishButton";
 import { publicEnv } from "@/lib/env/public";
+import { performance } from "perf_hooks";
+import OpenCalculator from "./_components/openCalculator";
 // import DashBoard from "./dashBoard";
 type Props = {
    params: {
@@ -390,6 +392,20 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .execute();
         redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);        
     }
+
+    const handleOpenCalculator = async(performanceId:string,openOrNot:boolean) => {
+        "use server";
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                openCalculator: openOrNot,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+    }
     return (
       <div>
         {/* <nav className=" sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">GameTime [ID] Page</nav> */}
@@ -439,6 +455,11 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 nowPlay={performance.nowPlay}
                                 handlePlayNow={handleNowPlay}
                             />
+                            <OpenCalculator 
+                                performanceId={performance.displayId}
+                                openOrNot={performance.openCalculator}
+                                handleOpenCalculator={handleOpenCalculator}
+                            />
                             {/* <PlayNowButton
                                 performanceId={performance.displayId}
                                 nowPlay={performance.nowPlay}
@@ -454,6 +475,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                     inTwoPt={performance.inTwoPt}
                                     inThreePt={performance.inThreePt}
                                     inFt={performance.inFt}
+                                    openCalculator={performance.openCalculator}
                                     handleAddShooting={handleAddShooting}
                             />
                             <AddOther
@@ -465,6 +487,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 assist={performance.assist}
                                 defReb={performance.defReb}
                                 offReb={performance.offReb}
+                                openCalculator={performance.openCalculator}
                                 handleAddOther={handleAddOther}
                             />
                         </div>

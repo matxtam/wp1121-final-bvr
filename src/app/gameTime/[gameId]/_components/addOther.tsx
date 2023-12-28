@@ -11,12 +11,13 @@ type Props = {
     assist: number;
     defReb: number;
     offReb: number;
+    openCalculator: boolean;
     handleAddOther: (selectedItem: string, performanceId: string, newStatus: number, action: number) => void;
 }
 type ButtonType = 'foul' | 'block' | 'turnover' | 'steal' | 'assist' | 'defReb' | 'offReb';
 
-export default function AddOther({ performanceId, foul, block, turnover, steal, assist, defReb, offReb, handleAddOther }: Props) {
-    const [selectedButton, setSelectedButton] = useState("foul");
+export default function AddOther({ performanceId, foul, block, turnover, steal, assist, defReb, offReb, handleAddOther, openCalculator }: Props) {
+    const [selectedButton, setSelectedButton] = useState("");
     const [countFoul, setCountFoul] = useState<number>(foul);//set with foul
     const [countBlock, setCountBlock] = useState<number>(block);//set with block
     const [countTurnover, setCountTurnover] = useState<number>(turnover);//set with turnover
@@ -24,64 +25,44 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
     const [countAssist, setCountAssist] = useState<number>(assist);//set with assist
     const [countDefReb, setCountDefReb] = useState<number>(defReb);//set with defReb
     const [countOffReb, setCountOffReb] = useState<number>(offReb);//set with offReb
-    // const buttonTypeMappings: Record<ButtonType, { count: number }> = {
-    //     foul: { count: foul },
-    //     block: { count: block },
-    //     turnover: { count: turnover },
-    //     steal: { count: steal },
-    //     assist: { count: assist },
-    //     defReb: { count: defReb },
-    //     offReb: { count: offReb },
-    //   };    
+
     const handleButtonClick = (buttonType:ButtonType) => {
         setSelectedButton(buttonType);
             if(buttonType==="foul"){
               setCountFoul(countFoul);
+              setCountFoul((prevNumber) => prevNumber + 1);
+              handleAddOther("foul", performanceId, countFoul+1, 1);
             }
             if(buttonType==="block"){
                 setCountBlock(countBlock);
+                setCountBlock((prevNumber) => prevNumber + 1);
+                handleAddOther("block", performanceId, countBlock+1, 1);
             }
             if(buttonType==="turnover"){
                 setCountTurnover(countTurnover);
+                setCountTurnover((prevNumber) => prevNumber + 1);
+                handleAddOther("turnover", performanceId, countTurnover+1, 1);
             }
             if(buttonType==="steal"){
                 setCountSteal(countSteal);
+                setCountSteal((prevNumber) => prevNumber + 1);
+                handleAddOther("steal", performanceId, countSteal+1, 1);
             }
             if(buttonType==="assist"){
                 setCountAssist(countAssist);
+                setCountAssist((prevNumber) => prevNumber + 1);
+                handleAddOther("assist", performanceId, countAssist+1, 1);
             }
             if(buttonType==="defReb"){
                 setCountDefReb(countDefReb);
+                setCountDefReb((prevNumber) => prevNumber + 1);
+                handleAddOther("defReb", performanceId, countDefReb+1, 1);
             }
             if(buttonType==="offReb"){
                 setCountOffReb(countOffReb);
+                setCountOffReb((prevNumber) => prevNumber + 1);
+                handleAddOther("offReb", performanceId, countOffReb+1, 1);
             }
-
-        // if (buttonTypeMappings.hasOwnProperty(buttonType)) {
-        // //   const { count } = buttonTypeMappings[buttonType];
-        //   setSelectedButton(buttonType);
-        //     if(buttonType==="foul"){
-        //       setCountFoul(count);
-        //     }
-        //     if(buttonType==="block"){
-        //         setCountBlock(count);
-        //     }
-        //     if(buttonType==="turnover"){
-        //         setCountTurnover(count);
-        //     }
-        //     if(buttonType==="steal"){
-        //         setCountSteal(count);
-        //     }
-        //     if(buttonType==="assist"){
-        //         setCountAssist(count);
-        //     }
-        //     if(buttonType==="defReb"){
-        //         setCountDefReb(count);
-        //     }
-        //     if(buttonType==="offReb"){
-        //         setCountOffReb(count);
-        //     }
-        // }
       };
     useEffect(() => {
         setCountFoul(foul);
@@ -170,17 +151,6 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
         // router.refresh();
     }
 
-    // const handleIncrement = () => {
-    //     setCount((prevNumber) => prevNumber + 1);
-    //     handleAddOther(selectedButton, performanceId, count+1);
-    //     router.refresh();
-    // };
-    
-    // const handleDecrement = () => {
-    //     setCount((prevNumber) => prevNumber - 1);
-    //     handleAddOther(selectedButton, performanceId, count-1);
-    //     router.refresh();
-    // };
 
     return (
         <div className="flex flex-wrap flex-col items-center">
@@ -192,6 +162,9 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}
                 >
                     FOUL
+                    <p  className={`p-1 ${
+                    selectedButton === 'foul' ? 'text-yellow-400' : ''
+                    }`}><b>{countFoul}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('block')}
@@ -200,6 +173,9 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}
                 >
                     BLOCK
+                    <p  className={`p-1 ${
+                    selectedButton === 'block' ? 'text-yellow-400' : ''
+                    }`}><b>{countBlock}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('assist')}
@@ -208,6 +184,9 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}
                 >
                     AST
+                    <p  className={`p-1 ${
+                    selectedButton === 'assist' ? 'text-yellow-400' : ''
+                    }`}><b>{countAssist}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('steal')}
@@ -216,6 +195,9 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}
                 >
                     STL
+                    <p  className={`p-1 ${
+                    selectedButton === 'steal' ? 'text-yellow-400' : ''
+                    }`}><b>{countSteal}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('turnover')}
@@ -224,6 +206,9 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}
                 >
                     TO
+                    <p  className={`p-1 ${
+                    selectedButton === 'turnover' ? 'text-yellow-400' : ''
+                    }`}><b>{countTurnover}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('offReb')}
@@ -232,6 +217,9 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}
                 >
                     OFFREB
+                    <p  className={`p-1 ${
+                    selectedButton === 'offReb' ? 'text-yellow-400' : ''
+                    }`}><b>{countOffReb}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('defReb')}
@@ -240,10 +228,13 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}
                 >
                     DEFREB
+                    <p  className={`p-1 ${
+                    selectedButton === 'defReb' ? 'text-yellow-400' : ''
+                    }`}><b>{countDefReb}</b></p>
                 </Button>
             </div>
 
-            <div className="flex items-center">
+            {openCalculator && <div className="flex items-center">
                 <p className="p-1">
                     <b>投球數</b>
                 </p>
@@ -274,7 +265,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <button onClick={handleIncrement} className="p-2 m-2 bg-gray-300">
                     +
                 </button>
-            </div>
+            </div>}
             
         </div>
     )
