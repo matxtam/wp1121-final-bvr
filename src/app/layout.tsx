@@ -22,9 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={novaSquare.className}>
-      <body className="flex flex-col h-screen overflow-hidden text-batra-100 bg-batra-900 select-none">
+      <body className="flex flex-col h-screen overflow-hidden text-batra-100 bg-background select-none">
           <SessionProvider>
-          <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-batra-600">
+          <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-primary">
             <h1 className="text-4xl font-bold">
               <Link href="/homePage">
                 Batra

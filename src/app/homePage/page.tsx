@@ -122,7 +122,7 @@ export default async function HomePage() {
 
     
     <section className="flex flex-col gap-12">
-      <div className="sticky top-0 z-50 p-6 bg-batra-900 flex flex-col justify-around items-center">
+      <div className="sticky top-0 z-50 p-6 bg-background flex flex-col justify-around items-center">
         <div className="flex flex-row w-full justify-around items-center">
           <Separator className="w-1/3 "/>
           <h2>Game History</h2>
@@ -132,7 +132,7 @@ export default async function HomePage() {
       </div>
       
       <div className="flex flex-row flex-wrap w-full px-20 justify-center items-center gap-4">
-      <NewGameBtn className="flex h-52 w-64 rounded bg-transparent shadow-md shadow-batra-300t hover:bg-batra-600 hover:animate-pulse"/>
+      <NewGameBtn className="flex h-52 w-64 rounded bg-transparent shadow-md shadow-batra-300 hover:bg-muted hover:animate-pulse"/>
       {displayGame.map((game) => (
         <Link key={game.id} href={`../history/${game.displayId}`} className="flex flex-col items-center w-64 h-52 p-3 gap-3 rounded border-2 border-blue-100 transition duration-100 rouneded-sm shadow-md shadow-batra-300 bg-transparent hover:scale-105 hover:-translate-y-3 hover:z-0" >
           <div className="flex flex-row w-full justify-between">

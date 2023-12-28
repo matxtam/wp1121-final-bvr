@@ -14,12 +14,12 @@ type Props = {
 function SearchBar({ handleSearch, handleClear, className }: Props) {
     const inputRef = useRef<HTMLInputElement>(null);
     return (
-        <div className={"flex justify-end items-center gap-0.5 px-2 py-1 mr-2 text-left text-md text-batra-400"+className}>
+        <div className={"flex justify-end items-center gap-0.5 px-2 py-1 mr-2 text-left text-md text-border"+className}>
             <input
                 type="text"
                 name="inputTitle"
                 placeholder="Search title..."
-                className="mx-2 p-1 border-2 border-gray-300 bg-batra-300/30 rounded"
+                className="mx-2 p-1 border-2 border-gray-300 bg-accent/30 rounded"
                 ref={inputRef}
             />
             <button 
@@ -27,13 +27,13 @@ function SearchBar({ handleSearch, handleClear, className }: Props) {
             onClick={async() => {
                 handleSearch(inputRef.current?.value || '');
                 }}>
-                <Search className="transition-all hover:text-white"/>
+                <Search className="transition-all hover:text-muted-foreground"/>
             </button>
             <button onClick={async()=>{
                 handleClear();
                 inputRef.current!.value = '';
                 }}>
-                <XCircle className="transition-all hover:text-white"/>
+                <XCircle className="transition-all hover:text-muted-foreground"/>
             </button>
       </div>
       
