@@ -308,3 +308,33 @@ export const GamePerformanceRelations = relations(
 //   }),
 // }),
 // );
+
+export const GoBackTable = pgTable( 
+  "go_back",
+  {
+    id: serial("id").primaryKey(),
+    displayId: uuid("display_id").defaultRandom().notNull().unique(),
+    gameId: uuid("game_id")
+      .notNull()
+      .references(() => gamesTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    periodId: uuid("period_id")
+      .references(() => periodsTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    performanceId: uuid("performance_id")
+      .references(() => gamePerformancesTable.displayId, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      }),
+    actionString: varchar("action_string", { length: 100 }).notNull(),
+    undoAction: smallint("undo_action").default(0).notNull(),
+    originalValue: smallint("original_value").default(0).notNull(),
+  },
+  (table) => ({
+    displayIdIndex: index("display_id_index").on(table.displayId),
+  }),
+);
