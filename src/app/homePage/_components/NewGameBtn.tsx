@@ -27,8 +27,8 @@ export default async function NewGameBtn({className}:NewGameBtnProps) {
 
   return (
     <Dialog>
-      <DialogTrigger className={className && ""} asChild>
-        <Button>
+      <DialogTrigger asChild>
+        <Button className={className}>
           <Plus/>
         </Button>
       </DialogTrigger>

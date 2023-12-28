@@ -111,7 +111,7 @@ export default async function HomePage() {
   
   return (
   <>
-    <div className="flex flex-row justify-around items-center">
+    <div className="flex flex-row pt-12 justify-around items-center">
       <Separator className="w-1/3 "/>
       <h2>Players</h2>
       <Separator className="w-1/3"/>
@@ -120,32 +120,38 @@ export default async function HomePage() {
     <ShowPlayer players={players}/>
 
 
-    <div className="flex flex-row justify-around items-center">
-      <Separator className="w-1/3 "/>
-      <h2>Game History</h2>
-      <Separator className="w-1/3"/>
-    </div>
-    <SearchBar handleSearch={handleSearch} handleClear={handleClear}/>
-    <section className="flex flex-row">
-      <NewGameBtn/>
-      {/* {games.game.map((game) => (
-      <Link key={game.id} href={`../history/${game.displayId}`}>
-        <h4>{game.title}</h4>
-        <div>
-          <p>{game.date?.toString()}</p>
-          <p>{game.hashtag}</p>
+    
+    <section className="flex flex-col gap-12">
+      <div className="sticky top-0 z-50 p-6 bg-batra-900 flex flex-col justify-around items-center">
+        <div className="flex flex-row justify-around items-center">
+        <Separator className="w-1/3 "/>
+        <h2>Game History</h2>
+        <Separator className="w-1/3 "/>
         </div>
-      </Link>
-      ))} */}
+        <SearchBar handleSearch={handleSearch} handleClear={handleClear} className=" w-1/3"/>
+      </div>
+      
+      <div className="flex flex-row flex-wrap w-full px-20 justify-center items-center gap-4">
+      <NewGameBtn className="flex h-52 w-64 rounded bg-transparent shadow-md shadow-batra-300t hover:bg-batra-600 hover:animate-pulse"/>
       {displayGame.map((game) => (
-        <Link key={game.id} href={`../history/${game.displayId}`} className="game box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap" >
-          <h4>{game.title}</h4>
-          <div className="px-4">
+        <Link key={game.id} href={`../history/${game.displayId}`} className="flex flex-col items-center w-64 h-52 p-3 gap-3 rounded border-2 border-blue-100 transition duration-100 rouneded-sm shadow-md shadow-batra-300 bg-transparent hover:scale-105 hover:-translate-y-3 hover:z-0" >
+          <div className="flex flex-row w-full justify-between">
             <p>{game.date?.toString()}</p>
-            <p>{game.hashtag}</p>
+            <p className="rounded-full bg-accent w-20 overflow-hidden text-center">{game.hashtag}</p>
           </div>
+          <Image
+            src="/history_df.jpg"
+            alt="banana"
+            width={200}
+            height={100}
+            priority
+            style={{  borderRadius: 10 }}
+          />
+        <h4 className="text-xl">{game.title}</h4>
+          
         </Link>
       ))}
+      </div>
     </section>
   </>)
 }

@@ -46,17 +46,18 @@ export default function ShowPlayer ({players}: playerBtnType) {
   return (
   <Card
     key={player.id} 
-    className="transition duration-100 relative flex flex-row h-full border-none rouneded-sm shadow-md shadow-batra-300 p-3 bg-batra-700 hover:scale-105 hover:-translate-y-3 open:bg-transparent"
+    className="transition duration-100 relative flex flex-row h-full border-none rouneded-sm shadow-md shadow-batra-300 p-3 bg-batra-700 hover:scale-105 hover:-translate-y-3"
     onClick={() => {setShowPlayer(index); if((!open)||(showPlayer===index))setOpen(!open); }}
   >
     <div className="flex flex-col">
-    <Image
+      <Image
           src="/banana.jpg"
           alt="banana"
           width={100}
           height={100}
           priority
-          className="transition-transform duration-100 rounded-t-md sepia"
+          style={{  borderTopRightRadius: 10, borderTopLeftRadius: 10, }}
+          className="sepia"
         />
       <p className="w-full px-1 text-batra-900 rounded-bl bg-gradient-to-r from-batra-300 to-transparent">{player.name}</p>
       <p className="absolute bottom-0 right-0 text-5xl text-opacity-80 text-batra-900 font-extrabold p-2">{player.number}</p>
