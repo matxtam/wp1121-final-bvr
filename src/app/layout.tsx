@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={novaSquare.className}>
-      <body className="flex flex-col h-screen overflow-hidden text-batra-100 bg-batra-900">
+      <body className="flex flex-col h-screen overflow-hidden text-batra-100 bg-batra-900 select-none">
           <SessionProvider>
           <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-batra-600">
             <h1 className="text-4xl font-bold">
@@ -30,12 +30,12 @@ export default function RootLayout({
                 Batra
               </Link>
             </h1>
-            <SignOutButton />
-            <Link href="/settings">
-              <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
-                <Users2 size={20} strokeWidth={2} color="#ffffff"></Users2>
-              </Button>
-            </Link>
+            <div className="flex flex-row items-center gap-3">
+              <SignOutButton/>
+              <Link href="/settings" className="flex items-center justify-center rounded-full w-12 h-12 p-0 border-4 hover:bg-accent hover:text-accent-foreground">
+                <Users2 size={20} strokeWidth={2} color="#ffffff" className="transparent-50"></Users2>
+              </Link>
+            </div>
           </header>
 
           {children}

@@ -10,6 +10,6 @@ export default function SignOutButton() {
   const handleSignOut = async () => {
     await signOut();
   }
-  return <Button variant={"outline"} data-testid="sign-out-button" onClick={handleSignOut}>Sign Out</Button>;
+  return <Button variant={"outline"} data-testid="sign-out-button" onClick={handleSignOut} className="rounded">Sign Out</Button>;
 }
 // TODO: 4. end
