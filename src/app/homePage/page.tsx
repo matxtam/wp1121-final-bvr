@@ -123,12 +123,12 @@ export default async function HomePage() {
     
     <section className="flex flex-col gap-12">
       <div className="sticky top-0 z-50 p-6 bg-batra-900 flex flex-col justify-around items-center">
-        <div className="flex flex-row justify-around items-center">
-        <Separator className="w-1/3 "/>
-        <h2>Game History</h2>
-        <Separator className="w-1/3 "/>
+        <div className="flex flex-row w-full justify-around items-center">
+          <Separator className="w-1/3 "/>
+          <h2>Game History</h2>
+          <Separator className="w-1/3 "/>
         </div>
-        <SearchBar handleSearch={handleSearch} handleClear={handleClear} className=" w-1/3"/>
+        <SearchBar handleSearch={handleSearch} handleClear={handleClear} className=" pt-6 pr-24 self-end"/>
       </div>
       
       <div className="flex flex-row flex-wrap w-full px-20 justify-center items-center gap-4">
