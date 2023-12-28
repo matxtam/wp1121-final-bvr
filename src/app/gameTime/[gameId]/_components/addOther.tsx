@@ -188,7 +188,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('foul')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'foul' ? 'bg-indigo-400 text-white' : ''
+                    selectedButton === 'foul' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
                     FOUL
@@ -196,7 +196,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('block')}
                     className={`bg-gray-300 m-2 px-4 py-2 ${
-                    selectedButton === 'block' ? 'bg-indigo-400 text-white' : ''
+                    selectedButton === 'block' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
                     BLOCK
@@ -204,7 +204,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('assist')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'assist' ? 'bg-indigo-400 text-white' : ''
+                    selectedButton === 'assist' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
                     AST
@@ -212,7 +212,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('steal')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'steal' ? 'bg-indigo-400 text-white' : ''
+                    selectedButton === 'steal' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
                     STL
@@ -220,7 +220,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('turnover')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'turnover' ? 'bg-indigo-400 text-white' : ''
+                    selectedButton === 'turnover' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
                     TO
@@ -228,7 +228,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('offReb')}
                     className={`bg-gray-300 m-2 px-4 py-2 ${
-                    selectedButton === 'offReb' ? 'bg-indigo-400 text-white' : ''
+                    selectedButton === 'offReb' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
                     OFFREB
@@ -236,7 +236,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 <Button
                     onClick={() => handleButtonClick('defReb')}
                     className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'defReb' ? 'bg-indigo-400 text-white' : ''
+                    selectedButton === 'defReb' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
                     DEFREB
@@ -251,25 +251,25 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     -
                 </button>
                 {selectedButton === "foul" && (
-                    <div className="p-4 bg-indigo-100 m-2">{countFoul}</div>
+                    <div className="p-4 bg-batra-100 m-2">{countFoul}</div>
                 )}
                 {selectedButton === "block" && (
-                    <div className="p-4 bg-indigo-100 m-2">{countBlock}</div>
+                    <div className="p-4 bg-batra-100 m-2">{countBlock}</div>
                 )}
                 {selectedButton === "turnover" && (
-                    <div className="p-4 bg-indigo-100 m-2">{countTurnover}</div>
+                    <div className="p-4 bg-batra-100 m-2">{countTurnover}</div>
                 )}
                 {selectedButton === "steal" && (
-                    <div className="p-4 bg-indigo-100 m-2">{countSteal}</div>
+                    <div className="p-4 bg-batra-100 m-2">{countSteal}</div>
                 )}
                 {selectedButton === "assist" && (
-                    <div className="p-4 bg-indigo-100 m-2">{countAssist}</div>
+                    <div className="p-4 bg-batra-100 m-2">{countAssist}</div>
                 )}
                 {selectedButton === "defReb" && (
-                    <div className="p-4 bg-indigo-100 m-2">{countDefReb}</div>
+                    <div className="p-4 bg-batra-100 m-2">{countDefReb}</div>
                 )}
                 {selectedButton === "offReb" && (
-                    <div className="p-4 bg-indigo-100 m-2">{countOffReb}</div>
+                    <div className="p-4 bg-batra-100 m-2">{countOffReb}</div>
                 )}
                 <button onClick={handleIncrement} className="p-2 m-2 bg-gray-300">
                     +

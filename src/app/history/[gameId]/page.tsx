@@ -45,7 +45,7 @@ export default async function ({ params }:{ params: { gameId:string } }){
   }
 
   return (<>
-    <aside className="flex flex-col items-center h-screen w-1/5 bg-indigo-100">
+    <aside className="flex flex-col items-center h-screen w-1/5 bg-batra-100">
       <figure>
         <Image 
           src="/gift.jpg"

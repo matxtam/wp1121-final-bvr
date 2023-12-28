@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
-import { Inter } from "next/font/google";
+import { Nova_Square } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { Users2 } from 'lucide-react';
@@ -8,7 +8,7 @@ import SignOutButton from "./homePage/_components/SignOutButton";
 import "./globals.css";
 import Link from "next/link";
 
-const inter = Inter({ subsets: ["latin"], weight: ["400", "700"] });
+const novaSquare = Nova_Square({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,21 +21,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-gray-100 flex flex-col h-screen overflow-hidden">
+    <html lang="en" className={novaSquare.className}>
+      <body className="flex flex-col h-screen overflow-hidden text-batra-100 bg-batra-900 select-none">
           <SessionProvider>
-          <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-indigo-300">
-            <h1 className="text-2xl font-bold">
+          <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-batra-600">
+            <h1 className="text-4xl font-bold">
               <Link href="/homePage">
-                We Need a Brand Name
+                Batra
               </Link>
             </h1>
-            <SignOutButton />
-            <Link href="/settings">
-              <Button variant="outline" className="rounded-full w-12 h-12 p-0 border-4">
-                <Users2 size={20} strokeWidth={2} color="#ffffff"></Users2>
-              </Button>
-            </Link>
+            <div className="flex flex-row items-center gap-3">
+              <SignOutButton/>
+              <Link href="/settings" className="flex items-center justify-center rounded-full w-12 h-12 p-0 border-4 hover:bg-accent hover:text-accent-foreground">
+                <Users2 size={20} strokeWidth={2} color="#ffffff" className="transparent-50"></Users2>
+              </Link>
+            </div>
           </header>
 
           {children}
