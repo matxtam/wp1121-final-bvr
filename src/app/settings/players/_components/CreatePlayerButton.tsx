@@ -33,7 +33,7 @@ export default function CreatePlayerDialog() {
   const handleAddClick = async () => {
     console.log("add");
     try {
-      await createPlayer(addPlayername, addPlayerposition, addPlayernumber);
+      await createPlayer(addPlayername, addPlayernumber, addPlayerposition);
     } catch (error) {
       console.log("error is", error);
       if (error instanceof Error) {
