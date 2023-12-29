@@ -41,9 +41,10 @@ export default function ShowPlayer ({players}: playerBtnType) {
   <div className="flex flex-row gap-4 justify-center">
 
   {players.map((player, index) => {
-    const shooting = player.personal2pt + player.personal3pt + player.personalFt;
-    const ins = player.personalIn2pt + player.personalIn3pt + player.personalInFt;
-    const rate = shooting === 0 ? Math.floor(ins*100/shooting) : "Nan";
+    const ins =  player.personalIn2pt + player.personalIn3pt + player.personalInFt;
+    const shooting = ins + player.personal2pt + player.personal3pt + player.personalFt;
+    
+    const rate = shooting !== 0 ? Math.floor(ins*100/shooting) : "Nan";
   return (
   <Card
     key={player.displayId} 
