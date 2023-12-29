@@ -22,6 +22,7 @@ import { publicEnv } from "@/lib/env/public";
 import { performance } from "perf_hooks";
 import OpenCalculator from "./_components/openCalculator";
 import { Separator } from "@/components/ui/separator";
+import React from "react";
 // import DashBoard from "./dashBoard";
 type Props = {
    params: {
@@ -452,12 +453,12 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
       <>
         {/* <nav className=" sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">GameTime [ID] Page</nav> */}
             {/* TODO: get the true info */}
-        <nav className="sticky flex flex-row w-60 sm:flex-col sm:w-full">
-            <div className="flex flex-col p-5 m-3 gap-2">
+        <nav className="flex flex-col flex-nowrap items-end justify-between w-60 px-24 py-12 sm:flex-row sm:w-full">
+            <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-bold">GameTitle: {gameData[0].title}</h1>
                 <div className="flex items-center gap-2 justify-between">
                     <p className="text-lg">{gameData[0].date}</p>
-                    <div className="text-lg bg-fuchsia-200 p-2 rounded-full">{gameData[0].hashtag}</div>
+                    <div className="text-lg bg-muted text-muted-foreground p-2 rounded-full">{gameData[0].hashtag}</div>
                 </div>
             </div>
             <div className="grid grid-cols-5 content-center items-center justify-between h-12 w-60 px-6 py-1 gap-2 rounded-full overflow-hidden bg-primary">
@@ -467,27 +468,34 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 <InputPlayerBar handleAddPlayer={handleAddPlayer}/>
                 <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
             </div>
-            <div>
-                <div className="flex items-center gap-2 p-2">
-                    <AddOp periodId={URLperiodId} handleAddOpScore={handleAddOpScore} handleAddOpFoul={handleAddOpFoul}/>
-                </div>
-                <b>ScoreBoard</b>
+            
+        </nav>
+        <div className="grid grid-cols-3 gap-4 px-24 pb-24">
+
+                <div className="flex flex-col items-center justify-center h-min gap-2 pt-2 border-ring border-2 rounded-xl text-center bg-ring">
+                    
+                <b className="text-background font-bold text-xl">Score Board</b>
+                <div className="flex items-center justify-center bg-background w-full h-full p-4 rounded-xl">
                     <table>
                         <thead>
                             <tr>
-                                <th className="p-2">No</th>
-                                <th className="p-2">Score</th>
-                                <th className="p-2">OP Score</th>
-                                <th className="p-2">Foul</th>
-                                <th className="p-2">OP Foul</th>
+                                <th></th>
+                                <th colSpan={2}><p>Score</p></th>
+                                <th colSpan={2}><p>Foul</p></th>
+                            </tr>
+                            <tr>
+                                <th><p className="w-8">No</p></th>
+                                <th><p className="w-12">We</p></th>
+                                <th><p className="w-12">OP</p></th>
+                                <th><p className="w-12">We</p></th>
+                                <th><p className="w-12">OP</p></th>
                             </tr>
                         </thead>
-                    </table>
-                {URLperiodId !== null && URLperiodId !== undefined && allPeriod !== null && 
+                    {URLperiodId !== null && URLperiodId !== undefined && allPeriod !== null && 
                     allPeriod
                     .sort((a, b) => (a.number === b.number ? 0 : a.number < b.number ? -1 : 1))
                     .map((period, index) => (
-                        <div key={index} className="flex w-full">
+                        <React.Fragment key={index}>
                             <ScoreBoard
                                 gameId={gameId}
                                 periodId={URLperiodId}
@@ -497,12 +505,13 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 totalFoul={period.totalFoul}
                                 totalOpFoul={period.totalOpFoul}
                             />
-                        </div>
+                        </React.Fragment>
                     ))}
+                    <AddOp periodId={URLperiodId} handleAddOpScore={handleAddOpScore} handleAddOpFoul={handleAddOpFoul}/>
+                    </table>
+                    </div>
                 </div>
-        </nav>
-        
-            <div className="grid grid-cols-3 gap-4">
+
                 {allGamePerformances
                 .sort((a, b) => a.id - b.id)
                 .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
@@ -565,10 +574,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                         
                     </div>
                 ))}
-                
-                
-               
-            </div>
+        </div>
       </>
     );
     revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
