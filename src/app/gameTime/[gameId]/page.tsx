@@ -156,8 +156,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        
-        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        // redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
 
     const handleNowPlay = async(performanceId: string, newStatus: boolean) => {
@@ -172,7 +171,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        //revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         //BUG!!
     }
 
@@ -227,9 +226,10 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     eq(periodsTable.displayId, URLperiodId)
                 )
                 .execute();
+            redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         }        
        
-        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+       
     }
     const handleAddOther = async(selectedItem: string, performanceId: string, newStatus: number, action: number) => {
         "use server";
@@ -268,8 +268,9 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     eq(periodsTable.displayId, URLperiodId)
                 )
                 .execute();
+            revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         }
-        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        
     }
     const handleAddOpScore = async(periodId: string, action: number) => {
         "use server";

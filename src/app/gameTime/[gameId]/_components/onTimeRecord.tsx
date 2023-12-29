@@ -77,41 +77,40 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
             <div className="flex items-center">
             <h1>OnTime: </h1>
                 <button
-                className={`rounded ${onP1 ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP1Now ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
                 onClick={()=>{
                     setOnP1Now(!onP1Now);
                     handleChangeOnTime(performanceId, "onP1", !onP1Now);
                 }}>P1</button>
                 <button
-                className={`rounded ${onP2 ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP2Now ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
                 onClick={()=>{
                     setOnP2Now(!onP2Now);
                     handleChangeOnTime(performanceId, "onP2", !onP2Now);
-                    router.refresh();
+                    // router.refresh();
                 }}>P2</button>
                 <button
-                className={`rounded ${onP3 ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP3Now ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
                 onClick={()=>{
                     setOnP3Now(!onP3Now);
                     handleChangeOnTime(performanceId, "onP3", !onP3Now);
-                    router.refresh();
+                    // router.refresh();
                 }}>P3</button>
                 <button
-                className={`rounded ${onP4? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP4Now? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
                 onClick={()=>{
                     setOnP4Now(!onP4Now);
                     handleChangeOnTime(performanceId, "onP4", !onP4Now);
-                    router.refresh();
+                    // router.refresh();
                 }}>P4</button>
                 <button
-                className={`rounded ${onOt ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onOtNow ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
                 onClick={()=>{
                     setOnOtNow(!onOtNow);
                     handleChangeOnTime(performanceId, "onOt", !onOtNow);
-                    router.refresh();
+                    // router.refresh();
                 }}>OT</button>
             </div>
-            
             <div>
                 <button
                 className={cn(
