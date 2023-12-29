@@ -27,11 +27,11 @@ export default async function HomePage() {
   }
   const user = session.user;
   const userId = user.id;
-  const players = await db
-    .select()
-    .from(playersTable)
-    .execute();
-  // const players = await getPlayers(userId);
+  // const players = await db
+  //   .select()
+  //   .from(playersTable)
+  //   .execute();
+  const players = await getPlayers(userId);
   // let displayGame = null;
 
   // const games = await db.query.userToGameTable.findMany({
