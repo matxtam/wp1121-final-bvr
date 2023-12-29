@@ -1,11 +1,8 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 
 
 type Props = {
-    gameId: string;
-    periodId: string;
     number: string;
     totalScore: number; 
     totalOpScore: number;
@@ -14,7 +11,7 @@ type Props = {
     // handleChangeOnTime: (performanceId: string, item: string, newStatus: boolean) => void;
 }
 
-export default function ScoreBoard({gameId, periodId, number, totalScore, totalOpScore, totalFoul, totalOpFoul }: Props) {
+export default function ScoreBoard({ number, totalScore, totalOpScore, totalFoul, totalOpFoul }: Props) {
     const [totalScoreNow, setTotalScoreNow] = useState(totalScore);
     const [totalOpScoreNow, setTotalOpScoreNow] = useState(totalOpScore);
     const [totalFoulNow, setTotalFoulNow] = useState(totalFoul);

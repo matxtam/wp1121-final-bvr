@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import React, { use, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 type Props = {
     performanceId: string;
     twoPt: number;
@@ -23,7 +23,6 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
     const [inCountThreePt, setInCountThreePt] = useState<number>(inThreePt);//set with inThreePt
     const [countFt, setCountFt] = useState<number>(ft);//set with ft
     const [inCountFt, setInCountFt] = useState<number>(inFt);//set with inFt
-
       
       const handleButtonClick = (buttonType: ButtonType) => {
         setSelectedButton(buttonType);

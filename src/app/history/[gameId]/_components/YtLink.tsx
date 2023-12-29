@@ -27,7 +27,7 @@ export default function YtLink ({ link, handleSave }:Props){
     <Input onKeyDown={e => handleEnter(e)}></Input>
     : 
     <div className="flex flex-row">
-     <a href={link} target="_blank">{link}</a>
+     <a href={link} target="_blank" rel="noreferrer">{link}</a>
       <Button onClick={() => setEdit(true)}>
         <PenSquare></PenSquare>
       </Button>

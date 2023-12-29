@@ -24,8 +24,8 @@ import { Pencil } from 'lucide-react';
 
 import { Label } from "@/components/ui/label"
 import { updatePlayer } from "../actions";
-
 import { toast } from "@/components/ui/use-toast";
+
 
 type EditPlayerButtonProps = {
   playerId: string;

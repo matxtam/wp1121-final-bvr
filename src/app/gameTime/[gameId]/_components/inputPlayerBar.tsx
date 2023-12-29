@@ -1,20 +1,18 @@
 "use client"
-import { useRef, useState } from "react";
-import { Check, PlusCircle } from 'lucide-react';
+import {  useState } from "react";
+import { PlusCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Contact } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import ListPlayer from "./listPlayer";
+import {Player} from "@/lib/types/db";
 type Props = {
     handleAddPlayer: (inputName: string) => Promise<string>;
-    allPlayers: any;
+    allPlayers: Player[];
   };
 
 
 function InputPlayerBar({ handleAddPlayer, allPlayers }: Props) {
-    const inputRef = useRef<HTMLInputElement>(null);
+    // const inputRef = useRef<HTMLInputElement>(null);
     // const handleToggle = async (playerid:string) => {
     //   try {
     //       await TogglePlayerUsable(playerid, !playerUsable);
@@ -46,7 +44,7 @@ function InputPlayerBar({ handleAddPlayer, allPlayers }: Props) {
             <DialogTitle>
                 <p>Add players</p>
             </DialogTitle>
-            <form action={async(e) => {
+            <form action={async() => {
                 checkedPlayers.map(async (playerName) => {
                     const resultPromise = handleAddPlayer(playerName);
                     const result = await resultPromise;
@@ -80,7 +78,7 @@ function InputPlayerBar({ handleAddPlayer, allPlayers }: Props) {
                 className="mr-2 p-1 border border-gray-300 rounded"
                 ref={inputRef}
             /> */}
-            {allPlayers.map((player: any) => (
+            {allPlayers.map((player: Player) => (
                 player && (
                     <div className="flex" key={player.id}>
                         <div className="flex flex-row items-center">

@@ -2,7 +2,6 @@
 import { useRef} from "react";
 import { XCircle } from 'lucide-react';
 import { Search } from 'lucide-react';
-import { type } from "os";
 // const games = window.document.querySelectorAll('.game');
 
 type Props = {

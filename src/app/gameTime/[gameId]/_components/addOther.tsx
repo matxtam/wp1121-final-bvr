@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import React, { use, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, {useState, useEffect } from "react";
 type Props = {
     performanceId: string;
     foul: number;
@@ -25,7 +24,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
     const [countAssist, setCountAssist] = useState<number>(assist);//set with assist
     const [countDefReb, setCountDefReb] = useState<number>(defReb);//set with defReb
     const [countOffReb, setCountOffReb] = useState<number>(offReb);//set with offReb
-    const router = useRouter();
+    
     const handleButtonClick = (buttonType:ButtonType) => {
         setSelectedButton(buttonType);
             if(buttonType==="foul"){

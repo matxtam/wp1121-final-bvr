@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";

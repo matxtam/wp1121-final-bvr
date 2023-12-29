@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Nova_Square } from "next/font/google";
-import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/toaster";
 import { Users2 } from 'lucide-react';
 import SignOutButton from "./homePage/_components/SignOutButton";

@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
 // import { Player } from "@/lib/types/db";
 export type Player = {
   id: number;
@@ -25,8 +24,6 @@ export type Player = {
   personalSteal: number; //個人抄截數
   personalAssist: number; //個人助攻數
 };
-
-import { cn } from "@/lib/utils/shadcn";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 type playerBtnType = {
