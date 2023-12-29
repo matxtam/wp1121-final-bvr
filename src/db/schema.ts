@@ -1,9 +1,7 @@
-import exp from "constants";
 import { relations } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import {
   index,
-  text,
   pgTable,
   serial,
   uuid,
@@ -11,10 +9,7 @@ import {
   date,
   smallint,
   boolean,
-  unique,
-  timestamp,
 } from "drizzle-orm/pg-core";
-import { Economica } from "next/font/google";
 
 export const usersTable = pgTable(
   "users",

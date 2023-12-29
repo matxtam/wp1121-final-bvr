@@ -10,7 +10,7 @@ import {
     DialogTrigger,
     } from "@/components/ui/dialog"
 
-import { User } from "@/lib/types/db";
+import type { User } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
@@ -18,7 +18,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from "@/components/ui/label"
 import { updateUser } from "../actions";
 
-import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 type EditUserButtonProps = {
