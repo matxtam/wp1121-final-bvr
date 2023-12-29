@@ -27,9 +27,10 @@ export type Player = {
 };
 
 import { cn } from "@/lib/utils/shadcn";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 type playerBtnType = {
-  players: Player[],
+  players: Omit<Player, "id">[],
 };
 
 export default function ShowPlayer ({players}: playerBtnType) {
@@ -45,20 +46,17 @@ export default function ShowPlayer ({players}: playerBtnType) {
     const rate = shooting === 0 ? Math.floor(ins*100/shooting) : "Nan";
   return (
   <Card
-    key={player.id} 
+    key={player.displayId} 
     className="transition duration-100 relative flex flex-row h-full border-none rouneded-sm shadow-md shadow-batra-300 p-3 bg-secondary hover:scale-105 hover:-translate-y-3"
     onClick={() => {setShowPlayer(index); if((!open)||(showPlayer===index))setOpen(!open); }}
   >
-    <div className="flex flex-col">
-      <Image
-          src="/banana.jpg"
-          alt="banana"
-          width={100}
-          height={100}
-          priority
-          style={{  borderTopRightRadius: 10, borderTopLeftRadius: 10, }}
-          // className="sepia"
-        />
+    <div className="flex flex-col w-52">
+      
+      <Avatar className="w-52 h-52 rounded-none">
+        <AvatarImage src={player.photo} alt="Preview" />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
+
       <p className="w-full px-1 text-secondary rounded-bl bg-gradient-to-r from-secondary-foreground to-transparent">{player.name}</p>
       <p className="absolute bottom-0 right-0 text-5xl text-secondary-foreground/50 font-extrabold p-2">{player.number}</p>
     </div>
