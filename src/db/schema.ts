@@ -56,7 +56,7 @@ export const gamesTable = pgTable(
       }),
     title: varchar("title", { length: 100 }).notNull(),
     date: date("date").default(sql`now()`),
-    photo: varchar("photo", { length: 1000 }).notNull(),
+    photo: varchar("photo").notNull().default("None"),
     video: varchar("video", { length: 200 }),
     hashtag: varchar("hashtag", { length: 100 }).notNull(),
     totalScore: smallint("total_score").default(0).notNull(),

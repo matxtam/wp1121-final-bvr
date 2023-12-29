@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils/shadcn";
 import HistoryTable from "./_components/HistoryTable";
 import YtLink from "./_components/YtLink";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import UploadPhoto from "./_components/UploadPhoto";
 
 export default async function ({ params }:{ params: { gameId:string } }){
   const playersOfTheGame = await db.query.gamePerformancesTable.findMany({
@@ -47,14 +49,8 @@ export default async function ({ params }:{ params: { gameId:string } }){
   return (<>
     <aside className="flex flex-col items-center h-screen w-1/5 bg-secondary">
       <figure>
-        <Image 
-          src="/gift.jpg"
-          alt="group image"
-          width={200}
-          height={200}
-          priority>
-        </Image>
       </figure>
+        <UploadPhoto gameId={games.displayId} photo={games.photo}/>
       <div className="flex flex-row">
         <p>{games.date?.toString()}</p>
         <span>{games.hashtag}</span>

@@ -18,6 +18,7 @@ import { revalidatePath } from "next/cache";
 import { publicEnv } from "@/lib/env/public";
 import { get } from "http";
 import { getPlayers } from "../settings/players/actions";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // const photo = document.querySelector("#photo")
 
 export default async function HomePage() {
@@ -139,14 +140,18 @@ export default async function HomePage() {
             <p>{game.date?.toString()}</p>
             <p className="rounded-full bg-accent w-20 overflow-hidden text-center">{game.hashtag}</p>
           </div>
-          <Image
-            src="/history_df.jpg"
-            alt="banana"
+          {/* <Image
+            src={game.photo}
+            alt="/banana.jpg"
             width={200}
             height={100}
             priority
             style={{  borderRadius: 10 }}
-          />
+          /> */}
+          <Avatar className="w-48 h-24 rounded-none">
+            <AvatarImage src={game.photo} />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
         <h4 className="text-xl">{game.title}</h4>
           
         </Link>
