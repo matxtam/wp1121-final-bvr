@@ -12,11 +12,12 @@ type Props = {
     defReb: number;
     offReb: number;
     openCalculator: boolean;
+    undo: boolean;
     handleAddOther: (selectedItem: string, performanceId: string, newStatus: number, action: number) => void;
 }
 type ButtonType = 'foul' | 'block' | 'turnover' | 'steal' | 'assist' | 'defReb' | 'offReb';
 
-export default function AddOther({ performanceId, foul, block, turnover, steal, assist, defReb, offReb, handleAddOther, openCalculator }: Props) {
+export default function AddOther({ performanceId, foul, block, turnover, steal, assist, defReb, offReb, handleAddOther, openCalculator, undo }: Props) {
     const [selectedButton, setSelectedButton] = useState("");
     const [countFoul, setCountFoul] = useState<number>(foul);//set with foul
     const [countBlock, setCountBlock] = useState<number>(block);//set with block

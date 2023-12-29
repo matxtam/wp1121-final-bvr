@@ -204,6 +204,7 @@ export const gamePerformancesTable = pgTable(
     turnover: smallint("turnover").default(0).notNull(),
     point: smallint("point").default(0).notNull(),
     openCalculator: boolean("open_calculator").default(false).notNull(),
+    undo: boolean("undo").default(false).notNull(),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),

@@ -185,6 +185,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .update(gamePerformancesTable)
             .set({
                 [selectedItem]: newStatus,
+                undo: false,
             })
             .where(
                 eq(gamePerformancesTable.displayId, performanceId)
@@ -243,6 +244,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .update(gamePerformancesTable)
             .set({
                 [selectedItem]: newStatus,
+                undo: false,
             })
             .where(
                 eq(gamePerformancesTable.displayId, performanceId)
@@ -398,6 +400,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .update(gamePerformancesTable)
             .set({
                 [selectedItem]: originalValue,
+                undo: true,
             })
             .where(
                 eq(gamePerformancesTable.displayId, performanceId)
@@ -447,6 +450,19 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .execute();
         redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
+    const handleCancelUndo = async(performanceId:string) => {
+        "use server";
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                undo: false,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+        //redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+    }
+
     return (
       <div>
         {/* <nav className=" sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">GameTime [ID] Page</nav> */}
@@ -517,7 +533,9 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                     inThreePt={performance.inThreePt}
                                     inFt={performance.inFt}
                                     openCalculator={performance.openCalculator}
+                                    undo={performance.undo}
                                     handleAddShooting={handleAddShooting}
+                                    handleCancelUndo={handleCancelUndo}
                             />
                             <AddOther
                                 performanceId={performance.displayId}                            
@@ -529,6 +547,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 defReb={performance.defReb}
                                 offReb={performance.offReb}
                                 openCalculator={performance.openCalculator}
+                                undo={performance.undo}
                                 handleAddOther={handleAddOther}
                             />
                         </div>

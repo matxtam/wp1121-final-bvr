@@ -1,6 +1,8 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import React, { use, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { set } from "zod";
 type Props = {
     performanceId: string;
     twoPt: number;
@@ -10,11 +12,13 @@ type Props = {
     inThreePt: number;
     inFt: number;
     openCalculator: boolean;
+    undo: boolean;
     handleAddShooting: (selectedItem: string, performanceId: string, newStatus: number, action:number) => void;
+    handleCancelUndo: (performanceId: string) => void;
 }
 type ButtonType = 'twoPt' | 'threePt' | 'ft' | 'inTwoPt' | 'inThreePt' | 'inFt';
 
-export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt, inThreePt, inFt, handleAddShooting, openCalculator }: Props) {
+export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt, inThreePt, inFt, handleAddShooting, openCalculator, undo, handleCancelUndo }: Props) {
     const [selectedButton, setSelectedButton] = useState("");
     const [inSelectedButton, setInSelectedButton] = useState("");
     const [countTwoPt, setCountTwoPt] = useState<number>(twoPt);//set with twoPt
@@ -23,8 +27,19 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
     const [inCountThreePt, setInCountThreePt] = useState<number>(inThreePt);//set with inThreePt
     const [countFt, setCountFt] = useState<number>(ft);//set with ft
     const [inCountFt, setInCountFt] = useState<number>(inFt);//set with inFt
-
-      
+    const [ifUndo, setIfUndo] = useState<boolean>(undo);
+    const router = useRouter();
+    if(undo && (countFt!==ft || countThreePt!==threePt || countTwoPt!==twoPt || inCountFt!==inFt || inCountThreePt!==inThreePt || inCountTwoPt!==inTwoPt)){
+        setCountTwoPt(twoPt);
+        setCountThreePt(threePt);
+        setCountFt(ft);
+        setInCountTwoPt(inTwoPt);
+        setInCountThreePt(inThreePt);
+        setInCountFt(inFt);
+        setIfUndo(!undo);    
+        handleCancelUndo(performanceId);
+        router.refresh();
+    }
       const handleButtonClick = (buttonType: ButtonType) => {
         setSelectedButton(buttonType);
         if(buttonType==="twoPt"){
