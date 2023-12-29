@@ -27,7 +27,7 @@ import { updatePlayer } from "../actions";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { set } from "zod";
-import ImageUploader from "./ImageUploader";
+import ImageUploader from "./ImageUploaderTemplate";
 
 type EditPlayerButtonProps = {
   playerId: string;

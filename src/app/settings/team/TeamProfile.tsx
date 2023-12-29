@@ -37,49 +37,72 @@ export default async function Navbar() {
   const user = users[0];
 // const projects = await getProjects(userId);
   return (
-    // <nav className="flex min-w-fit flex-col justify-between gap-2 overflow-hidden bg-gray-100">
-    <nav className="sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">
-      <div className="flex h-10 w-full flex-row items-center gap-12 px-6 py-8 pt-8">
+    <div style={{ position: 'sticky', top: '0' }}>
+      <div className="flex h-10 w-full flex-row bg-white bg-opacity-10 items-center justify-between gap-12 px-8 py-8 pt-8">
         <h2 className="text-2xl font-bold" data-testid="title">
           TeamProfiles
         </h2>
       </div>
-      <Separator />
-      <div className="flex w-full items-center justify-between gap-8 px-4 py-2">
-        <div className="flex items-center gap-2">
-          {/* <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-200"></div> */}
-          <Avatar>
-            <AvatarImage src={user.photo} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <span className="text-md font-semibold">
-            {session?.user?.name}
-          </span>
+      <Separator className="bg-primary "/>
+      <div className="flex items-center gap-2 bg-white bg-opacity-10 px-8 py-8 pt-4 justify-between;">
+        <div className="flex h-10 w-full items-center">
+          <div className="flex items-center gap-2">
+            <Avatar>
+              <AvatarImage src={user.photo} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <span className="text-md font-semibold">
+              {session?.user?.name}
+            </span>
+          </div>
+        </div>
+        <div className="flex h-10 w-full items-center justify-end">
+          <div className="grid grid-cols-5 h-10 items-center justify-end">
+            {/* fb */}
+            <div className="col-span-1 grid-column-start:1">
+              {user.fbLink === "None" ? (
+                  <Image src={fbLink1} alt="Facebook Link" className="col-span-2 h-10 w-10" />
+                ) : (
+                  <Link href={user.fbLink} target="_blank">
+                    <Image src={fbLink1} alt="Facebook Link" className="col-span-2 h-10 w-10" />
+                  </Link>
+              )}
+            </div>
+            {/* ig */}
+            <div className="col-span-1 grid-column-start:2">
+              {user.igLink === "None" ? (
+                  <Image src={igLink1} alt="Instagram Link" className="col-span-2 h-10 w-10" />
+                    ) : (
+                  <Link href={user.igLink} target="_blank">
+                    <Image src={igLink1} alt="Instagram Link" className="col-span-2 h-10 w-10" />
+                  </Link>
+                )}
+            </div>
+            {/* youtube */}
+            <div className="col-span-1 grid-column-start:3">
+              {user.ytLink === "None" ? (
+                  <Image src={ytLink1} alt="Youtube Link" className="col-span-2 h-10 w-10" />
+                    ) : (
+                  <Link href={user.ytLink} target="_blank">
+                    <Image src={ytLink1} alt="Youtube Link" className="col-span-2 h-10 w-10" />
+                  </Link>
+                )}
+            </div>
+            <div className="col-span-1 grid-column-start:4">
+              {user.cloudLink === "None" ? (
+                  <Image src={cloudLink1} alt="GoogleDrive Link" className="col-span-2 h-10 w-10" />
+                    ) : (
+                  <Link href={user.cloudLink} target="_blank">
+                    <Image src={cloudLink1} alt="GoogleDrive Link" className="col-span-2 h-10 w-10" />
+                  </Link>
+                )}
+            </div>
+            <div className="col-span-1 grid-column-start:5" style={{ placeSelf: 'center' }}>
+              <EditUserButton photo={user.photo} name={user.name} fbLink={user.fbLink} ytLink={user.ytLink} igLink={user.igLink} cloudLink={user.cloudLink} />
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="grid w-full lg:max-w-sm items-center gap-1.5">
-        <div className="grid grid-cols-7">
-        {/* fb */}
-        <div className="col-span-1"></div>
-        <Link href={user.fbLink}>
-          <Image src={fbLink1} alt="Facebook Link" className="col-span-2" />
-        </Link>
-        {/* ig */}
-        <Link href={user.igLink}>
-          <Image src={igLink1} alt="Instagram Link" className="col-span-2" />
-        </Link>
-        {/* youtube */}
-        <Link href={user.ytLink}>
-          <Image src={ytLink1} alt="Youtube Link" className="col-span-2" />
-        </Link>
-        <Link href={user.cloudLink}>
-          <Image src={cloudLink1} alt="GoogleDrive Link" className="col-span-2" />
-        </Link>
-        <EditUserButton photo={user.photo} name={user.name} fbLink={user.fbLink} ytLink={user.ytLink} igLink={user.igLink} cloudLink={user.cloudLink} />
-        </div>
     </div>
-
-    </nav>
   );
 }
