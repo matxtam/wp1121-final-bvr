@@ -9,17 +9,11 @@ type Props = {
 export default function UndoButton({ handleUndo }: Props) {
    
     return (
-        <div>
-            <button
-            className="rounded bg-sky-500 text-slate-50 shadow-sm hover:bg-sky-200/80 flex w-25 items-center hover:text-black"
-            onClick={() => {
-                handleUndo();
-            }}
-            >
-                <div className= "flex items-center gap-1 py-1.5 px-2 transition-colors duration-300 hover:bg-brand/10">
-                    <Undo2 size={18}/>
-                </div>
-            </button>
-        </div>
+        <button
+            className="flex items-center justify-center w-full h-10 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
+            onClick={handleUndo}
+        >
+            <Undo2 size={18} className=""/>
+        </button>
     )
 }

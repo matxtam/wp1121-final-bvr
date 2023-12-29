@@ -46,7 +46,7 @@ export default function ShowPlayer ({players}: playerBtnType) {
   return (
   <Card
     key={player.id} 
-    className="transition duration-100 relative flex flex-row h-full border-none rouneded-sm shadow-md shadow-batra-300 p-3 bg-secondary hover:scale-105 hover:-translate-y-3"
+    className="transition duration-100 relative flex flex-row h-full shadow-md shadow-batra-300 p-3 bg-secondary hover:scale-105 hover:-translate-y-3"
     onClick={() => {setShowPlayer(index); if((!open)||(showPlayer===index))setOpen(!open); }}
   >
     <div className="flex flex-col">
@@ -56,8 +56,8 @@ export default function ShowPlayer ({players}: playerBtnType) {
           width={100}
           height={100}
           priority
-          style={{  borderTopRightRadius: 10, borderTopLeftRadius: 10, }}
-          className="sepia"
+          // style={{  borderTopRightRadius: 10, borderTopLeftRadius: 10, }}
+          className="rounded-t-xl"
         />
       <p className="w-full px-1 text-secondary rounded-bl bg-gradient-to-r from-secondary-foreground to-transparent">{player.name}</p>
       <p className="absolute bottom-0 right-0 text-5xl text-secondary-foreground/50 font-extrabold p-2">{player.number}</p>
