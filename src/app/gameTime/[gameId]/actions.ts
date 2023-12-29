@@ -57,6 +57,7 @@ export const createPerformance = async (playerName: string, gameId: string) => {
 
 
 export const getGamePerformances = async (gameId: string) => {
+    "use server"
     console.log("[getGamePerformances]");
     const gamePerformances= await db.query.gamePerformancesTable.findMany({
         where: (eq(gamePerformancesTable.gameId, gameId)),

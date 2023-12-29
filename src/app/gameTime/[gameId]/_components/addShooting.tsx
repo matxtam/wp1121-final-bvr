@@ -12,11 +12,11 @@ type Props = {
     openCalculator: boolean;
     handleAddShooting: (selectedItem: string, performanceId: string, newStatus: number, action:number) => void;
 }
-type ButtonType = 'twoPt' | 'threePt' | 'ft';
+type ButtonType = 'twoPt' | 'threePt' | 'ft' | 'inTwoPt' | 'inThreePt' | 'inFt';
 
 export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt, inThreePt, inFt, handleAddShooting, openCalculator }: Props) {
     const [selectedButton, setSelectedButton] = useState("");
-    const [inSelectedButton, setInSelectedButton] = useState("inTwoPt");
+    const [inSelectedButton, setInSelectedButton] = useState("");
     const [countTwoPt, setCountTwoPt] = useState<number>(twoPt);//set with twoPt
     const [inCountTwoPt, setInCountTwoPt] = useState<number>(inTwoPt);//set with inTwoPt
     const [countThreePt, setCountThreePt] = useState<number>(threePt);//set with threePt
@@ -28,22 +28,49 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
       const handleButtonClick = (buttonType: ButtonType) => {
         setSelectedButton(buttonType);
         if(buttonType==="twoPt"){
+            // setSelectedButton("twoPt");
             setCountTwoPt(countTwoPt)
-            setInCountTwoPt(inCountTwoPt)
-            setInSelectedButton("inTwoPt")
+            setCountTwoPt((prevNumber) => prevNumber + 1);
+            // setInCountTwoPt(inCountTwoPt)
+            // setInSelectedButton("inTwoPt")
             handleAddShooting("twoPt", performanceId, countTwoPt+1, 2);
         }
         if(buttonType==="threePt"){
+            // setSelectedButton("threePt")
             setCountThreePt(countThreePt)
-            setInCountThreePt(inCountThreePt)
-            setInSelectedButton("inThreePt")
+            setCountThreePt((prevNumber) => prevNumber + 1);
+            // setInCountThreePt(inCountThreePt)
+            // setInSelectedButton("inThreePt")
             handleAddShooting("threePt", performanceId, countThreePt+1, 3);
         }   
         if(buttonType==="ft"){
             setCountFt(countFt)
-            setInCountFt(inCountFt)
-            setInSelectedButton("inFt")
+            // setSelectedButton("ft")
+            setCountFt((prevNumber) => prevNumber + 1);
+            // setInCountFt(inCountFt)
+            // setInSelectedButton("inFt")
             handleAddShooting("ft", performanceId, countFt+1, 1);
+        }
+      }
+      const handleInButtonClick = (buttonType: ButtonType) => {
+        setInSelectedButton(buttonType);
+        if(buttonType==="inTwoPt"){
+            setInCountTwoPt(inCountTwoPt)
+            setInCountTwoPt((prevNumber) => prevNumber + 1);
+            // setInSelectedButton("inTwoPt")
+            handleAddShooting("inTwoPt", performanceId, inCountTwoPt+1, 2);
+        }
+        if(buttonType==="inThreePt"){
+            setInCountThreePt(inCountThreePt)
+            setInCountThreePt((prevNumber) => prevNumber + 1);
+            // setInSelectedButton("inThreePt")
+            handleAddShooting("inThreePt", performanceId, inCountThreePt+1, 3);
+        }
+        if(buttonType==="inFt"){
+            setInCountFt(inCountFt)
+            setInCountFt((prevNumber) => prevNumber + 1);
+            // setInSelectedButton("inFt")
+            handleAddShooting("inFt", performanceId, inCountFt+1, 1);
         }
       };
 
@@ -137,7 +164,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                     2
                     <p  className={`p-1 ${
                     selectedButton === 'twoPt' ? 'text-yellow-400' : ''
-                    }`}><b>{twoPt}</b></p>
+                    }`}><b>{countTwoPt}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('threePt')}
@@ -148,7 +175,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                     3
                     <p  className={`p-1 ${
                     selectedButton === 'threePt' ? 'text-yellow-400' : ''
-                    }`}><b>{threePt}</b></p>
+                    }`}><b>{countThreePt}</b></p>
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('ft')}
@@ -159,7 +186,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                     FT
                     <p  className={`p-1 ${
                     selectedButton === 'ft' ? 'text-yellow-400' : ''
-                    }`}><b>{ft}</b></p>
+                    }`}><b>{countFt}</b></p>
                 </Button>
             </div>
 
@@ -170,14 +197,50 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                 <button onClick={handleDecrement} className="p-2 m-2 bg-gray-300">
                     -
                 </button>
-                {selectedButton==="twoPt" && <div className="p-4 bg-blue-100 m-2">{countTwoPt}</div>}
-                {selectedButton==="threePt" && <div className="p-4 bg-blue-100 m-2">{countThreePt}</div>}
-                {selectedButton==="ft" && <div className="p-4 bg-blue-100 m-2">{countFt}</div>}
+                {selectedButton==="twoPt" && (<div className="p-4 bg-blue-100 m-2">{countTwoPt}</div>)}
+                {selectedButton==="threePt" && (<div className="p-4 bg-blue-100 m-2">{countThreePt}</div>)}
+                {selectedButton==="ft" && (<div className="p-4 bg-blue-100 m-2">{countFt}</div>)}
                 <button onClick={handleIncrement} className="p-2 m-2 bg-gray-300">
                     +
                 </button>
             </div>}
-            <div className="flex items-center">
+            
+
+            <Button
+                onClick={() => handleInButtonClick('inTwoPt')}
+                className={`bg-gray-300 px-4 m-2 py-2 ${
+                inSelectedButton === 'inTwoPt' ? 'bg-blue-400 text-white' : ''
+                }`}
+            >
+                2In
+                <p  className={`p-1 ${
+                selectedButton === 'inTwoPt' ? 'text-yellow-400' : ''
+                }`}><b>{inCountTwoPt}</b></p>
+            </Button>
+            <Button
+                onClick={() => handleInButtonClick('inThreePt')}
+                className={`bg-gray-300 m-2 px-4 py-2 ${
+                inSelectedButton === 'inThreePt' ? 'bg-blue-400 text-white' : ''
+                }`}
+            >
+                3In
+                <p  className={`p-1 ${
+                inSelectedButton === 'inThreePt' ? 'text-yellow-400' : ''
+                }`}><b>{inCountThreePt}</b></p>
+            </Button>
+            <Button
+                onClick={() => handleInButtonClick('inFt')}
+                className={`bg-gray-300 px-4 m-2 py-2 ${
+                inSelectedButton === 'inFt' ? 'bg-blue-400 text-white' : ''
+                }`}
+            >
+                FTIn
+                <p  className={`p-1 ${
+                selectedButton === 'inFt' ? 'text-yellow-400' : ''
+                }`}><b>{inCountFt}</b></p>
+            </Button>
+
+            {openCalculator &&<div className="flex items-center">
                 <p className="p-1">
                     <b>進球數</b>
                 </p>
@@ -191,7 +254,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                 <button onClick={handleInIncrement} className="p-2 m-2 bg-gray-300">
                     +
                 </button>
-            </div>
+            </div>}
         </div>
     )
 }

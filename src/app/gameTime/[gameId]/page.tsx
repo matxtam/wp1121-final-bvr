@@ -11,7 +11,7 @@ import PlayNowButton from "./_components/playNowButton";
 import { redirect } from "next/navigation";
 import OnTimeRecord from "./_components/onTimeRecord";
 import { db } from "@/db";
-import { GoBackTable, gamesTable, periodsTable, gamePerformancesTable } from "@/db/schema";
+import { GoBackTable, gamesTable, periodsTable, gamePerformancesTable, usersTable, playersTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { title } from "process";
 import { revalidatePath } from "next/cache";
@@ -42,6 +42,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     // let nowPeriod = null;
     let gameTotalScore = 0;
     let gameTotalOpScore = 0;
+    
     if(URLperiodId === null || URLperiodId === undefined){
         console.log("URLperiodId is null");
         return;
@@ -157,8 +158,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        
-        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        // redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
 
     const handleNowPlay = async(performanceId: string, newStatus: boolean) => {
@@ -173,7 +173,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        //revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         //BUG!!
     }
 
@@ -228,9 +228,10 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     eq(periodsTable.displayId, URLperiodId)
                 )
                 .execute();
+            redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         }        
        
-        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+       
     }
     const handleAddOther = async(selectedItem: string, performanceId: string, newStatus: number, action: number) => {
         "use server";
@@ -269,8 +270,9 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     eq(periodsTable.displayId, URLperiodId)
                 )
                 .execute();
+            revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         }
-        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        
     }
     const handleAddOpScore = async(periodId: string, action: number) => {
         "use server";
@@ -316,6 +318,45 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamesTable.displayId, nowGameId)
             )
             .execute();
+        await db
+            .delete(GoBackTable)
+            .where(
+                eq(GoBackTable.gameId, gameId)
+            )
+            .execute();
+        const AllGamePerformances= await db.query.gamePerformancesTable.findMany({
+                where: (eq(gamePerformancesTable.gameId, gameId)),
+                with:{
+                    player:{
+                        columns:{
+                            name: true,
+                            number: true,
+                        }
+                    }
+                }
+            });
+        AllGamePerformances.map(async(performance) => {
+            await db
+                .update(playersTable)
+                .set({
+                    // personalValue: performance.personalValue,
+                    personal2pt: performance.twoPt,
+                    personalIn2pt: performance.inTwoPt,
+                    personal3pt: performance.threePt,
+                    personalIn3pt: performance.inThreePt,
+                    personalFt: performance.ft,
+                    personalInFt: performance.inFt,
+                    personalDefReb: performance.defReb,
+                    personalOffReb: performance.offReb,
+                    personalSteal: performance.steal,
+                    personalAssist: performance.assist,
+                })
+                .where(
+                    eq(playersTable.displayId, performance.playerId)
+                )
+                .execute();
+        }
+        )
         redirect(`/history/${gameId}`);
     }
     const handleUndo = async() => {

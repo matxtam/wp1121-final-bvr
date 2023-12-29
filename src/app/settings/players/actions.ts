@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
@@ -246,33 +246,34 @@ export async function getPlayers(userId: User["id"]) {
     personalOffReb: item.player.personalOffReb,
     personalSteal: item.player.personalSteal,
     personalAssist: item.player.personalAssist,
-  }));
+  }))
+  // .sort((a, b) => String(!a.usable).localeCompare(String(!b.usable)));
   return players;
 }
 
 
 
 // toggle player usable
-// export async function PlayerUsable(
-//   playerId: string,
-//   usable: boolean,
-//   ) {
-//   // Check if user is logged in
-//   const session = await auth();
-//   const userId = session?.user?.id;
-//   if (!userId) {
-//     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
-//   } 
-//   console.log("playerId", playerId);
+export async function TogglePlayerUsable(
+  playerId: string,
+  usable: boolean,
+  ) {
+  // Check if user is logged in
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+  } 
+  // console.log("usable", usable);
 
-//   await db.transaction(async (trx) => {
-//     await trx
-//       .update(playersTable)
-//       .set({
-//         usable: usable,
-//       })
-//       .where(eq(playersTable.displayId, playerId))
-//       .returning();
-//   });
-//   revalidatePath(`/settings`);
-// }
+  await db.transaction(async (trx) => {
+    await trx
+      .update(playersTable)
+      .set({
+        usable: usable,
+      })
+      .where(eq(playersTable.displayId, playerId))
+      .returning();
+  });
+  revalidatePath(`/settings`);
+}
