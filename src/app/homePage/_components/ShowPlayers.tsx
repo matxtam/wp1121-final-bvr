@@ -57,7 +57,7 @@ export default function ShowPlayer ({players}: playerBtnType) {
           height={100}
           priority
           style={{  borderTopRightRadius: 10, borderTopLeftRadius: 10, }}
-          className="sepia"
+          // className="sepia"
         />
       <p className="w-full px-1 text-secondary rounded-bl bg-gradient-to-r from-secondary-foreground to-transparent">{player.name}</p>
       <p className="absolute bottom-0 right-0 text-5xl text-secondary-foreground/50 font-extrabold p-2">{player.number}</p>
