@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Flame } from 'lucide-react';
@@ -24,7 +23,6 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
     const [onP3Now, setOnP3Now] = useState(onP3);
     const [onP4Now, setOnP4Now] = useState(onP4);
     const [onOtNow, setOnOtNow] = useState(onOt);
-    const [change, setChange] = useState(false);
     const router = useRouter();
     // let change = false;
     // if(!change  && onP1Now!==onP1){

@@ -1,32 +1,25 @@
-import { Button } from "@/components/ui/button";
 import Possession from "./_components/possession";
 import AddOp from "./_components/addOp";
 import InputPlayerBar from "./_components/inputPlayerBar";
 import StartPeriod from "./_components/startPeriod";
-import {createPerformance, getGamePerformances, updateGamePerformance, finishGame} from "./actions";
-import { get } from "http";
+import {createPerformance, getGamePerformances, finishGame} from "./actions";
 import AddShooting from "./_components/addShooting";
 import AddOther from "./_components/addOther";
-import PlayNowButton from "./_components/playNowButton";
+// import PlayNowButton from "./_components/playNowButton";
 import { redirect } from "next/navigation";
 import OnTimeRecord from "./_components/onTimeRecord";
 import { db } from "@/db";
-import { GoBackTable, gamesTable, periodsTable, gamePerformancesTable, usersTable, playersTable } from "@/db/schema";
+import { GoBackTable, gamesTable, periodsTable, gamePerformancesTable,  playersTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
-import { title } from "process";
 import { revalidatePath } from "next/cache";
 import  ScoreBoard  from "./_components/scoreBoard";
 import  UndoButton  from "./_components/undoButton";
 import FinishGame from "./_components/FinishButton";
-import { publicEnv } from "@/lib/env/public";
-import { performance } from "perf_hooks";
 import OpenCalculator from "./_components/openCalculator";
-import { Separator } from "@/components/ui/separator";
-
 import React from "react";
-import { getPlayers } from "@/app/settings/players/actions";
+import { getPlayersTwo } from "@/app/settings/players/actions";
 import { auth } from "@/lib/auth";
-
+import {Player} from "@/lib/types/db";
 type Props = {
    params: {
          gameId: string;
@@ -35,10 +28,10 @@ type Props = {
         URLperiodId?: string;
     };
 }
-interface GamePerformancesTable {
-    id: number;
-    [key: string]: any;
-}
+// interface GamePerformancesTable {
+//     id: number;
+//     [key: string]: any;
+// }
 
 
 async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: Props) {
@@ -152,7 +145,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     //         eq(playersTable.userId, gameData[0].userId)
     //     )
     //     .execute();
-    const allPlayer = await getPlayers(userId);
+    const allPlayer: Player[] = await getPlayersTwo(userId);
 
     const handleAddPlayer = async(inputName: string) => {
         "use server";
@@ -379,6 +372,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     }
     const handleUndo = async() => {
         "use server";
+        console.log("Undo");
         const undoData = await db
             .select()
             .from(GoBackTable)
@@ -423,6 +417,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             )
             .execute();
         if(selectedItem === "inTwoPt" || selectedItem === "inThreePt" || selectedItem === "inFt"){
+            console.log("Undo Score");
             await db
                 .update(periodsTable)
                 .set({
@@ -514,8 +509,8 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     .map((period, index) => (
                         <React.Fragment key={index}>
                             <ScoreBoard
-                                gameId={gameId}
-                                periodId={URLperiodId}
+                                // gameId={gameId}
+                                // periodId={URLperiodId}
                                 number={period.number}
                                 totalScore={period.totalScore}
                                 totalOpScore={period.totalOpScore}

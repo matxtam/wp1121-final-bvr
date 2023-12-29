@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import React, {useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 type Props = {
     performanceId: string;
     foul: number;

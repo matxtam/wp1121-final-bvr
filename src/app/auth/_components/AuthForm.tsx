@@ -1,20 +1,15 @@
 "use client";
-
 import { useState } from "react";
-
 import { signIn } from "next-auth/react";
-import Image from "next/image";
-
 // Run: npx shadcn-ui@latest add button
 import { Button } from "@/components/ui/button";
 // Run: npx shadcn-ui@latest add card
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { publicEnv } from "@/lib/env/public";
-
 import AuthInput from "./AuthInput";
-import { type } from "os";
+import type { User } from "@/lib/types/db";
 type props = {  
-  allUsers?: any;
+  allUsers?: User[];
 };
 function AuthForm({ allUsers }: props) {
   const [email, setEmail] = useState<string>("");
@@ -29,11 +24,11 @@ function AuthForm({ allUsers }: props) {
       alert("Passwords do not match");
       return;
     }
-    if(isSignUp && allUsers?.some((user: any) => user.email === email)) {
+    if(isSignUp && allUsers?.some((user: User) => user.email === email)) {
       alert("Email already exists");
       return;
     }
-    if(isSignUp && allUsers?.some((user: any) => user.name === name)) {
+    if(isSignUp && allUsers?.some((user: User) => user.name === name)) {
       alert("Name already exists");
       return;
     }
@@ -41,7 +36,7 @@ function AuthForm({ allUsers }: props) {
       alert("Password must be at least 8 characters");
       return;
     }
-    if(!isSignUp && !allUsers?.some((user: any) => user.email === email)) {
+    if(!isSignUp && !allUsers?.some((user: User) => user.email === email)) {
       alert("Email does not exist");
       return;
     }

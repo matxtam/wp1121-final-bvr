@@ -202,6 +202,7 @@ export async function getPlayers(userId: User["id"]) {
     with: {
       player: {
         columns: {
+          id: true,
           displayId: true,
           name: true,
           position: true,
@@ -223,6 +224,7 @@ export async function getPlayers(userId: User["id"]) {
       },
     },
   });
+  
 
   const players: Omit<Player, "id">[] = temp.map((item) => ({
     displayId: item.player.displayId,
@@ -245,7 +247,40 @@ export async function getPlayers(userId: User["id"]) {
   }))
   return players;
 }
+export async function getPlayersTwo(userId: User["id"]): Promise<Player[]> {
+  const temp = await db.query.usersToPlayersTable.findMany({
+    where: eq(usersToPlayersTable.userId, userId),
+    with: {
+      player: {
+        columns: {
+          id: true,
+          displayId: true,
+          name: true,
+          position: true,
+          number: true,
+          photo: true,
+          usable: true,
+          personalValue: true,
+          personal2pt: true,
+          personalIn2pt: true,
+          personal3pt: true,
+          personalIn3pt: true,
+          personalFt: true,
+          personalInFt: true,
+          personalDefReb: true,
+          personalOffReb: true,
+          personalSteal: true,
+          personalAssist: true,
+        },
+      },
+    },
+  });
+  
+  // Extract the player objects from the result
+  const allPlayer: Player[] = temp.map(item => item.player);
 
+  return allPlayer;
+}
 
 
 // toggle player usable

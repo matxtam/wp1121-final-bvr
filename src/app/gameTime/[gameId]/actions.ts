@@ -1,8 +1,7 @@
 "use server"
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq} from "drizzle-orm";
 import { db } from "@/db";
-import { playersTable, gamePerformancesTable, GamePerformanceRelations, gamesTable } from "@/db/schema";
-import { GamePerformance } from '@/lib/types/db';
+import { playersTable, gamePerformancesTable, gamesTable } from "@/db/schema";
 import { revalidatePath } from "next/cache";
 
 export const createPerformance = async (playerName: string, gameId: string) => {
@@ -101,32 +100,32 @@ export const getGamePerformances = async (gameId: string) => {
     // return gamePerformances;
 }
 
-export const updateGamePerformance = async (selectedItem:string , performanceId:string , change:number, periodId:string) => {
-    console.log("[updateGamePerformance]");
-    console.log("selectedItem",selectedItem);
-    if (selectedItem === "twoPt" && change === 1) {
-        // Fetch the current value from the database
-        const currentTwoPtResult = await db
-          .select({ twoPt: gamePerformancesTable.twoPt })
-          .from(gamePerformancesTable)
-          .where(eq(gamePerformancesTable.displayId, performanceId))
-          .execute();
-        const currentTwoPt = currentTwoPtResult[0]?.twoPt ?? 0;
-        // Increment the value by 1
-        const newNum = currentTwoPt + 1;
-        console.log('newNum',newNum)
-        // Update the game performance
-        await db
-          .update(gamePerformancesTable)
-          .set({
-            twoPt: newNum,
-          })
-          .where(eq(gamePerformancesTable.displayId, performanceId))
-          .execute();
-      }
+// export const updateGamePerformance = async (selectedItem:string , performanceId:string , change:number, periodId:string) => {
+//     console.log("[updateGamePerformance]");
+//     console.log("selectedItem",selectedItem);
+//     if (selectedItem === "twoPt" && change === 1) {
+//         // Fetch the current value from the database
+//         const currentTwoPtResult = await db
+//           .select({ twoPt: gamePerformancesTable.twoPt })
+//           .from(gamePerformancesTable)
+//           .where(eq(gamePerformancesTable.displayId, performanceId))
+//           .execute();
+//         const currentTwoPt = currentTwoPtResult[0]?.twoPt ?? 0;
+//         // Increment the value by 1
+//         const newNum = currentTwoPt + 1;
+//         console.log('newNum',newNum)
+//         // Update the game performance
+//         await db
+//           .update(gamePerformancesTable)
+//           .set({
+//             twoPt: newNum,
+//           })
+//           .where(eq(gamePerformancesTable.displayId, performanceId))
+//           .execute();
+//       }
       
-    return updateGamePerformance;
-}
+//     return updateGamePerformance;
+// }
 
 export const finishGame = async (gameId: string, totalScore:number) => {
     await db
