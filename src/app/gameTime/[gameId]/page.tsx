@@ -541,6 +541,9 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                             <div>
                                 <p>{performance.player.number}</p>
                             </div>
+                            {/* <div> */}
+                                {/* <a><img src={performance.player.photo} className="w-20 h-20 rounded-full" /></a> */}
+                            {/* </div> */}
                             <OnTimeRecord 
                                 performanceId={performance.displayId}
                                 onP1={performance.onP1}
