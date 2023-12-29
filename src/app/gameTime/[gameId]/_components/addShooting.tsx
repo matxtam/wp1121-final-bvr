@@ -199,7 +199,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
             <Button
                 onClick={() => handleButtonClick('inTwoPt')}
                 className={`bg-gray-300 px-4 m-2 py-2 ${
-                selectedButton === 'inTwoPt' ? 'bg-blue-400 text-white' : ''
+                inSelectedButton === 'inTwoPt' ? 'bg-blue-400 text-white' : ''
                 }`}
             >
                 2In
