@@ -14,7 +14,7 @@ import HistoryTable from "./_components/HistoryTable";
 import YtLink from "./_components/YtLink";
 import Image from "next/image";
 
-export default async function ({ params }:{ params: { gameId:string } }){
+export default async function DZDZ({ params }:{ params: { gameId:string } }){
   const playersOfTheGame = await db.query.gamePerformancesTable.findMany({
     with: {
       player: true,
