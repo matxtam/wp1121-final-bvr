@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import React, { use, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 type Props = {
     performanceId: string;
     twoPt: number;

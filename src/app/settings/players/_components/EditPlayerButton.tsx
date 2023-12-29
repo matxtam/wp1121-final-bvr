@@ -23,11 +23,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { Label } from "@/components/ui/label"
 import { updatePlayer } from "../actions";
-
-import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
-import { set } from "zod";
-import ImageUploader from "./ImageUploaderTemplate";
+
 
 type EditPlayerButtonProps = {
   playerId: string;

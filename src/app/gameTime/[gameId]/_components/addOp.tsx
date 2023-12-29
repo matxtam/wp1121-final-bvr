@@ -1,7 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Plus, Minus } from 'lucide-react';
-import { useState } from "react";
 type Props = {
     periodId: string;
     handleAddOpScore: (periodId: string, action: number) => void;

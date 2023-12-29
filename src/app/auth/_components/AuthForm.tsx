@@ -79,7 +79,7 @@ function AuthForm({ allUsers }: props) {
       <CardContent className=" flex flex-col gap-2">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <AuthInput
-            label="Email"
+            label="Email (please contain @ and .com)"
             type="email"
             value={email}
             setValue={setEmail}

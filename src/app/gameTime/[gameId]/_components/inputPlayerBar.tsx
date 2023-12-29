@@ -1,12 +1,10 @@
 "use client"
 import { useRef, useState } from "react";
-import { Check, PlusCircle } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Contact } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import ListPlayer from "./listPlayer";
+
 type Props = {
     handleAddPlayer: (inputName: string) => Promise<string>;
     allPlayers: any;
@@ -14,7 +12,7 @@ type Props = {
 
 
 function InputPlayerBar({ handleAddPlayer, allPlayers }: Props) {
-    const inputRef = useRef<HTMLInputElement>(null);
+    // const inputRef = useRef<HTMLInputElement>(null);
     // const handleToggle = async (playerid:string) => {
     //   try {
     //       await TogglePlayerUsable(playerid, !playerUsable);
