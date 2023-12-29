@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { eq, asc } from "drizzle-orm";
 import { gamesTable, gamePerformancesTable, periodsTable } from "@/db/schema";
+import { auth } from "@/lib/auth";
 
 import { redirect } from "next/navigation";
 import { publicEnv } from "@/lib/env/public";
@@ -17,6 +18,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import UploadPhotoButton from "./_components/UploadPhotoButton";
 
 export default async function DZDZ({ params }:{ params: { gameId:string } }){
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId || !session?.user) {
+    redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
+  }
   const playersOfTheGame = await db.query.gamePerformancesTable.findMany({
     with: {
       player: true,

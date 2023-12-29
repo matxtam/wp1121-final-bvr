@@ -11,15 +11,15 @@ import { revalidatePath } from "next/cache";
 import { publicEnv } from "@/lib/env/public";
 import { getPlayers } from "../settings/players/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { redirect } from "next/navigation";
 // const photo = document.querySelector("#photo")
 
 export default async function HomePage() {
   const session = await auth();
-  if (!session?.user?.id) {
-    return null;
+  const userId = session?.user?.id;
+  if (!userId || !session?.user) {
+    redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
   }
-  const user = session.user;
-  const userId = user.id;
   // const players = await db
   //   .select()
   //   .from(playersTable)

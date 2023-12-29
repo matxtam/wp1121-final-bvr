@@ -48,12 +48,11 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     let gameTotalOpScore = 0;
 
     const session = await auth();
-    if (!session?.user?.id) {
-        return null;
+    const userId = session?.user?.id;
+    if (!userId || !session?.user) {
+      redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
     }
-    const user = session.user;
-    const userId = user.id;
-    
+      
     if(URLperiodId === null || URLperiodId === undefined){
         console.log("URLperiodId is null");
         return;
