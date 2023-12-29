@@ -22,6 +22,8 @@ import { publicEnv } from "@/lib/env/public";
 import { performance } from "perf_hooks";
 import OpenCalculator from "./_components/openCalculator";
 import { Separator } from "@/components/ui/separator";
+import { getPlayers } from "@/app/settings/players/actions";
+import { auth } from "@/lib/auth";
 // import DashBoard from "./dashBoard";
 type Props = {
    params: {
@@ -42,6 +44,13 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     // let nowPeriod = null;
     let gameTotalScore = 0;
     let gameTotalOpScore = 0;
+
+    const session = await auth();
+    if (!session?.user?.id) {
+        return null;
+    }
+    const user = session.user;
+    const userId = user.id;
     
     if(URLperiodId === null || URLperiodId === undefined){
         console.log("URLperiodId is null");
@@ -134,7 +143,14 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     
     const allPeriod = await getPeriod(gameId);
     const nowPeriod = allPeriod.filter((period) => period.displayId === URLperiodId);
-    
+    // const allPlayer = await db
+    //     .select()
+    //     .from(playersTable)
+    //     .where(
+    //         eq(playersTable.userId, gameData[0].userId)
+    //     )
+    //     .execute();
+    const allPlayer = await getPlayers(userId);
 
     const handleAddPlayer = async(inputName: string) => {
         "use server";
@@ -464,7 +480,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 <UndoButton handleUndo={handleUndo}/>
                 <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
                 <FinishGame gameId={gameId} handleFinish={handleFinish}/>
-                <InputPlayerBar handleAddPlayer={handleAddPlayer}/>
+                <InputPlayerBar  allPlayers= {allPlayer} handleAddPlayer={handleAddPlayer}/>
                 <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
             </div>
             <div>
