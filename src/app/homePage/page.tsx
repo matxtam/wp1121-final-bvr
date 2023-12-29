@@ -12,6 +12,7 @@ import { publicEnv } from "@/lib/env/public";
 import { getPlayers } from "../settings/players/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { redirect } from "next/navigation";
+import DeleteGameButton from "./_components/DeleteGameButton";
 // const photo = document.querySelector("#photo")
 
 export default async function HomePage() {
@@ -127,26 +128,26 @@ export default async function HomePage() {
       <div className="flex flex-row flex-wrap w-full px-20 justify-start items-center gap-4">
       <NewGameBtn className="flex h-52 w-64 rounded bg-transparent shadow-md shadow-batra-300 hover:bg-muted hover:animate-pulse"/>
       {displayGame.map((game) => (
-        <Link key={game.id} href={`../history/${game.displayId}`} className="flex flex-col items-center w-64 h-52 p-3 gap-3 rounded border-2 border-blue-100 transition duration-100  shadow-md shadow-batra-300 bg-transparent hover:scale-105 hover:-translate-y-3 hover:z-0" >
-          <div className="flex flex-row w-full justify-between">
-            <p>{game.date?.toString()}</p>
-            <p className="rounded-full bg-accent w-20 overflow-hidden text-center">{game.hashtag}</p>
-          </div>
-          {/* <Image
-            src={game.photo}
-            alt="/banana.jpg"
-            width={200}
-            height={100}
-            priority
-            style={{  borderRadius: 10 }}
-          /> */}
-          <Avatar className="w-48 h-24 rounded-none">
-            <AvatarImage src={game.photo} />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        <h4 className="text-xl">{game.title}</h4>
-          
-        </Link>
+          <Link key={game.id} href={`../history/${game.displayId}`} className="flex flex-col items-center w-64 h-52 p-3 gap-3 rounded border-2 border-blue-100 transition duration-100  shadow-md shadow-batra-300 bg-transparent hover:scale-105 hover:-translate-y-3 hover:z-0" >
+            <div className="flex flex-row w-full justify-between">
+              <p>{game.date?.toString()}</p>
+              <p className="rounded-full bg-accent w-20 overflow-hidden text-center">{game.hashtag}</p>
+            </div>
+            {/* <Image
+              src={game.photo}
+              alt="/banana.jpg"
+              width={200}
+              height={100}
+              priority
+              style={{  borderRadius: 10 }}
+            /> */}
+            <Avatar className="w-48 h-24 rounded-none">
+              <AvatarImage src={game.photo} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          <h4 className="text-xl">{game.title}</h4>
+          <DeleteGameButton gameId={game.displayId}/>   
+          </Link>
       ))}
       </div>
     </section>
