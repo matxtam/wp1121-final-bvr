@@ -2,12 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { Undo2 } from 'lucide-react';
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 type Props = {
     handleUndo: () => void;
 }
 
 export default function UndoButton({ handleUndo }: Props) {
-   
+   const router = useRouter();  
     return (
         <div>
             <button

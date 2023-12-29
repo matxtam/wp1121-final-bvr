@@ -25,7 +25,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
     const [countAssist, setCountAssist] = useState<number>(assist);//set with assist
     const [countDefReb, setCountDefReb] = useState<number>(defReb);//set with defReb
     const [countOffReb, setCountOffReb] = useState<number>(offReb);//set with offReb
-
+    const router = useRouter();
     const handleButtonClick = (buttonType:ButtonType) => {
         setSelectedButton(buttonType);
             if(buttonType==="foul"){
@@ -85,7 +85,25 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
     useEffect(() => {
         setCountOffReb(offReb);
       },[offReb]);
-     
+    
+    // if(countBlock!==block && selectedButton==="block"){
+    //     router.refresh();
+    // }
+    // if(countTurnover!==turnover && selectedButton==="turnover"){
+    //     router.refresh();
+    // }
+    // if(countSteal!==steal && selectedButton==="steal"){
+    //     router.refresh();
+    // }
+    // if(countAssist!==assist && selectedButton==="assist"){
+    //     router.refresh();
+    // }
+    // if(countDefReb!==defReb && selectedButton==="defReb"){
+    //     router.refresh();
+    // }
+    // if(countOffReb!==offReb && selectedButton==="offReb"){
+    //     router.refresh();
+    // }
     
     
     const handleIncrement = () => {
