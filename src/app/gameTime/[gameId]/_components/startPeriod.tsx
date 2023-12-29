@@ -1,7 +1,7 @@
 'use client';
 import { Button } from "@/components/ui/button";
-import { is } from "drizzle-orm";
-import { useState } from "react";
+import { SkipForward } from "lucide-react";
+
 type Props = {
     gameId: string;
     handlePeriod: (gameId:string, number:string) => void;
@@ -26,14 +26,16 @@ export default function StartPeriod({ gameId, handlePeriod, periodNumber }: Prop
 
     console.log("nowPeriod", nowPeriod);
     return (
-        <Button
+        <button
         onClick={() => {
             handlePeriod(gameId, passInData);
         }}
         disabled={disabled}
+        className="flex items-center justify-center w-full h-10 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
         >
-                {nowPeriod}
-        </Button>
+                {/* {nowPeriod} */}
+            <SkipForward size={18}/>
+        </button>
         
     )
 }
