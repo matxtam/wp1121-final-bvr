@@ -1,6 +1,6 @@
 "use client";
 
-import { Game } from "@/lib/types/db";
+import type { Game } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"

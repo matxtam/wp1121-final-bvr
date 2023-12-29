@@ -12,9 +12,9 @@ import { cn } from "@/lib/utils/shadcn";
 
 import HistoryTable from "./_components/HistoryTable";
 import YtLink from "./_components/YtLink";
-import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import UploadPhoto from "./_components/UploadPhoto";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+// import UploadPhoto from "./_components/UploadPhoto";
+import UploadPhotoButton from "./_components/UploadPhotoButton";
 
 export default async function DZDZ({ params }:{ params: { gameId:string } }){
   const playersOfTheGame = await db.query.gamePerformancesTable.findMany({
@@ -50,7 +50,12 @@ export default async function DZDZ({ params }:{ params: { gameId:string } }){
     <aside className="flex flex-col items-center h-screen w-1/5 bg-secondary">
       <figure>
       </figure>
-        <UploadPhoto gameId={games.displayId} photo={games.photo}/>
+        {/* <UploadPhoto gameId={games.displayId} photo={games.photo}/> */}
+        <Avatar className="w-52 h-52">
+            <AvatarImage src={games.photo} />
+            <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <UploadPhotoButton gameId={games.displayId} photo={games.photo}/>
       <div className="flex flex-row">
         <p>{games.date?.toString()}</p>
         <span>{games.hashtag}</span>

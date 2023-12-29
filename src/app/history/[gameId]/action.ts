@@ -3,18 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { eq, and } from "drizzle-orm";
-import { z } from "zod";
+import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import { gamesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
 import type { Game } from "@/lib/types/db";
-
-const updateGamePhotoSchema = z.object({
-    photo: z.string().min(1),
-  });
 
 export async function updateGamePhoto(
     gameId: string,

@@ -1,22 +1,14 @@
 import { db } from "@/db";
-import { playersTable, gamesTable } from "@/db/schema";
-import UploadPhoto from "./_components/UploadPhoto";
-import { Button } from "@/components/ui/button"
+import { gamesTable } from "@/db/schema";
 import NewGameBtn from "./_components/NewGameBtn"
-import { Player, Game } from "@/lib/types/db";
-import Image from "next/image";
 import Link from "next/link";
 import ShowPlayer from "./_components/ShowPlayers";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogTrigger, DialogContent, DialogClose } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { ChevronsUpDown } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { eq, like, and } from "drizzle-orm";
 import SearchBar from "./_components/SearchBar";
 import { revalidatePath } from "next/cache";
 import { publicEnv } from "@/lib/env/public";
-import { get } from "http";
 import { getPlayers } from "../settings/players/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // const photo = document.querySelector("#photo")
