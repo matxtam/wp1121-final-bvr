@@ -16,7 +16,7 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import UploadPhoto from "./_components/UploadPhoto";
 
-export default async function ({ params }:{ params: { gameId:string } }){
+export default async function DZDZ({ params }:{ params: { gameId:string } }){
   const playersOfTheGame = await db.query.gamePerformancesTable.findMany({
     with: {
       player: true,
