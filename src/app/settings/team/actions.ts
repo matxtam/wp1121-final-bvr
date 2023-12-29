@@ -4,8 +4,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { eq } from "drizzle-orm";
-import { z } from "zod";
-
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -35,7 +33,6 @@ export async function updateUser(
     if (!userId) {
       redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
     }
-    //TODO: Validate input        
     const updatedUser: Omit<User, "id"> = await db.transaction(async (trx) => {
       const [updatedUser] = await trx
         .update(usersTable)

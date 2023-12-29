@@ -10,7 +10,7 @@ import {
     DialogTrigger,
     } from "@/components/ui/dialog"
 
-import { Player } from "@/lib/types/db";
+import type { Player } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"

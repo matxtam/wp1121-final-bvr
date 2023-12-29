@@ -10,7 +10,7 @@ import {
     DialogTrigger,
     } from "@/components/ui/dialog"
 
-import { Player } from "@/lib/types/db";
+import type { Player } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
@@ -26,7 +26,7 @@ import { toast } from "@/components/ui/use-toast";
 
 export default function CreatePlayerDialog() {
   const [addPlayername, setAddPlayername] = useState<Player["name"]>("");
-  const [addPlayerphoto, setAddPlayerphoto] = useState<Player["photo"]>("");
+  // const [addPlayerphoto, setAddPlayerphoto] = useState<Player["photo"]>("");
   const [addPlayerposition, setAddPlayerposition] = useState<Player["position"]>("");
   const [addPlayernumber, setAddPlayernumber] = useState<Player["number"]>("");
 
@@ -51,7 +51,7 @@ export default function CreatePlayerDialog() {
       }
     }
     setAddPlayername("");
-    setAddPlayerphoto("");
+    // setAddPlayerphoto("");
     setAddPlayerposition("");
     setAddPlayernumber("");
   };
