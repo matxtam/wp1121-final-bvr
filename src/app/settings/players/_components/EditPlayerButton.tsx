@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Pencil } from 'lucide-react';
 
 // export type PlayerDialogProps = {
 //     open: boolean;
@@ -83,7 +84,9 @@ export default function EditPlayerButton({ playerId, name, photo, position, numb
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit</Button>
+        <Button variant="outline" className="border-none">
+          <Pencil/>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>

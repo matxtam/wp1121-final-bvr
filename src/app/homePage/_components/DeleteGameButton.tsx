@@ -1,6 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { DeleteGame } from "../actions";
+import { Trash2 } from 'lucide-react';
 
 type DeleteGameButtonProps = {
     gameId: string;
@@ -19,8 +20,8 @@ export default function DeleteGameButton({gameId}: DeleteGameButtonProps) {
     }
     return (
         <div>
-            <Button className="destructive" onClick={(e) => {handleDelete(gameId); handlePreventDefault(e)}}>
-                DeleteGameButton
+            <Button className="border-none" onClick={(e) => {handleDelete(gameId); handlePreventDefault(e)}}>
+                <Trash2/>
             </Button>
         </div>
     );

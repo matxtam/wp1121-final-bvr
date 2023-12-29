@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { deletePlayer } from "../actions";
+import { Trash2 } from 'lucide-react';
 
 type DeletePlayerButtonProps = {
     displayId: string;
@@ -18,7 +19,7 @@ export default function DeletePlayerButton({displayId}: DeletePlayerButtonProps)
 
   return (
     <Button variant="destructive" onClick={() => handleDelete(displayId)}>
-      delete
+      <Trash2/>
     </Button>
   );
 }

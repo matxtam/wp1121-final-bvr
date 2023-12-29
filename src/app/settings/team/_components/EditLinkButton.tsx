@@ -81,7 +81,9 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit</Button>
+        <Button variant="outline">
+          Edit 
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
