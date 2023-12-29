@@ -12,6 +12,7 @@ import { publicEnv } from "@/lib/env/public";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import DeletePlayerButton from "./_components/DeletePlayerButton";
 import UsableButton from "./_components/UsableButton";
+import { DataTableDemo } from "./_components/PlayersTable";
 
 export default async function PlayerPage() {
     const session = await auth();
@@ -39,7 +40,7 @@ export default async function PlayerPage() {
                     <TableCell align="center">Position</TableCell>
                     <TableCell align="center">Edit</TableCell>
                     <TableCell align="center">Delete</TableCell>
-                    <TableCell align="center">Info</TableCell>
+                    <TableCell align="center">Usable</TableCell>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -50,14 +51,10 @@ export default async function PlayerPage() {
                     <TableCell align="center">
                       <Avatar>
                           <AvatarImage src={player.photo} />
-                          <AvatarFallback>CN</AvatarFallback>
+                          <AvatarFallback className="round" >CN</AvatarFallback>
                       </Avatar>
                      </TableCell>
-                    <TableCell align="center">
-                      <Link href={`/settings/players/${player.displayId}`}>
-                          {player.name}
-                      </Link>
-                    </TableCell>
+                    <TableCell align="center">{player.name}</TableCell>
                     <TableCell align="center">{player.position}</TableCell>
                     <TableCell align="center">
                         <EditPlayerButton playerId={player.displayId} name={player.name} photo={player.photo} position={player.position} number={player.number} />
@@ -66,13 +63,14 @@ export default async function PlayerPage() {
                       <DeletePlayerButton displayId={player.displayId} />
                     </TableCell>
                     <TableCell align="center">
-                      {/* <UsableButton displayId={player.displayId} usable={player.usable} /> */}
+                      <UsableButton displayId={player.displayId} usable={player.usable} />
                     </TableCell>
                   </TableRow>
                 );
               })}
             </TableBody>
         </Table>
+        {/* <DataTableDemo /> */}
     </div>
   );
 }
