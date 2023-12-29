@@ -40,6 +40,8 @@ export default function History ({playersOfTheGame}:Props) {
   contents[12].state = useState(false);
   contents[13].state = useState(false);
 
+  const [checkAll, setCheckAll] = useState(false);
+
   return (<div className="flex flex-row w-full px-12 py-6">
     <div className="grid grid-cols-14 w-3/4 gap-1">
 
@@ -79,17 +81,24 @@ export default function History ({playersOfTheGame}:Props) {
     </React.Fragment>))}
     </div>
     <div className="flex flex-col w-1/4">
-    <Switch
-            defaultChecked={false}
-            onCheckedChange={() => {}}
-          />
+      <div className="flex flex-row items-center p-1 gap-3">
+        <Switch
+          defaultChecked={false}
+          onCheckedChange={(checked) => {
+            contents.forEach((content) => {if(content.state[1])content.state[1](checked);})
+          }}
+        />
+            <label>View All</label>
+        </div>
+      
       {contents.map((content) => (
         (content.state[1] !== undefined) &&
         <div className="flex flex-row items-center p-1 gap-3" key={content.title+"switch"}>
           <Switch
             defaultChecked={content.state[0]}
+            checked={content.state[0]}
             onCheckedChange={() => {content.state[1] ? content.state[1](!content.state[0]) : {};
-          console.log(content.title, content.state[0])}}
+          }}
           />
           <label>{content.title}</label>
         </div>
