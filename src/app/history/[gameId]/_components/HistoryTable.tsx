@@ -20,20 +20,25 @@ type Props = {
 export default function History ({playersOfTheGame}:Props) {
   const titles = ["#", "name", "on time", "2pt", "3pt", "ft", "foul", "steal", "block", "assist", "defReb", "offReb", "turnover", "point"]
   const contents :{title: string, state: [boolean, Dispatch<SetStateAction<boolean>>|undefined] }[] = [];
-  for(let i in titles){
-    if(i==="0" || i==="1"){
-      contents.push({
-        title: titles[i],
-        state: [true, undefined]
-      })
-    }else{
-      contents.push({
-        title: titles[i],
-        state: useState(false),
-      })
-    }
-  }
-
+  
+  titles.forEach((title) => {
+    contents.push({
+      title: title,
+      state: [true, undefined]
+    })
+  })
+  contents[2].state = useState(false);
+  contents[3].state = useState(false);
+  contents[4].state = useState(false);
+  contents[5].state = useState(false);
+  contents[6].state = useState(false);
+  contents[7].state = useState(false);
+  contents[8].state = useState(false);
+  contents[9].state = useState(false);
+  contents[10].state = useState(false);
+  contents[11].state = useState(false);
+  contents[12].state = useState(false);
+  contents[13].state = useState(false);
 
   return (<div className="flex flex-row w-full px-12 py-6">
     <div className="grid grid-cols-14 w-3/4 gap-1">
@@ -74,7 +79,10 @@ export default function History ({playersOfTheGame}:Props) {
     </React.Fragment>))}
     </div>
     <div className="flex flex-col w-1/4">
-
+    <Switch
+            defaultChecked={false}
+            onCheckedChange={() => {}}
+          />
       {contents.map((content) => (
         (content.state[1] !== undefined) &&
         <div className="flex flex-row items-center p-1 gap-3" key={content.title+"switch"}>
