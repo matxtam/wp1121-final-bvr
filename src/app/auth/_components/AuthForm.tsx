@@ -12,8 +12,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { publicEnv } from "@/lib/env/public";
 
 import AuthInput from "./AuthInput";
-
-function AuthForm() {
+import { type } from "os";
+type props = {  
+  allUsers?: any;
+};
+function AuthForm({ allUsers }: props) {
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -22,6 +25,45 @@ function AuthForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSignUp && password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    if(isSignUp && allUsers?.some((user: any) => user.email === email)) {
+      alert("Email already exists");
+      return;
+    }
+    if(isSignUp && allUsers?.some((user: any) => user.name === name)) {
+      alert("Name already exists");
+      return;
+    }
+    if(password.length < 8) {
+      alert("Password must be at least 8 characters");
+      return;
+    }
+    if(!isSignUp && !allUsers?.some((user: any) => user.email === email)) {
+      alert("Email does not exist");
+      return;
+    }
+
+    // if(!isSignUp && !allUsers?.some((user: any) => user.password === password)) {
+    //   alert("Password is incorrect");
+    //   return;
+    // }
+
+    // if (!isSignUp) {
+    //   let foundUser = allUsers?.find((user: any) => user.email === email);
+    //   if (foundUser) {
+    //     console.log("foundUser", foundUser);
+    //     if (password !== foundUser.password) {
+    //       console.log("password", password);
+    //       console.log("foundUser.password", foundUser.password);
+    //       alert('Password is incorrect');
+    //     }
+    //   }
+      
+    // }
+    
     signIn("credentials", {
       email,
       name,
@@ -51,7 +93,7 @@ function AuthForm() {
             />
           )}
           <AuthInput
-            label="Password"
+            label="Password (8 characters minimum)"
             type="password"
             value={password}
             setValue={setPassword}

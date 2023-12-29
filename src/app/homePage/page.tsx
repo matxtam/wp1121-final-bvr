@@ -131,7 +131,7 @@ export default async function HomePage() {
         <SearchBar handleSearch={handleSearch} handleClear={handleClear} className=" pt-6 pr-24 self-end"/>
       </div>
       
-      <div className="flex flex-row flex-wrap w-full px-20 justify-center items-center gap-4">
+      <div className="flex flex-row flex-wrap w-full px-20 justify-start items-center gap-4">
       <NewGameBtn className="flex h-52 w-64 rounded bg-transparent shadow-md shadow-batra-300 hover:bg-muted hover:animate-pulse"/>
       {displayGame.map((game) => (
         <Link key={game.id} href={`../history/${game.displayId}`} className="flex flex-col items-center w-64 h-52 p-3 gap-3 rounded border-2 border-blue-100 transition duration-100  shadow-md shadow-batra-300 bg-transparent hover:scale-105 hover:-translate-y-3 hover:z-0" >
