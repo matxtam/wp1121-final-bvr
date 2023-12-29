@@ -21,6 +21,7 @@ import FinishGame from "./_components/FinishButton";
 import { publicEnv } from "@/lib/env/public";
 import { performance } from "perf_hooks";
 import OpenCalculator from "./_components/openCalculator";
+import { Separator } from "@/components/ui/separator";
 // import DashBoard from "./dashBoard";
 type Props = {
    params: {
@@ -448,30 +449,59 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
     return (
-      <div>
+      <>
         {/* <nav className=" sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">GameTime [ID] Page</nav> */}
             {/* TODO: get the true info */}
-            <div className="flex flex-col gap-2 p-5 m-3">
+        <nav className="sticky flex flex-row w-60 sm:flex-col sm:w-full">
+            <div className="flex flex-col p-5 m-3 gap-2">
+                <h1 className="text-3xl font-bold">GameTitle: {gameData[0].title}</h1>
                 <div className="flex items-center gap-2 justify-between">
-                    <h1 className="text-3xl font-bold">GameTitle: {gameData[0].title}</h1>
-                    <div className="text-lg bg-fuchsia-200 p-2 rounded">{gameData[0].hashtag}</div>
+                    <p className="text-lg">{gameData[0].date}</p>
+                    <div className="text-lg bg-fuchsia-200 p-2 rounded-full">{gameData[0].hashtag}</div>
                 </div>
-                <p className="text-lg">Date: {gameData[0].date}</p>
             </div>
-            <div className="flex items-center justify-between px-2">
+            <div className="grid grid-cols-5 content-center items-center justify-between h-12 w-60 px-6 py-1 gap-2 rounded-full overflow-hidden bg-primary">
+                <UndoButton handleUndo={handleUndo}/>
+                <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
+                <FinishGame gameId={gameId} handleFinish={handleFinish}/>
+                <InputPlayerBar handleAddPlayer={handleAddPlayer}/>
+                <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
+            </div>
+            <div>
                 <div className="flex items-center gap-2 p-2">
-                    <InputPlayerBar handleAddPlayer={handleAddPlayer}/>
-                    <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
                     <AddOp periodId={URLperiodId} handleAddOpScore={handleAddOpScore} handleAddOpFoul={handleAddOpFoul}/>
-                    <UndoButton 
-                        handleUndo={handleUndo}
-                    />
                 </div>
-                <div className="flex gap-2 p-2">
-                    <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
-                    <FinishGame gameId={gameId} handleFinish={handleFinish}/>
-                </div>     
-            </div>
+                <b>ScoreBoard</b>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th className="p-2">No</th>
+                                <th className="p-2">Score</th>
+                                <th className="p-2">OP Score</th>
+                                <th className="p-2">Foul</th>
+                                <th className="p-2">OP Foul</th>
+                            </tr>
+                        </thead>
+                    </table>
+                {URLperiodId !== null && URLperiodId !== undefined && allPeriod !== null && 
+                    allPeriod
+                    .sort((a, b) => (a.number === b.number ? 0 : a.number < b.number ? -1 : 1))
+                    .map((period, index) => (
+                        <div key={index} className="flex w-full">
+                            <ScoreBoard
+                                gameId={gameId}
+                                periodId={URLperiodId}
+                                number={period.number}
+                                totalScore={period.totalScore}
+                                totalOpScore={period.totalOpScore}
+                                totalFoul={period.totalFoul}
+                                totalOpFoul={period.totalOpFoul}
+                            />
+                        </div>
+                    ))}
+                </div>
+        </nav>
+        
             <div className="grid grid-cols-3 gap-4">
                 {allGamePerformances
                 .sort((a, b) => a.id - b.id)
@@ -536,39 +566,10 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     </div>
                 ))}
                 
-                <div>
-                <b>ScoreBoard</b>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th className="p-2">No</th>
-                                <th className="p-2">Score</th>
-                                <th className="p-2">OP Score</th>
-                                <th className="p-2">Foul</th>
-                                <th className="p-2">OP Foul</th>
-                            </tr>
-                        </thead>
-                    </table>
-                {URLperiodId !== null && URLperiodId !== undefined && allPeriod !== null && 
-                    allPeriod
-                    .sort((a, b) => (a.number === b.number ? 0 : a.number < b.number ? -1 : 1))
-                    .map((period, index) => (
-                        <div key={index} className="flex w-full">
-                            <ScoreBoard
-                                gameId={gameId}
-                                periodId={URLperiodId}
-                                number={period.number}
-                                totalScore={period.totalScore}
-                                totalOpScore={period.totalOpScore}
-                                totalFoul={period.totalFoul}
-                                totalOpFoul={period.totalOpFoul}
-                            />
-                        </div>
-                    ))}
-                </div>
+                
                
             </div>
-      </div>
+      </>
     );
     revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
   }

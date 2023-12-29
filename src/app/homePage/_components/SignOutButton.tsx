@@ -12,6 +12,6 @@ export default function SignOutButton() {
     await signOut({ callbackUrl: '/auth' });
     // router.push("/anth");
   }
-  return <Button variant={"outline"} data-testid="sign-out-button" onClick={handleSignOut} className="rounded">Sign Out</Button>;
+  return <Button variant={"outline"} data-testid="sign-out-button" onClick={handleSignOut} className="rounded-md">Sign Out</Button>;
 }
 // TODO: 4. end
