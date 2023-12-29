@@ -20,6 +20,7 @@ import React from "react";
 import { getPlayersTwo } from "@/app/settings/players/actions";
 import { auth } from "@/lib/auth";
 import {Player} from "@/lib/types/db";
+import { publicEnv } from "@/lib/env/public";
 type Props = {
    params: {
          gameId: string;
