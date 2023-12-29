@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
@@ -84,11 +84,7 @@ export async function createPlayer(
     };
   });
 
-  // TODO: 6. Update the navbar for the user's players
-//   router.refresh();
   revalidatePath(`/settings`);
-  // TODO: 6. end
-
   return newPlayer;
 }
 
@@ -247,7 +243,6 @@ export async function getPlayers(userId: User["id"]) {
     personalSteal: item.player.personalSteal,
     personalAssist: item.player.personalAssist,
   }))
-  // .sort((a, b) => String(!a.usable).localeCompare(String(!b.usable)));
   return players;
 }
 

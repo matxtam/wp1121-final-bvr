@@ -4,20 +4,13 @@ import { redirect } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import fbLink1 from "public/fbLink1.png";
 import igLink1 from "public/igLink1.png";
 import ytLink1 from "public/ytLink1.png";
 import cloudLink1 from "public/cloudLink1.png";
-import fbLink2 from "public/fbLink2.png";
-import igLink2 from "public/igLink2.png";
-import ytLink2 from "public/ytLink2.png";
-import cloudLink2 from "public/cloudLink2.png";
 import Image from "next/image";
 
 import EditUserButton from "./_components/EditLinkButton";
-// import SignOutButton from "./SignOutButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { usersTable } from "@/db/schema";
 import { db } from "@/db";
@@ -35,7 +28,6 @@ export default async function Navbar() {
   .where(eq(usersTable.displayId, userId))
   .execute();
   const user = users[0];
-// const projects = await getProjects(userId);
   return (
     <div style={{ position: 'sticky', top: '0' }}>
       <div className="flex h-10 w-full flex-row bg-white bg-opacity-10 items-center justify-between gap-12 px-8 py-8 pt-8">
