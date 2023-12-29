@@ -17,29 +17,25 @@ export default async function PlayerPage() {
       redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
     }
     const players = await getPlayers(userId);
-    // console.log(players);
-    // not user-only
-    // const players = await db
-    //   .select()
-    //   .from(playersTable)
-    //   .execute();
   
   return (
     <div>
+      <div className="flex h-10 w-full flex-row items-center justify-end gap-12 px-6 py-8 pt-8">
         <CreatePlayerButton />
+      </div>
         <Table>
-            <TableHeader>
+            <TableHeader className="border-primary bg-white bg-opacity-20">
                 <TableRow>
-                    <TableCell align="center">Number</TableCell>
-                    <TableCell align="center">Photo</TableCell>
-                    <TableCell align="center">Player</TableCell>
-                    <TableCell align="center">Position</TableCell>
-                    <TableCell align="center">Edit</TableCell>
-                    <TableCell align="center">Delete</TableCell>
-                    <TableCell align="center">Usable</TableCell>
+                    <TableCell align="center">NUMBER</TableCell>
+                    <TableCell align="center">PHOTO</TableCell>
+                    <TableCell align="center">PLAYER</TableCell>
+                    <TableCell align="center">POSITION</TableCell>
+                    <TableCell align="center">EDIT</TableCell>
+                    <TableCell align="center">DELETE</TableCell>
+                    <TableCell align="center">USABLE</TableCell>
                 </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="bg-white bg-opacity-10">
             {players.map((player) => {
               if (player.usable)
                 return (
