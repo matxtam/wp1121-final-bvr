@@ -86,9 +86,10 @@ export default async function DZDZ({ params }:{ params: { gameId:string } }){
         </div>
       </div>
     </aside>
+
     <section className="flex flex-col items-center w-4/5 gap-6 overflow-y-scroll">
       <section className="flex justify-between items-center w-min px-24 pt-6 gap-12">
-        <h2 className="text-2xl font-bold">{games.title}</h2>
+        <h2 className="text-2xl font-bold truncate overflow-ellipsis">{games.title}</h2>
         <div className="flex flex-row items-center justify-between w-min gap-2">
           <p className="truncate">{games.date?.toString()}</p>
           <p className="px-4 rounded-full bg-muted">{games.hashtag}</p>
