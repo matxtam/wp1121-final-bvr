@@ -174,7 +174,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
             {(selectedButton === 'twoPt') && (!inClicked) &&
             <Button
                 onClick={() => {handleInButtonClick('inTwoPt'); setInClicked(true); }}
-                className={`absolute top-12 left-0 z-50 bg-ring/30 w-8 h-8 px-4 rounded-full border-none ${""
+                className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
                 // inSelectedButton === 'inTwoPt' ? 'bg-blue-600 text-white' : ''
                 }`}
             >In?
@@ -199,7 +199,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
             {(selectedButton === 'threePt') && (!inClicked) &&
             <Button
                 onClick={() => {handleInButtonClick('inThreePt'); setInClicked(true);}}
-                className={`absolute top-12 left-0 z-50 bg-ring/30 w-8 h-8 px-4 rounded-full border-none ${""
+                className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
                 // inSelectedButton === 'inThreePt' ? 'bg-blue-600 text-white' : ''
                 }`}
             >In?
@@ -224,7 +224,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
             {(selectedButton === 'ft') && (!inClicked) &&
             <Button
                 onClick={() => {handleInButtonClick('inFt'); setInClicked(true)}}
-                className={`absolute top-12 left-0 z-50 bg-ring/30 w-8 h-8 px-4 rounded-full border-none ${""
+                className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
                 // inSelectedButton === 'inFt' ? 'bg-blue-600 text-white' : ''
                 }`}
             >In?
@@ -244,13 +244,13 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
             {/* <p className="p-1">
                 <b>進球數</b>
             </p> */}
-            <button onClick={handleInDecrement} className="absolute -bottom-6 right-8 px-2 bg-muted rounded-full">
+            <button onClick={handleInDecrement} className="absolute -bottom-6 left-0 px-2 bg-muted rounded-full">
                 -
             </button>
             {/* {inSelectedButton==="inTwoPt" &&(<div className="p-4 bg-blue-100 m-2">{inCountTwoPt}</div>)}
             {inSelectedButton==="inThreePt" && (<div className="p-4 bg-blue-100 m-2">{inCountThreePt}</div>)}
             {inSelectedButton==="inFt" && (<div className="p-4 bg-blue-100 m-2">{inCountFt}</div>)} */}
-            <button onClick={handleInIncrement} className="absolute bottom-12 right-8 px-2 bg-muted rounded-full">
+            <button onClick={handleInIncrement} className="absolute bottom-12 left-0 px-2 bg-muted rounded-full">
                 +
             </button>
         </div>}
