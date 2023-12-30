@@ -126,6 +126,7 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
                     type="file"
                     accept="image/*"
                     className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded border-black-600"
+
                     // onChange={(e) => setEditPlayerphoto(e.target.value)}
                     onChange={handleFileChange}
                   />

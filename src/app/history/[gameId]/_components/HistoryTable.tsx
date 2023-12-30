@@ -40,6 +40,7 @@ export default function History ({playersOfTheGame}:Props) {
   contents[12].state = useState(false);
   contents[13].state = useState(false);
 
+
   return (
   <div className="flex flex-row justify-between w-full px-12 py-6">
     <table className="w-min gap-1 h-min" >
@@ -113,6 +114,7 @@ export default function History ({playersOfTheGame}:Props) {
             checked={content.state[0]}
             onCheckedChange={() => {content.state[1] ? content.state[1](!content.state[0]) : {};
           }}
+
           />
           <label>{content.title}</label>
         </div>
