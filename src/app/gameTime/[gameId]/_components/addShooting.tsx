@@ -1,6 +1,8 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils/shadcn";
+import { set } from "zod";
 type Props = {
     performanceId: string;
     twoPt: number;
@@ -23,6 +25,8 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
     const [inCountThreePt, setInCountThreePt] = useState<number>(inThreePt);//set with inThreePt
     const [countFt, setCountFt] = useState<number>(ft);//set with ft
     const [inCountFt, setInCountFt] = useState<number>(inFt);//set with inFt
+
+    const [inClicked, setInClicked] = useState(true);
       
       const handleButtonClick = (buttonType: ButtonType) => {
         setSelectedButton(buttonType);
@@ -108,6 +112,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
         }
     };    
     const handleDecrement = () => {
+        console.log("hello?")
         if(selectedButton==="twoPt"){
             setCountTwoPt((prevNumber) => prevNumber - 1);
             handleAddShooting(selectedButton, performanceId, countTwoPt-1, -2);
@@ -152,108 +157,122 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
 
 
     return (
-        <div className="flex flex-col items-center">
-            <div className="flex flex-row">
-                <Button
-                    onClick={() => handleButtonClick('twoPt')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'twoPt' ? 'bg-blue-400 text-white' : ''
-                    }`}
-                >
-                    2
-                    <p  className={`p-1 ${
-                    selectedButton === 'twoPt' ? 'text-yellow-400' : ''
-                    }`}><b>{countTwoPt}</b></p>
-                </Button>
-                <Button
-                    onClick={() => handleButtonClick('threePt')}
-                    className={`bg-gray-300 m-2 px-4 py-2 ${
-                    selectedButton === 'threePt' ? 'bg-blue-400 text-white' : ''
-                    }`}
-                >
-                    3
-                    <p  className={`p-1 ${
-                    selectedButton === 'threePt' ? 'text-yellow-400' : ''
-                    }`}><b>{countThreePt}</b></p>
-                </Button>
-                <Button
-                    onClick={() => handleButtonClick('ft')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'ft' ? 'bg-blue-400 text-white' : ''
-                    }`}
-                >
-                    FT
-                    <p  className={`p-1 ${
-                    selectedButton === 'ft' ? 'text-yellow-400' : ''
-                    }`}><b>{countFt}</b></p>
-                </Button>
-            </div>
-
-            {openCalculator && <div className="flex items-center">
-                <p className="p-1">
-                    <b>投球數</b>
-                </p>
-                <button onClick={handleDecrement} className="p-2 m-2 bg-gray-300">
-                    -
-                </button>
-                {selectedButton==="twoPt" && (<div className="p-4 bg-blue-100 m-2">{countTwoPt}</div>)}
-                {selectedButton==="threePt" && (<div className="p-4 bg-blue-100 m-2">{countThreePt}</div>)}
-                {selectedButton==="ft" && (<div className="p-4 bg-blue-100 m-2">{countFt}</div>)}
-                <button onClick={handleIncrement} className="p-2 m-2 bg-gray-300">
-                    +
-                </button>
-            </div>}
-            
-
+    <div className="grid grid-cols-3 items-center justify-center content-center justify-items-center mb-8">
+        
+        <div className="col-start-1 flex flex-col relative items-center">
             <Button
-                onClick={() => handleInButtonClick('inTwoPt')}
-                className={`bg-gray-300 px-4 m-2 py-2 ${
-                inSelectedButton === 'inTwoPt' ? 'bg-blue-400 text-white' : ''
+                onClick={() => {handleButtonClick('twoPt'); setInClicked(false);}}
+                className={`bg-transparent w-20  m-2 ${
+                selectedButton === 'twoPt' ? 'bg-blue-600 text-white' : ''
                 }`}
             >
-                2In
+                2pt
                 <p  className={`p-1 ${
-                selectedButton === 'inTwoPt' ? 'text-yellow-400' : ''
-                }`}><b>{inCountTwoPt}</b></p>
+                selectedButton === 'twoPt' ? 'text-yellow-400' : ''
+                }`}><b>{`${inCountTwoPt}/${countTwoPt}`}</b></p>
             </Button>
+            {(selectedButton === 'twoPt') && (!inClicked) &&
             <Button
-                onClick={() => handleInButtonClick('inThreePt')}
-                className={`bg-gray-300 m-2 px-4 py-2 ${
-                inSelectedButton === 'inThreePt' ? 'bg-blue-400 text-white' : ''
+                onClick={() => {handleInButtonClick('inTwoPt'); setInClicked(true); }}
+                className={`absolute top-12 left-0 z-50 bg-ring/30 w-8 h-8 px-4 rounded-full border-none ${""
+                // inSelectedButton === 'inTwoPt' ? 'bg-blue-600 text-white' : ''
                 }`}
-            >
-                3In
-                <p  className={`p-1 ${
-                inSelectedButton === 'inThreePt' ? 'text-yellow-400' : ''
-                }`}><b>{inCountThreePt}</b></p>
-            </Button>
-            <Button
-                onClick={() => handleInButtonClick('inFt')}
-                className={`bg-gray-300 px-4 m-2 py-2 ${
-                inSelectedButton === 'inFt' ? 'bg-blue-400 text-white' : ''
-                }`}
-            >
-                FTIn
-                <p  className={`p-1 ${
-                selectedButton === 'inFt' ? 'text-yellow-400' : ''
-                }`}><b>{inCountFt}</b></p>
-            </Button>
-
-            {openCalculator &&<div className="flex items-center">
-                <p className="p-1">
-                    <b>進球數</b>
-                </p>
-                <button onClick={handleInDecrement} className="p-2 m-2 bg-gray-300">
-                    -
-                </button>
-
-                {inSelectedButton==="inTwoPt" &&(<div className="p-4 bg-blue-100 m-2">{inCountTwoPt}</div>)}
-                {inSelectedButton==="inThreePt" && (<div className="p-4 bg-blue-100 m-2">{inCountThreePt}</div>)}
-                {inSelectedButton==="inFt" && (<div className="p-4 bg-blue-100 m-2">{inCountFt}</div>)}
-                <button onClick={handleInIncrement} className="p-2 m-2 bg-gray-300">
-                    +
-                </button>
-            </div>}
+            >In?
+            </Button>}
+            {/* <p className={`p-1 text-center font-bold ${selectedButton === 'inTwoPt' ? 'text-yellow-400' : ''}`}>
+                {`2In:${inCountTwoPt}`}
+            </p> */}
         </div>
+
+        <div className="flex flex-col relative">
+            <Button
+                onClick={() => {handleButtonClick('threePt'); setInClicked(false);}}
+                className={`bg-transparent w-20  m-2 ${
+                selectedButton === 'threePt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >
+                3pt
+                <p  className={`p-1 ${
+                selectedButton === 'threePt' ? 'text-yellow-400' : ''
+                }`}><b>{`${inCountThreePt}/${countThreePt}`}</b></p>
+            </Button>
+            {(selectedButton === 'threePt') && (!inClicked) &&
+            <Button
+                onClick={() => {handleInButtonClick('inThreePt'); setInClicked(true);}}
+                className={`absolute top-12 left-0 z-50 bg-ring/30 w-8 h-8 px-4 rounded-full border-none ${""
+                // inSelectedButton === 'inThreePt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >In?
+            </Button>}
+            {/* <p className={`p-1 text-center font-bold ${selectedButton === 'inThreePt' ? 'text-yellow-400' : ''}`}>
+                {`3In:${inCountThreePt}`}
+            </p> */}
+        </div>
+        
+        <div className="flex flex-col relative">
+            <Button
+                onClick={() => {handleButtonClick('ft'); setInClicked(false)}}
+                className={`bg-transparent w-20  m-2 ${
+                selectedButton === 'ft' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >
+                FT
+                <p  className={`p-1 ${
+                selectedButton === 'ft' ? 'text-yellow-400' : ''
+                }`}><b>{`${inCountFt}/${countFt}`}</b></p>
+            </Button>
+            {(selectedButton === 'ft') && (!inClicked) &&
+            <Button
+                onClick={() => {handleInButtonClick('inFt'); setInClicked(true)}}
+                className={`absolute top-12 left-0 z-50 bg-ring/30 w-8 h-8 px-4 rounded-full border-none ${""
+                // inSelectedButton === 'inFt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >In?
+            </Button>}
+            {/* <p className={`p-1 text-center font-bold ${selectedButton === 'inFt' ? 'text-yellow-400' : ''}`}>
+                {`3In:${inCountFt}`}
+            </p> */}
+        </div>
+
+        
+        {openCalculator &&
+        <div className={cn("flex bg-transparent relative h-0 w-full",
+            (inSelectedButton==="inTwoPt") && "col-start-1",
+            (inSelectedButton==="inThreePt") && "col-start-2",
+            (inSelectedButton==="inFt") && "col-start-3",
+        )}>
+            {/* <p className="p-1">
+                <b>進球數</b>
+            </p> */}
+            <button onClick={handleInDecrement} className="absolute -bottom-6 right-8 px-2 bg-muted rounded-full">
+                -
+            </button>
+            {/* {inSelectedButton==="inTwoPt" &&(<div className="p-4 bg-blue-100 m-2">{inCountTwoPt}</div>)}
+            {inSelectedButton==="inThreePt" && (<div className="p-4 bg-blue-100 m-2">{inCountThreePt}</div>)}
+            {inSelectedButton==="inFt" && (<div className="p-4 bg-blue-100 m-2">{inCountFt}</div>)} */}
+            <button onClick={handleInIncrement} className="absolute bottom-12 right-8 px-2 bg-muted rounded-full">
+                +
+            </button>
+        </div>}
+        {openCalculator && 
+        <div className={cn("flex bg-transparent relative h-0 w-full",
+            (selectedButton==="twoPt") && "col-start-1",
+            (selectedButton==="threePt") && "col-start-2",
+            (selectedButton==="ft") && "col-start-3",
+        )}>
+            {/* <p className="p-1">
+                <b>投球數</b>
+            </p> */}
+            <button onClick={handleDecrement} className="absolute -bottom-6 z-50 right-0 px-2 bg-muted rounded-full">
+                -
+            </button>
+            {/* {selectedButton==="twoPt" && (<div className="p-4 bg-blue-100 m-2">{countTwoPt}</div>)}
+            {selectedButton==="threePt" && (<div className="p-4 bg-blue-100 m-2">{countThreePt}</div>)}
+            {selectedButton==="ft" && (<div className="p-4 bg-blue-100 m-2">{countFt}</div>)} */}
+            <button onClick={handleIncrement} className="absolute bottom-12 right-0 px-2 bg-muted rounded-full">
+                +
+            </button>
+        </div>}
+    </div>
     )
 }

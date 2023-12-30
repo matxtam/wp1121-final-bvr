@@ -35,9 +35,10 @@ function InputPlayerBar({ handleAddPlayer, allPlayers }: Props) {
         <Dialog>
         <DialogTrigger asChild>
           <button
-            className="flex items-center justify-center w-full h-10 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
+            className="flex flex-col items-center justify-center w-full h-16 gap-1 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
           >
-            <Contact  size={18}/>
+            <Contact  size={20}/>
+            <p>Players</p>
           </button>
         </DialogTrigger>
         <DialogContent>

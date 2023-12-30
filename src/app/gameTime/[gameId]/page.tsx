@@ -19,8 +19,10 @@ import OpenCalculator from "./_components/openCalculator";
 import React from "react";
 import { getPlayersTwo } from "@/app/settings/players/actions";
 import { auth } from "@/lib/auth";
-import {Player} from "@/lib/types/db";
+import { Player } from "@/lib/types/db";
 import { publicEnv } from "@/lib/env/public";
+import { Shield } from "lucide-react";
+
 type Props = {
    params: {
          gameId: string;
@@ -474,7 +476,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     <div className="text-lg bg-muted text-muted-foreground p-2 rounded-full">{gameData[0].hashtag}</div>
                 </div>
             </div>
-            <div className="grid grid-cols-5 content-center items-center justify-between h-12 w-60 px-6 py-1 gap-2 rounded-full overflow-hidden bg-primary">
+            <div className="grid grid-cols-5 content-center items-center justify-between h-20 w-96 px-6 py-1 gap-2 rounded-full overflow-visible bg-primary text-sm overflow-ellipsis text-truncate">
                 <UndoButton handleUndo={handleUndo}/>
                 <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
                 <FinishGame gameId={gameId} handleFinish={handleFinish}/>
@@ -529,14 +531,16 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 .sort((a, b) => a.id - b.id)
                 .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
                 .map((performance, index) => (
-                    <div key={index} className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">                    
-                        <div className="w-full my-2 mx-4 flex flex-wrap justify-between items-center">
-                            <div>
-                                <p><b>{performance.player.name}</b></p>
-                            </div>
-                            <div>
-                                <p>{performance.player.number}</p>
-                            </div>
+                    <div key={index} className="relative items-center border-2 rounded-xl border-ring overflow-hidden">
+                        <Shield size={52} className="absolute left-2 bottom-2 w-12 text-center text-ring"/>
+                        <p className="absolute left-2 bottom-6 w-12 text-center text-ring font-bold">{performance.player.number}</p>
+                        <div className="relative">
+                            
+                            <p className="font-bold text-center bg-ring text-background ">{performance.player.name}</p>
+                        </div>
+                        
+                        <div className="box-content p-3 flex items-center flex-wrap">                
+                        <div className="w-full my-2 flex flex-wrap justify-between items-center">
                             {/* <div> */}
                                 {/* <a><img src={performance.player.photo} className="w-20 h-20 rounded-full" /></a> */}
                             {/* </div> */}
@@ -562,7 +566,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 handlePlayNow={handleNowPlay}
                             /> */}
                         </div>
-                        <div className="m-2 flex justify-between items-center ">
+                        <div className="m-2 flex flex-col justify-between items-center">
                             <AddShooting
                                     performanceId={performance.displayId}                            
                                     twoPt={performance.twoPt}
@@ -586,6 +590,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 openCalculator={performance.openCalculator}
                                 handleAddOther={handleAddOther}
                             />
+                            </div>    
                         </div>
                         
                     </div>

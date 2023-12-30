@@ -14,6 +14,7 @@ import type { Game } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { PenSquare } from "lucide-react";
 import { updateGamePhoto } from "../action";
 
 import { toast } from "@/components/ui/use-toast";
@@ -67,7 +68,9 @@ export default function UploadPhotoButton({ gameId, photo }: EditGameButtonProps
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Change Photo</Button>
+        <Button variant="outline" className="h-12 w-12 overflow-visible absolute bottom-0 right-0 border-none bg-gray-500/50 hover:bg-gray-500/80 rounded-full">
+          <PenSquare size={24}/>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
