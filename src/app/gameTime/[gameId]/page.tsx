@@ -19,7 +19,7 @@ import OpenCalculator from "./_components/openCalculator";
 import React from "react";
 import { getPlayersTwo } from "@/app/settings/players/actions";
 import { auth } from "@/lib/auth";
-import { Player } from "@/lib/types/db";
+import { type Player } from "@/lib/types/db";
 import { Shield } from "lucide-react";
 
 type Props = {

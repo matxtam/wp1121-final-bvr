@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 
-import { SetStateAction, useState } from "react";
-import { GamePerformance } from "@/lib/types/db";
+import { type SetStateAction, useState } from "react";
+import { type GamePerformance } from "@/lib/types/db";
 
 import Switch from "@/components/ui/switch";
 import { type Dispatch } from "react";
