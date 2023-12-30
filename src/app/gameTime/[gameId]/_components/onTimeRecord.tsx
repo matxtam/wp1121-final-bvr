@@ -110,7 +110,7 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
                     // router.refresh();
                 }}>OT</button>
             </div>
-            <div>
+            {/* <div>
                 <button
                 className={cn(
                     "rounded text-black-50 shadow-sm flex w-15 items-center p-1 m-1",
@@ -128,7 +128,7 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
                     </div>
                 </button>
         
-        </div>
+        </div> */}
         </>
         // </div> */}
     )
