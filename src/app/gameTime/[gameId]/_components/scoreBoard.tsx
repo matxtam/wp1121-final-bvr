@@ -1,11 +1,8 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 
 
 type Props = {
-    gameId: string;
-    periodId: string;
     number: string;
     totalScore: number; 
     totalOpScore: number;
@@ -14,7 +11,7 @@ type Props = {
     // handleChangeOnTime: (performanceId: string, item: string, newStatus: boolean) => void;
 }
 
-export default function ScoreBoard({gameId, periodId, number, totalScore, totalOpScore, totalFoul, totalOpFoul }: Props) {
+export default function ScoreBoard({ number, totalScore, totalOpScore, totalFoul, totalOpFoul }: Props) {
     const [totalScoreNow, setTotalScoreNow] = useState(totalScore);
     const [totalOpScoreNow, setTotalOpScoreNow] = useState(totalOpScore);
     const [totalFoulNow, setTotalFoulNow] = useState(totalFoul);
@@ -35,29 +32,17 @@ export default function ScoreBoard({gameId, periodId, number, totalScore, totalO
 
     
     return (
-        <div className="flex">
-          
-          <table>
-            {/* <thead>
+
+            <tbody className="w-full items-center justify-center">
               <tr>
-                <th>Number</th>
-                <th>Total Score</th>
-                <th>Total Opponent Score</th>
-                <th>Total Foul</th>
-                <th>Total Opponent Foul</th>
-              </tr>
-            </thead> */}
-            <tbody className="w-full">
-              <tr>
-                <td className="px-3">{number}</td>
-                <td className="px-9">{totalScoreNow}</td>
-                <td className="px-7">{totalOpScoreNow}</td>
-                <td className="px-7">{totalFoulNow}</td>
-                <td className="px-7">{totalOpFoulNow}</td>
+                <td className="text-center">{number}</td>
+                <td className="text-center">{totalScoreNow}</td>
+                <td className="text-center">{totalOpScoreNow}</td>
+                <td className="text-center">{totalFoulNow}</td>
+                <td className="text-center">{totalOpFoulNow}</td>
               </tr>
             </tbody>
-          </table>
-        </div>
+
       );
    
 }

@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { Square } from "lucide-react";
 
 type Props = {
     gameId: string;
@@ -9,11 +9,14 @@ type Props = {
 export default function FinishGame({ gameId, handleFinish}: Props) {    
     return (
         <div> 
-            <Button onClick={() => {
+            <button onClick={() => {
                 handleFinish(gameId);
-            }}>
-                Finish Game
-            </Button>
+            }}
+            className="flex flex-col items-center justify-center w-full h-16 gap-1 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
+            >
+                <Square size={20}/>
+                <p>finish</p>
+            </button>
         </div>
     )
 }

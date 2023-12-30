@@ -1,13 +1,7 @@
-type Props = {
-  children: React.ReactNode;
-};
-
-function GameTimeLayout({ children }: Props) {
+export default function GameTimeLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main>
-      <div>{children}</div>
+    <main className="flex flex-row sm:flex-col h-full w-full overflow-y-scroll">
+      {children}
     </main>
   );
 }
-
-export default GameTimeLayout;

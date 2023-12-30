@@ -1,8 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Plus } from 'lucide-react';
-import { Minus } from 'lucide-react';
-import { useState } from "react";
+import { Plus, Minus } from 'lucide-react';
 type Props = {
     periodId: string;
     handleAddOpScore: (periodId: string, action: number) => void;
@@ -12,47 +9,47 @@ type Props = {
 export default function AddOp({ periodId, handleAddOpScore, handleAddOpFoul }: Props) {
 
     return (
-        <div className="flex">
-            <div className="flex px-3">
-                <b>OP Score: </b>
+    <tbody className="relative w-full">
+        <tr className="-translate-y-6">
+            <td></td>
+            <td></td>
+            <td className="flex justify-between">
+            {/* <b>OP Score: </b> */}
                 <button
-                className="mx-2 rounded-full bg-orange-300 text-black-50 shadow-sm flex w-25 items-center "
-                onClick={() => {
-                    handleAddOpScore(periodId, 1);
-                }}
+                    className="rounded-full bg-muted text-black-50 shadow-sm flex w-25 items-center "
+                    onClick={() => {handleAddOpScore(periodId, -1);}}
                 >
-                    <Plus size={24}/>
+                    <Minus size={16}/>
                 </button>
-                <b>/</b>
                 <button
-                className="mx-2 rounded-full bg-orange-300 text-black-50 shadow-sm flex w-25 items-center "
-                onClick={() => {
-                    handleAddOpScore(periodId, -1);
-                }}
+                    className="rounded-full bg-muted text-black-50 shadow-sm flex w-25 items-center "
+                    onClick={() => {handleAddOpScore(periodId, 1);}}
                 >
-                    <Minus size={24}/>
+                    <Plus size={16}/>
                 </button>
-            </div>
-            <div className="flex px-3">
-                <b>OP Foul: </b>
+            </td>
+            <td></td>
+            <td className="flex justify-between">
+                {/* <b>OP Foul: </b> */}
                 <button
-                className="mx-2 rounded-full bg-pink-300 text-black-50 shadow-sm flex w-25 items-center "
-                onClick={() => {
-                    handleAddOpFoul(periodId, 1);
-                }}
+                    className="rounded-full bg-muted text-black-50 shadow-sm flex w-25 items-center "
+                    onClick={() => {
+                        handleAddOpFoul(periodId, -1);
+                    }}
                 >
-                    <Plus size={24}/>
-                </button>
-                <b>/</b>
+                    <Minus size={16}/>
+                </button>               
                 <button
-                className="mx-2 rounded-full bg-pink-300 text-black-50 shadow-sm flex w-25 items-center "
-                onClick={() => {
-                    handleAddOpFoul(periodId, -1);
-                }}
+                    className="rounded-full bg-muted text-black-50 shadow-sm flex w-25 items-center "
+                    onClick={() => {
+                        handleAddOpFoul(periodId, 1);
+                    }}
                 >
-                    <Minus size={24}/>
+                    <Plus size={16}/>
                 </button>
-            </div>
-        </div>
+            </td>
+        </tr>
+    </tbody>
+
     )
 }

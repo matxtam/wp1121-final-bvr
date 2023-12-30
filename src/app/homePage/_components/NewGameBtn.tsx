@@ -11,17 +11,24 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react"
 import { eq } from "drizzle-orm";
+import { auth } from "@/lib/auth";
+
 type NewGameBtnProps = {
   className?: string;
 }
 
-export default function NewGameBtn({className}:NewGameBtnProps) {
-
+export default async function NewGameBtn({className}:NewGameBtnProps) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return null;
+  }
+  const user = session.user;
+  const userId = user.id;
 
   return (
     <Dialog>
-      <DialogTrigger className={className && ""} asChild>
-        <Button>
+      <DialogTrigger asChild>
+        <Button className={className}>
           <Plus/>
         </Button>
       </DialogTrigger>
@@ -42,6 +49,7 @@ export default function NewGameBtn({className}:NewGameBtnProps) {
                   hashtag: hashtag?.toString() ?? "",
                   totalScore: 0,
                   possession:"WE",
+                  userId: userId,
                 })
                 .returning();
               
@@ -63,6 +71,11 @@ export default function NewGameBtn({className}:NewGameBtnProps) {
               .where(
                   eq(gamesTable.displayId, newGame.displayId)
               )
+              // await db.insert(userToGameTable).values({
+              //   userId: userId,
+              //   gameId: newGame.displayId,
+              // }).execute();
+
               const params = new URLSearchParams();
               params.set("URLperiodId", newPeriodId);
               redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}/gameTime/${newGame.displayId}/?${params.toString()}`);

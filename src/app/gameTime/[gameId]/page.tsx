@@ -1,24 +1,28 @@
-import { Button } from "@/components/ui/button";
 import Possession from "./_components/possession";
 import AddOp from "./_components/addOp";
 import InputPlayerBar from "./_components/inputPlayerBar";
 import StartPeriod from "./_components/startPeriod";
-import {createPerformance, getGamePerformances, updateGamePerformance, finishGame} from "./actions";
-import { get } from "http";
+import {createPerformance, getGamePerformances, finishGame} from "./actions";
 import AddShooting from "./_components/addShooting";
 import AddOther from "./_components/addOther";
 import PlayNowButton from "./_components/playNowButton";
 import { redirect } from "next/navigation";
 import OnTimeRecord from "./_components/onTimeRecord";
 import { db } from "@/db";
-import { gamesTable, periodsTable, gamePerformancesTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import { title } from "process";
+import { GoBackTable, gamesTable, periodsTable, gamePerformancesTable,  playersTable } from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import  ScoreBoard  from "./_components/scoreBoard";
+import  UndoButton  from "./_components/undoButton";
 import FinishGame from "./_components/FinishButton";
-import { publicEnv } from "@/lib/env/public";
-// import DashBoard from "./dashBoard";
+import OpenCalculator from "./_components/openCalculator";
+import React from "react";
+import { getPlayersTwo } from "@/app/settings/players/actions";
+import { auth } from "@/lib/auth";
+import { type Player } from "@/lib/types/db";
+import { cn } from "@/lib/utils/shadcn";
+
+
 type Props = {
    params: {
          gameId: string;
@@ -28,10 +32,21 @@ type Props = {
     };
 }
 
+
+
 async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: Props) {
     // let periodId = "131a8aee-8b33-11ee-b9d1-0242ac120002";
     // let nowPeriod = null;
     let gameTotalScore = 0;
+    let gameTotalOpScore = 0;
+
+    const session = await auth();
+    if (!session?.user?.id) {
+        return null;
+    }
+    const user = session.user;
+    const userId = user.id;
+    
     if(URLperiodId === null || URLperiodId === undefined){
         console.log("URLperiodId is null");
         return;
@@ -43,6 +58,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             date: gamesTable.date,
             hashtag: gamesTable.hashtag,
             totalScore: gamesTable.totalScore,
+            totalOpScore: gamesTable.totalOpScore,
             possession: gamesTable.possession,
             periodsNumber: gamesTable.periodsNumber,
         })
@@ -76,6 +92,13 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         .where(
             eq(gamesTable.displayId, gameId)
         )
+        await db
+            .delete(GoBackTable)
+            .where(
+                eq(GoBackTable.periodId, URLperiodId)
+            )
+            .execute();
+
         const [{newPeriodId}]= await db
             .insert(periodsTable)
             .values({
@@ -86,10 +109,12 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 newPeriodId: periodsTable.displayId,
               })
             .execute();
+        
+        redirect(`/gameTime/${gameId}/?URLperiodId=${newPeriodId}`);        
         const params = new URLSearchParams();
         params.set("URLperiodId", newPeriodId);
-        redirect(`/gameTime/${gameId}/?${params.toString()}`);
-        
+        // redirect(`/gameTime/${gameId}/?${params.toString()}`);
+        redirect(`/gameTime/${gameId}/?URLperiodId=${newPeriodId}`);
     } 
     
     const getPeriod = async(gameId: string) => {
@@ -113,7 +138,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     
     const allPeriod = await getPeriod(gameId);
     const nowPeriod = allPeriod.filter((period) => period.displayId === URLperiodId);
-    
+    const allPlayer: Player[] = await getPlayersTwo(userId);
 
     const handleAddPlayer = async(inputName: string) => {
         "use server";
@@ -152,16 +177,13 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
-        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
-        //BUG!!
+        //revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
 
     const handleAddShooting = async(selectedItem: string, performanceId: string, newStatus: number, action: number) => {
         "use server";
         console.log("Add Shooting", selectedItem);
         // updateGamePerformance(selectedItem, performanceId, change, URLperiodId);
-        //TODO: add a shooting to the performance with performanceId
-        //TODO: change the total score of the period
         await db
             .update(gamePerformancesTable)
             .set({
@@ -171,6 +193,33 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
+        if(action>0){
+            await db
+                .insert(GoBackTable)
+                .values({
+                    gameId: gameId,
+                    periodId: URLperiodId,
+                    performanceId: performanceId,
+                    actionString: selectedItem,
+                    undoAction: action,
+                    originalValue: newStatus - 1,
+                    })
+                .execute();  
+        }  
+        if(action<0){
+            await db
+                .insert(GoBackTable)
+                .values({
+                    gameId: gameId,
+                    periodId: URLperiodId,
+                    performanceId: performanceId,
+                    actionString: selectedItem,
+                    undoAction: action,
+                    originalValue: newStatus + 1,
+                    })
+                .execute();  
+        }
+
         if(selectedItem === "inTwoPt" || selectedItem === "inThreePt" || selectedItem === "inFt"){
             await db
                 .update(periodsTable)
@@ -181,9 +230,10 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     eq(periodsTable.displayId, URLperiodId)
                 )
                 .execute();
+            redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         }        
-        
-        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+       
+       
     }
     const handleAddOther = async(selectedItem: string, performanceId: string, newStatus: number, action: number) => {
         "use server";
@@ -201,6 +251,17 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 eq(gamePerformancesTable.displayId, performanceId)
             )
             .execute();
+        await db
+            .insert(GoBackTable)
+            .values({
+                gameId: gameId,
+                periodId: URLperiodId,
+                performanceId: performanceId,
+                actionString: selectedItem,
+                undoAction: action,
+                originalValue: newStatus - action,
+                })
+            .execute();  
         if(selectedItem === "foul"){
             await db
                 .update(periodsTable)
@@ -211,8 +272,9 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                     eq(periodsTable.displayId, URLperiodId)
                 )
                 .execute();
+            revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
         }
-        revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+        
     }
     const handleAddOpScore = async(periodId: string, action: number) => {
         "use server";
@@ -243,6 +305,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
         revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
     }
     gameTotalScore = allPeriod.reduce((a, b) => (a + b.totalScore), 0);
+    gameTotalOpScore = allPeriod.reduce((a, b) => (a + b.totalOpScore), 0);
     const handleFinish = async(nowGameId:string) => {
         "use server";
         console.log("Finish Game");
@@ -251,48 +314,240 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             .update(gamesTable)
             .set({
                 totalScore: gameTotalScore,
+                totalOpScore: gameTotalOpScore,
             })
             .where(
                 eq(gamesTable.displayId, nowGameId)
             )
             .execute();
+        await db
+            .delete(GoBackTable)
+            .where(
+                eq(GoBackTable.gameId, gameId)
+            )
+            .execute();
+        const AllGamePerformances= await db.query.gamePerformancesTable.findMany({
+                where: (eq(gamePerformancesTable.gameId, gameId)),
+                with:{
+                    player:{
+                        columns:{
+                            name: true,
+                            number: true,
+                        }
+                    }
+                }
+            });
+        AllGamePerformances.map(async(performance) => {
+            await db
+                .update(playersTable)
+                .set({
+                    // personalValue: performance.personalValue,
+                    personal2pt: performance.twoPt,
+                    personalIn2pt: performance.inTwoPt,
+                    personal3pt: performance.threePt,
+                    personalIn3pt: performance.inThreePt,
+                    personalFt: performance.ft,
+                    personalInFt: performance.inFt,
+                    personalDefReb: performance.defReb,
+                    personalOffReb: performance.offReb,
+                    personalSteal: performance.steal,
+                    personalAssist: performance.assist,
+                })
+                .where(
+                    eq(playersTable.displayId, performance.playerId)
+                )
+                .execute();
+        }
+        )
         redirect(`/history/${gameId}`);
     }
-    
+    const handleUndo = async() => {
+        "use server";
+        console.log("Undo");
+        const undoData = await db
+            .select()
+            .from(GoBackTable)
+            .where(
+                eq(GoBackTable.gameId, gameId)
+            )
+            .orderBy(desc(GoBackTable.id)) 
+            .limit(1)
+            .execute();
+        console.log("undoDate", undoData); 
+         if(undoData.length === 0){
+              console.log("No undoData");
+              return;
+         }
+        const selectedItem = undoData[0].actionString;
+        const originalValue = undoData[0].originalValue;
+        const undoAction = undoData[0].undoAction;
+        const performanceId = undoData[0].performanceId;
+        if(selectedItem === null || selectedItem === undefined){
+            console.log("selectedItem is null");
+            return;
+        }
+        if(originalValue === null || originalValue === undefined){
+            console.log("originalValue is null");
+            return;
+        }
+        if(undoAction === null || undoAction === undefined){
+            console.log("undoAction is null");
+            return;
+        }
+        if(performanceId === null || performanceId === undefined){
+            console.log("performanceId is null");
+            return;
+        }
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                [selectedItem]: originalValue,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        if(selectedItem === "inTwoPt" || selectedItem === "inThreePt" || selectedItem === "inFt"){
+            console.log("Undo Score");
+            await db
+                .update(periodsTable)
+                .set({
+                    totalScore: nowPeriod[0].totalScore - undoAction
+                })
+                .where(
+                    eq(periodsTable.displayId, URLperiodId)
+                )
+                .execute();
+        }
+        if(selectedItem === "foul"){
+            await db
+                .update(periodsTable)
+                .set({
+                    totalFoul: nowPeriod[0].totalFoul - undoAction
+                })
+                .where(
+                    eq(periodsTable.displayId, URLperiodId)
+                )
+                .execute();
+        }
+        await db
+            .delete(GoBackTable)
+            .where(
+                eq(GoBackTable.id, undoData[0].id)
+            )
+            .execute();
+        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);        
+    }
+
+    const handleOpenCalculator = async(performanceId:string,openOrNot:boolean) => {
+        "use server";
+        await db
+            .update(gamePerformancesTable)
+            .set({
+                openCalculator: openOrNot,
+            })
+            .where(
+                eq(gamePerformancesTable.displayId, performanceId)
+            )
+            .execute();
+        redirect(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
+    }
     return (
-      <div>
+      <>
         {/* <nav className=" sticky top-0 flex flex-col items-center justify-between border-b bg-blue-400 p-2 text-slate-50">GameTime [ID] Page</nav> */}
             {/* TODO: get the true info */}
-            <div className="flex flex-col gap-2 p-5 m-3">
+        <nav className="flex flex-col flex-nowrap items-end justify-between w-60 px-24 py-12 sm:flex-row sm:w-full">
+            <div className="flex flex-col gap-2">
+                <h1 className="text-3xl font-bold">GameTitle: {gameData[0].title}</h1>
                 <div className="flex items-center gap-2 justify-between">
-                    <h1 className="text-3xl font-bold">GameTitle: {gameData[0].title}</h1>
-                    <div className="text-lg bg-fuchsia-200 p-2 rounded">{gameData[0].hashtag}</div>
+                    <p className="text-lg">{gameData[0].date}</p>
+                    <div className="text-lg bg-muted text-muted-foreground p-2 rounded-full">{gameData[0].hashtag}</div>
                 </div>
-                <p className="text-lg">Date: {gameData[0].date}</p>
             </div>
-            <div className="flex items-center justify-between px-2">
-                <div className="flex items-center gap-2 p-2">
-                    <InputPlayerBar handleAddPlayer={handleAddPlayer}/>
-                    <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
+            <div className="grid grid-cols-5 content-center items-center justify-between h-20 w-96 px-6 py-1 gap-2 rounded-full overflow-visible bg-primary text-sm overflow-ellipsis text-truncate">
+                <UndoButton handleUndo={handleUndo}/>
+                <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
+                <FinishGame gameId={gameId} handleFinish={handleFinish}/>
+                <InputPlayerBar  allPlayers= {allPlayer} handleAddPlayer={handleAddPlayer}/>
+                <Possession gamePossession={gameData[0].possession} handlePossession={handlePossession} />
+            </div>
+            
+        </nav>
+        <div className="grid grid-cols-3 gap-4 px-24 pb-24 ">
+
+                <div className="flex flex-col items-center justify-center h-min gap-2 pt-2 border-ring border-2 rounded-xl text-center bg-ring">
+                    
+                <b className="text-background font-bold text-xl">Score Board</b>
+                <div className="flex items-center justify-center bg-background w-full h-full p-4 rounded-xl">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th colSpan={2}><p>Score</p></th>
+                                <th colSpan={2}><p>Foul</p></th>
+                            </tr>
+                            <tr>
+                                <th><p className="w-8">No</p></th>
+                                <th><p className="w-12">We</p></th>
+                                <th><p className="w-12">OP</p></th>
+                                <th><p className="w-12">We</p></th>
+                                <th><p className="w-12">OP</p></th>
+                            </tr>
+                        </thead>
+                    {URLperiodId !== null && URLperiodId !== undefined && allPeriod !== null && 
+                    allPeriod
+                    .sort((a, b) => (a.number === b.number ? 0 : a.number < b.number ? -1 : 1))
+                    .map((period, index) => (
+                        <React.Fragment key={index}>
+                            <ScoreBoard
+                                // gameId={gameId}
+                                // periodId={URLperiodId}
+                                number={period.number}
+                                totalScore={period.totalScore}
+                                totalOpScore={period.totalOpScore}
+                                totalFoul={period.totalFoul}
+                                totalOpFoul={period.totalOpFoul}
+                            />
+                        </React.Fragment>
+                    ))}
                     <AddOp periodId={URLperiodId} handleAddOpScore={handleAddOpScore} handleAddOpFoul={handleAddOpFoul}/>
+                    </table>
+                    </div>
                 </div>
-                <div className="flex gap-2 p-2">
-                    <StartPeriod gameId={gameId} handlePeriod={handlePeriod} periodNumber={gameData[0].periodsNumber}/>
-                    <FinishGame gameId={gameId} handleFinish={handleFinish}/>
-                </div>     
-            </div>
-            <div className="grid grid-cols-3 gap-4">
+
                 {allGamePerformances
+                .sort((a, b) => a.id - b.id)
                 .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
                 .map((performance, index) => (
-                    <div key={index} className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">                    
-                        <div className="w-full my-2 mx-4 flex flex-wrap justify-between items-center">
-                            <div>
-                                <p><b>{performance.player.name}</b></p>
-                            </div>
-                            <div>
-                                <p>{performance.player.number}</p>
-                            </div>
+                    <div key={index} className="relative items-center overflow-hidden w-80">
+                        {/* <Shield size={52} className="absolute left-2 bottom-2 w-12 text-center text-ring"/>
+                        <p className="absolute left-2 bottom-6 w-12 text-center text-ring font-bold">{` - ${performance.player.number}`}</p> */}
+                        <div className="relative flex gap-1 flex-nowrap ">
+                            {/* <div className="w-full h-8 bg-ring z-0 rounded-t-xl"></div> */}
+                            <p className={cn("w-full font-bold z-0 bg-ring w-full h-8 rounded-t-xl text-center align-text-bottom text-lg text-background justify-center",
+                                performance.nowPlay && "bg-yellow-400"
+                            )}>
+                                {`${performance.player.number} - ${performance.player.name}`}
+                            </p>
+                            <PlayNowButton
+                                performanceId={performance.displayId}
+                                nowPlay={performance.nowPlay}
+                                handlePlayNow={handleNowPlay}
+                            />
+                            <OpenCalculator
+                                performanceId={performance.displayId}
+                                openOrNot={performance.openCalculator}
+                                handleOpenCalculator={handleOpenCalculator}
+                            />
+                        </div>
+                        
+                        <div className={cn("box-content p-3 border-2 border-ring flex items-center flex-wrap rounded-b-xl", 
+                            performance.nowPlay && "border-yellow-400"
+                        )}>                
+                        <div className="w-full my-2 flex flex-wrap justify-between items-center">
+                            {/* <div> */}
+                                {/* <a><img src={performance.player.photo} className="w-20 h-20 rounded-full" /></a> */}
+                            {/* </div> */}
                             <OnTimeRecord 
                                 performanceId={performance.displayId}
                                 onP1={performance.onP1}
@@ -301,14 +556,13 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 onP4={performance.onP4}
                                 onOt={performance.onOt}
                                 handleChangeOnTime={handleChangeOnTime}
-                            />
-                            <PlayNowButton
-                                performanceId={performance.displayId}
                                 nowPlay={performance.nowPlay}
                                 handlePlayNow={handleNowPlay}
                             />
+                            
+                            
                         </div>
-                        <div className="m-2 flex justify-between items-center ">
+                        <div className="m-2 flex flex-col justify-between items-center">
                             <AddShooting
                                     performanceId={performance.displayId}                            
                                     twoPt={performance.twoPt}
@@ -317,6 +571,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                     inTwoPt={performance.inTwoPt}
                                     inThreePt={performance.inThreePt}
                                     inFt={performance.inFt}
+                                    openCalculator={performance.openCalculator}
                                     handleAddShooting={handleAddShooting}
                             />
                             <AddOther
@@ -328,88 +583,17 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 assist={performance.assist}
                                 defReb={performance.defReb}
                                 offReb={performance.offReb}
+                                openCalculator={performance.openCalculator}
                                 handleAddOther={handleAddOther}
                             />
+                            </div>    
                         </div>
                         
                     </div>
                 ))}
-                {/* here for trying display */}
-                {/* <div className="box-content rounded-lg border-2 border-blue-100 m-5 p-3 flex items-center flex-wrap">
-                    <div className="m-2 flex flex-wrap justify-between items-center">
-                        <div>
-                            <p>陳千蕙</p>
-                        </div>
-                        <div>
-                            <p>Number: 3</p>
-                        </div>
-                        <OnTimeRecord 
-                            performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}   
-                            onP1={true}
-                            onP2={true}
-                            onP3={false}
-                            onP4={false}
-                            onOt={false}
-                            handleChangeOnTime={handleChangeOnTime}
-                        />
-                    </div>
-                    <div className="m-2 flex flex-wrap justify-between items-center ">
-                        <AddShooting
-                                performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
-                                twoPt={20}
-                                threePt={30}
-                                ft={10}
-                                inTwoPt={2}
-                                inThreePt={3}
-                                inFt={1}
-                                handleAddShooting={handleAddShooting}
-                        />
-                        <AddOther
-                            performanceId={"81247b0e-8b5f-11ee-b9d1-0242ac120002"}                            
-                            foul={2}
-                            block={3}
-                            turnover={1}
-                            steal={0}
-                            assist={0}
-                            defReb={2}
-                            offReb={3}
-                            handleAddShooting={handleAddShooting}
-                        />
-                    </div>
-                </div> */}
-                <div>
-                <b>ScoreBoard</b>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th className="p-2">No</th>
-                                <th className="p-2">Score</th>
-                                <th className="p-2">OP Score</th>
-                                <th className="p-2">Foul</th>
-                                <th className="p-2">OP Foul</th>
-                            </tr>
-                        </thead>
-                    </table>
-                {URLperiodId !== null && URLperiodId !== undefined && allPeriod !== null && 
-                    allPeriod
-                    .sort((a, b) => (a.number === b.number ? 0 : a.number < b.number ? -1 : 1))
-                    .map((period, index) => (
-                        <div key={index} className="flex w-full">
-                            <ScoreBoard
-                                gameId={gameId}
-                                periodId={URLperiodId}
-                                number={period.number}
-                                totalScore={period.totalScore}
-                                totalOpScore={period.totalOpScore}
-                                totalFoul={period.totalFoul}
-                                totalOpFoul={period.totalOpFoul}
-                            />
-                        </div>
-                    ))}
-                </div>
-               
-            </div>
-      </div>
+        </div>
+      </>
     );
+    revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
   }
   export default GameTimeIdPage;

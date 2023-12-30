@@ -1,19 +1,17 @@
 "use client";
-
 import { useState } from "react";
-
 import { signIn } from "next-auth/react";
-import Image from "next/image";
-
 // Run: npx shadcn-ui@latest add button
 import { Button } from "@/components/ui/button";
 // Run: npx shadcn-ui@latest add card
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { publicEnv } from "@/lib/env/public";
-
 import AuthInput from "./AuthInput";
-
-function AuthForm() {
+import type { User } from "@/lib/types/db";
+type props = {  
+  allUsers?: User[];
+};
+function AuthForm({ allUsers }: props) {
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -22,16 +20,51 @@ function AuthForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: 3. sign in by calling signIn() with the correct parameters
-    // hint: notion clone
+    if (isSignUp && password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+    if(isSignUp && allUsers?.some((user: User) => user.email === email)) {
+      alert("Email already exists");
+      return;
+    }
+    if(isSignUp && allUsers?.some((user: User) => user.name === name)) {
+      alert("Name already exists");
+      return;
+    }
+    if(password.length < 8) {
+      alert("Password must be at least 8 characters");
+      return;
+    }
+    if(!isSignUp && !allUsers?.some((user: User) => user.email === email)) {
+      alert("Email does not exist");
+      return;
+    }
+
+    // if(!isSignUp && !allUsers?.some((user: any) => user.password === password)) {
+    //   alert("Password is incorrect");
+    //   return;
+    // }
+
+    // if (!isSignUp) {
+    //   let foundUser = allUsers?.find((user: any) => user.email === email);
+    //   if (foundUser) {
+    //     console.log("foundUser", foundUser);
+    //     if (password !== foundUser.password) {
+    //       console.log("password", password);
+    //       console.log("foundUser.password", foundUser.password);
+    //       alert('Password is incorrect');
+    //     }
+    //   }
+      
+    // }
+    
     signIn("credentials", {
       email,
       name,
       password,
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}`,
     });
-
-    // TODO: 3. end
   };
   return (
     <Card className="min-w-[300px]">
@@ -41,7 +74,7 @@ function AuthForm() {
       <CardContent className=" flex flex-col gap-2">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <AuthInput
-            label="Email"
+            label="Email (please contain @ and .com)"
             type="email"
             value={email}
             setValue={setEmail}
@@ -55,7 +88,7 @@ function AuthForm() {
             />
           )}
           <AuthInput
-            label="Password"
+            label="Password (8 characters minimum)"
             type="password"
             value={password}
             setValue={setPassword}
@@ -101,25 +134,6 @@ function AuthForm() {
             Sign {isSignUp ? "Up" : "In"}
           </Button>
         </form>
-        <div className="flex w-full items-center gap-1 py-2">
-          <div className="h-[1px] grow border-t"></div>
-          <p className="text-xs text-gray-400">or</p>
-          <div className="h-[1px] grow border-t"></div>
-        </div>
-
-        <Button
-          onClick={async () => {
-            signIn("github", {
-              callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/homePage`,
-            });
-          }}
-          className="flex w-full"
-          variant={"outline"}
-        >
-          {/* Remember to copy "github.png" to ./public folder */}
-          <Image src="/github.png" alt="github icon" width={20} height={20} />
-          <span className="grow">Sign In with Github</span>
-        </Button>
       </CardContent>
     </Card>
   );

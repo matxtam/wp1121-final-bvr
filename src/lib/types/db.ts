@@ -1,13 +1,13 @@
-// export type team = {
-//   id: string;
-//   account: string;
-//   password: string;
-//   teamName: string;
-// };
 export type User = {
   id: string;
   name: string;
+  displayId: string;
   email: string;
+  photo: string;
+  fbLink: string;
+  igLink: string;
+  ytLink: string;
+  cloudLink: string;
   provider: "github" | "credentials";
 };
 
@@ -18,7 +18,7 @@ export type Player = {
   photo: string;
   number: string; //背號 
   position: string; //位置
-  useable: boolean; //是否可用
+  usable: boolean; //是否可用
   personalValue: number; //個人價值(不知需不需要)
   personal2pt: number; //個人兩分球數
   personalIn2pt: number; //個人兩分球進球數
@@ -39,7 +39,9 @@ export type Game = {
   photo: string;
   hashtag: string; //友誼賽、北電、大電
   totalScore: number; //總得分
+  totalOpScore: number; //總對手得分
   possession: number; //球權
+  display: boolean; //是否顯示
 };
 
 export type Period = {

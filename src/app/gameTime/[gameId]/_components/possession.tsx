@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Shuffle } from 'lucide-react';
 import { useState } from "react";
 type Props = {
@@ -10,22 +9,23 @@ type Props = {
 export default function Possession({ gamePossession, handlePossession }: Props) {
     const [possession, setPossession] = useState(gamePossession);
     return (
-        <div>
+        <div className='relative'>
+            <p className='absolute bottom-16 text-ring h-10 truncate'>Possession: {possession}</p>
             <button
-            className="rounded bg-sky-500 text-slate-50 shadow-sm hover:bg-sky-200/80 flex w-25 items-center hover:text-black"
+            className="flex flex-col items-center justify-center w-full h-16 gap-1 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
             onClick={() => {
                 setPossession(possession === "WE" ? "OP" : "WE");
-                let newPossession = possession === "WE" ? "OP" : "WE";
+                const newPossession = possession === "WE" ? "OP" : "WE";
                 console.log("click Possession", newPossession);
                 handlePossession(newPossession);
                 console.log('finish Possession')
             }}
-            >
-                <div className= "flex items-center gap-1 py-1.5 px-2 transition-colors duration-300 hover:bg-brand/10">
-                    <Shuffle size={18}/>
-                    Possession: {possession}
-                </div>
+            > 
+                    <Shuffle size={20}/>
+                    <p>pos</p>
+                    
+
             </button>
-        </div>
+            </div>
     )
 }

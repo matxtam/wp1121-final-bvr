@@ -1,6 +1,9 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import React, { use, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils/shadcn";
+
+
 type Props = {
     performanceId: string;
     twoPt: number;
@@ -9,13 +12,14 @@ type Props = {
     inTwoPt: number;
     inThreePt: number;
     inFt: number;
+    openCalculator: boolean;
     handleAddShooting: (selectedItem: string, performanceId: string, newStatus: number, action:number) => void;
 }
-type ButtonType = 'twoPt' | 'threePt' | 'ft';
+type ButtonType = 'twoPt' | 'threePt' | 'ft' | 'inTwoPt' | 'inThreePt' | 'inFt';
 
-export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt, inThreePt, inFt, handleAddShooting }: Props) {
-    const [selectedButton, setSelectedButton] = useState("twoPt");
-    const [inSelectedButton, setInSelectedButton] = useState("inTwoPt");
+export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt, inThreePt, inFt, handleAddShooting, openCalculator }: Props) {
+    const [selectedButton, setSelectedButton] = useState("");
+    const [inSelectedButton, setInSelectedButton] = useState("");
     const [countTwoPt, setCountTwoPt] = useState<number>(twoPt);//set with twoPt
     const [inCountTwoPt, setInCountTwoPt] = useState<number>(inTwoPt);//set with inTwoPt
     const [countThreePt, setCountThreePt] = useState<number>(threePt);//set with threePt
@@ -23,55 +27,54 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
     const [countFt, setCountFt] = useState<number>(ft);//set with ft
     const [inCountFt, setInCountFt] = useState<number>(inFt);//set with inFt
 
-    // const handleButtonClick = (buttonType:string) => {
-    //     // Toggle the selected button
-    //     setSelectedButton(buttonType);
-    //     if(buttonType==="twoPt"){
-    //         setCount(twoPt)
-    //         setInCount(inTwoPt)
-    //         setInSelectedButton("inTwoPt")
-    //     }
-    //     if(buttonType==="threePt"){
-    //         setCount(threePt)
-    //         setInCount(inThreePt)
-    //         setInSelectedButton("inThreePt")
-    //     }
-    //     if(buttonType==="ft"){
-    //         setCount(ft)
-    //         setInCount(inFt)
-    //         setInSelectedButton("inFt")
-    //     }
-    //   };
-    // const buttonTypeMappings: Record<ButtonType, { count: number; inCount: number; inSelectedButton: string }> = {
-    //     twoPt: { count: twoPt, inCount: inTwoPt, inSelectedButton: "inTwoPt" },
-    //     threePt: { count: threePt, inCount: inThreePt, inSelectedButton: "inThreePt" },
-    //     ft: { count: ft, inCount: inFt, inSelectedButton: "inFt" },
-    //   };
+    const [inClicked, setInClicked] = useState(true);
       
       const handleButtonClick = (buttonType: ButtonType) => {
-        // if (buttonTypeMappings.hasOwnProperty(buttonType)) {
-        //   const { count, inCount, inSelectedButton } = buttonTypeMappings[buttonType];
-        //   console.log("buttonType", buttonType);
-        //   setSelectedButton(buttonType);
-        //   setCount(count);
-        //   setInCount(inCount);
-        //   setInSelectedButton(inSelectedButton);
-        // }
         setSelectedButton(buttonType);
         if(buttonType==="twoPt"){
             setCountTwoPt(countTwoPt)
-            setInCountTwoPt(inCountTwoPt)
             setInSelectedButton("inTwoPt")
+            if(!openCalculator){
+                setCountTwoPt((prevNumber) => prevNumber + 1);
+                handleAddShooting("twoPt", performanceId, countTwoPt+1, 2);
+            }
         }
         if(buttonType==="threePt"){
             setCountThreePt(countThreePt)
-            setInCountThreePt(inCountThreePt)
             setInSelectedButton("inThreePt")
+            if(!openCalculator){
+                setCountThreePt((prevNumber) => prevNumber + 1);
+                handleAddShooting("threePt", performanceId, countThreePt+1, 3);
+            }
         }   
         if(buttonType==="ft"){
             setCountFt(countFt)
-            setInCountFt(inCountFt)
             setInSelectedButton("inFt")
+            if(!openCalculator){
+                setCountFt((prevNumber) => prevNumber + 1);
+                handleAddShooting("ft", performanceId, countFt+1, 1);
+            }
+        }
+      }
+      const handleInButtonClick = (buttonType: ButtonType) => {
+        setInSelectedButton(buttonType);
+        if(buttonType==="inTwoPt"){
+            setSelectedButton("twoPt");
+            setInCountTwoPt(inCountTwoPt)
+            setInCountTwoPt((prevNumber) => prevNumber + 1);
+            handleAddShooting("inTwoPt", performanceId, inCountTwoPt+1, 2);
+        }
+        if(buttonType==="inThreePt"){
+            setSelectedButton("threePt")
+            setInCountThreePt(inCountThreePt)
+            setInCountThreePt((prevNumber) => prevNumber + 1);
+            handleAddShooting("inThreePt", performanceId, inCountThreePt+1, 3);
+        }
+        if(buttonType==="inFt"){
+            setSelectedButton("ft")
+            setInCountFt(inCountFt)
+            setInCountFt((prevNumber) => prevNumber + 1);
+            handleAddShooting("inFt", performanceId, inCountFt+1, 1);
         }
       };
 
@@ -110,6 +113,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
         }
     };    
     const handleDecrement = () => {
+        console.log("hello?")
         if(selectedButton==="twoPt"){
             setCountTwoPt((prevNumber) => prevNumber - 1);
             handleAddShooting(selectedButton, performanceId, countTwoPt-1, -2);
@@ -125,92 +129,165 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
     };
     const handleInIncrement = () => {
         if(inSelectedButton==="inTwoPt"){
+            setCountTwoPt((prevNumber) => prevNumber + 1);
             setInCountTwoPt((prevNumber) => prevNumber + 1);
+            handleAddShooting(selectedButton, performanceId, countTwoPt+1, 2);
             handleAddShooting(inSelectedButton, performanceId, inCountTwoPt+1, 2);
         }
         if(inSelectedButton==="inThreePt"){
+            setCountThreePt((prevNumber) => prevNumber + 1);
             setInCountThreePt((prevNumber) => prevNumber + 1);
+            handleAddShooting(selectedButton, performanceId, countThreePt+1, 3);
             handleAddShooting(inSelectedButton, performanceId, inCountThreePt+1, 3);
         }
         if(inSelectedButton==="inFt"){
+            setCountFt((prevNumber) => prevNumber + 1);
             setInCountFt((prevNumber) => prevNumber + 1);
+            handleAddShooting(selectedButton, performanceId, countFt+1, 1);
             handleAddShooting(inSelectedButton, performanceId, inCountFt+1, 1);
         }
     }
     const handleInDecrement = () => {
         if(inSelectedButton==="inTwoPt"){
+            setCountTwoPt((prevNumber) => prevNumber - 1);
             setInCountTwoPt((prevNumber) => prevNumber - 1);
+            handleAddShooting(selectedButton, performanceId, countTwoPt-1, -2);
             handleAddShooting(inSelectedButton, performanceId, inCountTwoPt-1, -2);
         }
         if(inSelectedButton==="inThreePt"){
+            setCountThreePt((prevNumber) => prevNumber - 1);
             setInCountThreePt((prevNumber) => prevNumber - 1);
+            handleAddShooting(selectedButton, performanceId, countThreePt-1, -3);
             handleAddShooting(inSelectedButton, performanceId, inCountThreePt-1, -3);
         }
         if(inSelectedButton==="inFt"){
+            setCountFt((prevNumber) => prevNumber - 1);
             setInCountFt((prevNumber) => prevNumber - 1);
+            handleAddShooting(selectedButton, performanceId, countFt-1, -1);
             handleAddShooting(inSelectedButton, performanceId, inCountFt-1, -1);
         }
     }
 
 
     return (
-        <div className="flex flex-col items-center">
-            <div className="flex flex-row">
-                <Button
-                    onClick={() => handleButtonClick('twoPt')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'twoPt' ? 'bg-blue-400 text-white' : ''
-                    }`}
-                >
-                    2
-                </Button>
-                <Button
-                    onClick={() => handleButtonClick('threePt')}
-                    className={`bg-gray-300 m-2 px-4 py-2 ${
-                    selectedButton === 'threePt' ? 'bg-blue-400 text-white' : ''
-                    }`}
-                >
-                    3
-                </Button>
-                <Button
-                    onClick={() => handleButtonClick('ft')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'ft' ? 'bg-blue-400 text-white' : ''
-                    }`}
-                >
-                    FT
-                </Button>
-            </div>
-
-            <div className="flex items-center">
-                <p className="p-1">
-                    <b>投球數</b>
-                </p>
-                <button onClick={handleDecrement} className="p-2 m-2 bg-gray-300">
-                    -
-                </button>
-                {selectedButton==="twoPt" && <div className="p-4 bg-blue-100 m-2">{countTwoPt}</div>}
-                {selectedButton==="threePt" && <div className="p-4 bg-blue-100 m-2">{countThreePt}</div>}
-                {selectedButton==="ft" && <div className="p-4 bg-blue-100 m-2">{countFt}</div>}
-                <button onClick={handleIncrement} className="p-2 m-2 bg-gray-300">
-                    +
-                </button>
-            </div>
-            <div className="flex items-center">
-                <p className="p-1">
-                    <b>進球數</b>
-                </p>
-                <button onClick={handleInDecrement} className="p-2 m-2 bg-gray-300">
-                    -
-                </button>
-
-                {inSelectedButton==="inTwoPt" &&(<div className="p-4 bg-blue-100 m-2">{inCountTwoPt}</div>)}
-                {inSelectedButton==="inThreePt" && (<div className="p-4 bg-blue-100 m-2">{inCountThreePt}</div>)}
-                {inSelectedButton==="inFt" && (<div className="p-4 bg-blue-100 m-2">{inCountFt}</div>)}
-                <button onClick={handleInIncrement} className="p-2 m-2 bg-gray-300">
-                    +
-                </button>
-            </div>
+    <div className="grid grid-cols-3 items-center justify-center content-center justify-items-center mb-8">
+        
+        <div className="col-start-1 flex flex-col relative items-center">
+            <Button
+                onClick={() => {handleButtonClick('twoPt'); setInClicked(false);}}
+                className={`bg-transparent w-20  m-2 ${
+                selectedButton === 'twoPt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >
+                2pt
+                <p  className={`p-1 ${
+                selectedButton === 'twoPt' ? 'text-yellow-400' : ''
+                }`}><b>{`${inCountTwoPt}/${countTwoPt}`}</b></p>
+            </Button>
+            {(selectedButton === 'twoPt') && (!inClicked) && (!openCalculator) &&
+            <Button
+                onClick={() => {handleInButtonClick('inTwoPt'); setInClicked(true); }}
+                className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
+                // inSelectedButton === 'inTwoPt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >In?
+            </Button>}
+            {/* <p className={`p-1 text-center font-bold ${selectedButton === 'inTwoPt' ? 'text-yellow-400' : ''}`}>
+                {`2In:${inCountTwoPt}`}
+            </p> */}
         </div>
+
+        <div className="flex flex-col relative">
+            <Button
+                onClick={() => {handleButtonClick('threePt'); setInClicked(false);}}
+                className={`bg-transparent w-20  m-2 ${
+                selectedButton === 'threePt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >
+                3pt
+                <p  className={`p-1 ${
+                selectedButton === 'threePt' ? 'text-yellow-400' : ''
+                }`}><b>{`${inCountThreePt}/${countThreePt}`}</b></p>
+            </Button>
+            {(selectedButton === 'threePt') && (!inClicked) && (!openCalculator) &&
+            <Button
+                onClick={() => {handleInButtonClick('inThreePt'); setInClicked(true);}}
+                className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
+                // inSelectedButton === 'inThreePt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >In?
+            </Button>}
+            {/* <p className={`p-1 text-center font-bold ${selectedButton === 'inThreePt' ? 'text-yellow-400' : ''}`}>
+                {`3In:${inCountThreePt}`}
+            </p> */}
+        </div>
+        
+        <div className="flex flex-col relative">
+            <Button
+                onClick={() => {handleButtonClick('ft'); setInClicked(false)}}
+                className={`bg-transparent w-20  m-2 ${
+                selectedButton === 'ft' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >
+                FT
+                <p  className={`p-1 ${
+                selectedButton === 'ft' ? 'text-yellow-400' : ''
+                }`}><b>{`${inCountFt}/${countFt}`}</b></p>
+            </Button>
+            {(selectedButton === 'ft') && (!inClicked) && (!openCalculator) &&
+            <Button
+                onClick={() => {handleInButtonClick('inFt'); setInClicked(true)}}
+                className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
+                // inSelectedButton === 'inFt' ? 'bg-blue-600 text-white' : ''
+                }`}
+            >In?
+            </Button>}
+            {/* <p className={`p-1 text-center font-bold ${selectedButton === 'inFt' ? 'text-yellow-400' : ''}`}>
+                {`3In:${inCountFt}`}
+            </p> */}
+        </div>
+
+        
+        {openCalculator &&
+        <div className={cn("flex bg-transparent relative h-0 w-full",
+            (inSelectedButton==="inTwoPt") && "col-start-1",
+            (inSelectedButton==="inThreePt") && "col-start-2",
+            (inSelectedButton==="inFt") && "col-start-3",
+            (inSelectedButton==="") && "col-start-1",
+        )}>
+            {/* <p className="p-1">
+                <b>進球數</b>
+            </p> */}
+            <button onClick={handleInDecrement} className="absolute -bottom-6 left-0 px-2 bg-muted rounded-full">
+                -
+            </button>
+            {/* {inSelectedButton==="inTwoPt" &&(<div className="p-4 bg-blue-100 m-2">{inCountTwoPt}</div>)}
+            {inSelectedButton==="inThreePt" && (<div className="p-4 bg-blue-100 m-2">{inCountThreePt}</div>)}
+            {inSelectedButton==="inFt" && (<div className="p-4 bg-blue-100 m-2">{inCountFt}</div>)} */}
+            <button onClick={handleInIncrement} className="absolute bottom-12 left-0 px-2 bg-muted rounded-full">
+                +
+            </button>
+        </div>}
+        {openCalculator && 
+        <div className={cn("flex bg-transparent relative h-0 w-full",
+            (selectedButton==="twoPt") && "col-start-1",
+            (selectedButton==="threePt") && "col-start-2",
+            (selectedButton==="ft") && "col-start-3",
+            (selectedButton==="") && "col-start-3",
+        )}>
+            {/* <p className="p-1">
+                <b>投球數</b>
+            </p> */}
+            <button onClick={handleDecrement} className="absolute -bottom-6 z-50 right-0 px-2 bg-muted rounded-full">
+                -
+            </button>
+            {/* {selectedButton==="twoPt" && (<div className="p-4 bg-blue-100 m-2">{countTwoPt}</div>)}
+            {selectedButton==="threePt" && (<div className="p-4 bg-blue-100 m-2">{countThreePt}</div>)}
+            {selectedButton==="ft" && (<div className="p-4 bg-blue-100 m-2">{countFt}</div>)} */}
+            <button onClick={handleIncrement} className="absolute bottom-12 right-0 px-2 bg-muted rounded-full">
+                +
+            </button>
+        </div>}
+    </div>
     )
 }
