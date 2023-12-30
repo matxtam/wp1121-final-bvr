@@ -43,6 +43,7 @@ export default function History ({playersOfTheGame}:Props) {
 
   return (
   <div className="flex flex-row justify-between w-full px-12 py-6">
+    <div className="flex flex-row justify-center w-full">
     <table className="w-min gap-1 h-min" >
       <thead>
         <tr>
@@ -70,7 +71,7 @@ export default function History ({playersOfTheGame}:Props) {
       </thead>
     <tbody>
       {playersOfTheGame.map((player) => (
-      <tr key={player.player.name} className="odd:bg-muted even:bg-background items-center text-center align-middle">
+      <tr key={player.player.name} className="odd:bg-muted even:bg-background items-center text-center align-middle truncate">
         <td><p className="p-2"> {player.player.number}</p></td>
         <td><p className="p-2"> {player.player.name}  </p></td>
         {contents[2] .state[0] ? (<td className="flex flex-row items-center justify-center my-2">
@@ -80,9 +81,9 @@ export default function History ({playersOfTheGame}:Props) {
           <div className={cn("w-1/5 h-8 bg-primary", player.onP4 && "bg-muted-foreground")}></div>
           <div className={cn("w-1/5 h-8 bg-primary", player.onOt && "bg-muted-foreground")}></div>
         </td>) : <></>}
-        {contents[3] .state[0] ? <td><p className="p-2"> {player.twoPt}   </p></td> : <></>}
-        {contents[4] .state[0] ? <td><p className="p-2"> {player.threePt} </p></td> : <></>}
-        {contents[5] .state[0] ? <td><p className="p-2"> {player.ft}      </p></td> : <></>}
+        {contents[3] .state[0] ? <td><p className="p-2"> {`${player.inTwoPt}/${player.twoPt}`}   </p></td> : <></>}
+        {contents[4] .state[0] ? <td><p className="p-2"> {`${player.inThreePt}/${player.threePt}`} </p></td> : <></>}
+        {contents[5] .state[0] ? <td><p className="p-2"> {`${player.inFt}/${player.ft}`}      </p></td> : <></>}
         {contents[6] .state[0] ? <td><p className="p-2"> {player.foul}    </p></td> : <></>}
         {contents[7] .state[0] ? <td><p className="p-2"> {player.steal}   </p></td> : <></>}
         {contents[8] .state[0] ? <td><p className="p-2"> {player.block}   </p></td> : <></>}
@@ -94,6 +95,7 @@ export default function History ({playersOfTheGame}:Props) {
       </tr>))}
       </tbody>
     </table>
+    </div>
     <div className="flex flex-col w-1/4">
 
       <div className="flex flex-row items-center p-1 gap-3">

@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import CreatePlayerButton from "./_components/CreatePlayerButton";
+
 import EditPlayerButton from "./_components/EditPlayerButton";
 import { getPlayers } from "./actions";
 
@@ -19,13 +19,10 @@ export default async function PlayerPage() {
     const players = await getPlayers(userId);
   
   return (
-    <div>
-      <div className="flex h-10 w-full flex-row items-center justify-end gap-12 px-6 py-8 pt-8">
-        <CreatePlayerButton />
-      </div>
-        <Table>
-            <TableHeader className="border-primary bg-white bg-opacity-20">
-                <TableRow>
+    <div className="flex flex-col h-full overflow-hidden">
+        <Table className="overflow-y-scroll">
+            <TableHeader className="sticky border-primary bg-white bg-opacity-20">
+                <TableRow className="">
                     <TableCell align="center">NUMBER</TableCell>
                     <TableCell align="center">PHOTO</TableCell>
                     <TableCell align="center">PLAYER</TableCell>
@@ -90,6 +87,6 @@ export default async function PlayerPage() {
               })}
             </TableBody>
         </Table>
-    </div>
+        </div>
   );
 }

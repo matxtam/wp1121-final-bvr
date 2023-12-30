@@ -23,7 +23,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" className={novaSquare.className}>
-      <body className="flex flex-col h-screen overflow-hidden text-batra-100 bg-background select-none">
+      <body className="flex flex-col h-screen w-screen overflow-hidden text-batra-100 bg-background select-none">
           <SessionProvider>
           <header className="flex flex-row justify-between items-center px-8 py-4 w-full bg-primary">
             <h1 className="text-4xl font-bold">

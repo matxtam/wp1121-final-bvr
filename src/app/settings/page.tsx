@@ -4,9 +4,9 @@ import PlayerPage from "./players/page";
 export default async function SettingsPage() {
   
   return (
-    <div>
+    <>
       <TeamProfile />
       <PlayerPage />
-    </div>
+    </>
   );
 }

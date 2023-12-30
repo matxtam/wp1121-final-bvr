@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Flame } from 'lucide-react';
-import { cn } from "@/lib/utils/shadcn";
+// import { useRouter } from "next/navigation";
+// import { Flame } from 'lucide-react';
+// import { cn } from "@/lib/utils/shadcn";
 
 type Props = {
     performanceId: string;
@@ -17,13 +17,13 @@ type Props = {
     handlePlayNow: (performanceId: string, nowPlay: boolean) => void;
 }
 
-export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, onOt, handleChangeOnTime, nowPlay, handlePlayNow }: Props) {
+export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, onOt, handleChangeOnTime}: Props) {
     const [onP1Now, setOnP1Now] = useState(onP1);
     const [onP2Now, setOnP2Now] = useState(onP2);
     const [onP3Now, setOnP3Now] = useState(onP3);
     const [onP4Now, setOnP4Now] = useState(onP4);
     const [onOtNow, setOnOtNow] = useState(onOt);
-    const router = useRouter();
+    // const router = useRouter();
     // let change = false;
     // if(!change  && onP1Now!==onP1){
     //     console.log("onP1Now", onP1Now);
