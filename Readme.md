@@ -19,8 +19,7 @@
    AUTH_GITHUB_ID=
    AUTH_GITHUB_SECRET=
    ```
-   :::info 
-   If there's some problem for not knowing what to paste, go to the bottom of this Readme, "Next Auth Setup" will tell you what to do.
+   - If there's some problem for not knowing what to paste, go to the bottom of this Readme, "Next Auth Setup" will tell you what to do.
 
 5. Start the database
    ```bash
@@ -35,7 +34,14 @@
    yarn dev
    ```
 8. Open http://localhost:3000 in your browser
-8. Appendix
+9. 每位組員之負責項目：
+   - 謝函蓁：
+         - HomePage、History、大多數排版
+   - 陳郁玲：
+         - GamePage
+   - 陳千蕙：
+         - SettingPage、Sign in/out
+11. Appendix
 
    ## NextAuth Setup
 
