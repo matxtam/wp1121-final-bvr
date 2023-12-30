@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { publicEnv } from "@/lib/env/public";
-import {User} from "@/lib/types/db";
+import { type User } from "@/lib/types/db";
 import AuthForm from "./_components/AuthForm";
 
 export default async function AuthPage() {

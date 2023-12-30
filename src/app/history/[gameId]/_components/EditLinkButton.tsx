@@ -10,7 +10,7 @@ import {
     DialogTrigger,
     } from "@/components/ui/dialog"
 
-import { User } from "@/lib/types/db";
+import { type User } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from "@/components/ui/label"
 // import { updateUser } from "../actions";
 
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 type EditUserButtonProps = {
@@ -30,9 +30,9 @@ type EditUserButtonProps = {
   cloudLink: User["cloudLink"];
 };
 
-export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cloudLink }: EditUserButtonProps) {
+export default function EditUserButton({ name, fbLink, igLink, ytLink, cloudLink }: EditUserButtonProps) {
   const [editUsername, setEditUsername] = useState<User["name"]>(name);
-  const [editUserphoto, setEditUserphoto] = useState<User["photo"]>(photo);
+  // const [editUserphoto, setEditUserphoto] = useState<User["photo"]>(photo);
   const [editUserfbLink, setEditUserfbLink] = useState<User["fbLink"]>(fbLink);
   const [editUserigLink, setEditUserigLink] = useState<User["igLink"]>(igLink);
   const [editUserytLink, setEditUserytLink] = useState<User["ytLink"]>(ytLink);
@@ -46,7 +46,7 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
       reader.onloadend = () => {
         // 'result' contains the data URL representing the file's data
         const imageDataURL = reader.result;
-        setEditUserphoto(imageDataURL as string);
+        // setEditUserphoto(imageDataURL as string);
         setPreviewImage(imageDataURL);
       };
 

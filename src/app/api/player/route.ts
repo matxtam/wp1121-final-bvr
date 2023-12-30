@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { Player } from "@/lib/types/db";
+import { type NextRequest, NextResponse } from "next/server";
+import { type Player } from "@/lib/types/db";
 import { db } from "@/db";
 import { playersTable } from "@/db/schema";
 

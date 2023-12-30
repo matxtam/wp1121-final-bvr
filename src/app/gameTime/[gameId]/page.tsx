@@ -19,8 +19,8 @@ import OpenCalculator from "./_components/openCalculator";
 import React from "react";
 import { getPlayersTwo } from "@/app/settings/players/actions";
 import { auth } from "@/lib/auth";
-import { Player } from "@/lib/types/db";
-import { publicEnv } from "@/lib/env/public";
+import { type Player } from "@/lib/types/db";
+// import { publicEnv } from "@/lib/env/public";
 import { Shield } from "lucide-react";
 
 type Props = {
