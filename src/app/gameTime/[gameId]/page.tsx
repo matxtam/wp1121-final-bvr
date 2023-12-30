@@ -525,7 +525,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                         <div className="relative flex gap-1 flex-nowrap ">
                             {/* <div className="w-full h-8 bg-ring z-0 rounded-t-xl"></div> */}
                             <p className={cn("w-full font-bold z-0 bg-ring w-full h-8 rounded-t-xl text-center align-text-bottom text-lg text-background justify-center",
-                                performance.nowPlay && "bg-destructive"
+                                performance.nowPlay && "bg-yellow-400"
                             )}>
                                 {`${performance.player.number} - ${performance.player.name}`}
                             </p>
@@ -542,7 +542,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                         </div>
                         
                         <div className={cn("box-content p-3 border-2 border-ring flex items-center flex-wrap rounded-b-xl", 
-                            performance.nowPlay && "border-destructive"
+                            performance.nowPlay && "border-yellow-400"
                         )}>                
                         <div className="w-full my-2 flex flex-wrap justify-between items-center">
                             {/* <div> */}

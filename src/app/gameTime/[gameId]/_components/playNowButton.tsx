@@ -21,7 +21,7 @@ export default function PlayNowButton({ performanceId, nowPlay, handlePlayNow }:
         //     nowPlay ? 'bg-rose-400' : 'bg-background border-2',
         // )}
         aria-pressed={nowPlay}
-        className="w-12 z-30 rounded-t text-black-50 shadow-sm flex items-center justify-center transition-all origin-bottom h-8 bg-transparent border-2 border-b-0 aria-pressed:scale-y-75 aria-pressed:bg-destructive aria-pressed:border-none"
+        className="w-12 z-30 rounded-t text-black-50 shadow-sm flex items-center justify-center transition-all origin-bottom h-8 bg-transparent border-2 border-b-0 aria-pressed:scale-y-75 aria-pressed:bg-yellow-400 aria-pressed:border-none aria-pressed:text-background"
  
         onClick={() => {
             // setNowPlay(!newNowPlay);

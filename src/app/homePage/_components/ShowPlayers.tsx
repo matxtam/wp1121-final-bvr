@@ -39,7 +39,7 @@ export default function ShowPlayer ({players}: playerBtnType) {
 
   {players.map((player, index) => {
     const ins =  player.personalIn2pt + player.personalIn3pt + player.personalInFt;
-    const shooting = ins + player.personal2pt + player.personal3pt + player.personalFt;
+    const shooting =  player.personal2pt + player.personal3pt + player.personalFt;
     
     const rate = shooting !== 0 ? Math.floor(ins*100/shooting) : "Nan";
   return (
