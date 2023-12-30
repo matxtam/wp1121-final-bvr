@@ -36,11 +36,14 @@
 8. Open http://localhost:3000 in your browser
 9. 每位組員之負責項目：
    - 謝函蓁：
-         - HomePage、History、大多數排版
+         - 負責處理
+         *folder: HomePage、History
    - 陳郁玲：
-         - GamePage
+         - 
+         *folder: GamePage
    - 陳千蕙：
-         - SettingPage、Sign in/out
+         -
+         *folder: SettingPage、auth
 11. Appendix
 
    ## NextAuth Setup
