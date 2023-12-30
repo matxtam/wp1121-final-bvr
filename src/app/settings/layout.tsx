@@ -5,9 +5,11 @@ type Props = {
 
 export default function SettingsLayout({ children }: Props) {
   return (
-    <main>
+    <main className="h-full overflow-hidden flex flex-col">
       {/* <TeamProfile /> */}
-      <div>{children}</div>
+
+        {children}
+
     </main>
   );
 }

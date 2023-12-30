@@ -35,7 +35,7 @@ export default function ShowPlayer ({players}: playerBtnType) {
   const [showPlayer, setShowPlayer] = useState(-1);
 
   return (
-  <div className="flex flex-row gap-4 justify-center">
+  <div className="grid grid-rows-1 grid-flow-col-dense gap-4 justify-center h-72 w-screen">
 
   {players.map((player, index) => {
     const ins =  player.personalIn2pt + player.personalIn3pt + player.personalInFt;

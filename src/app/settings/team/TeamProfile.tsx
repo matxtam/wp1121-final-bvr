@@ -10,6 +10,7 @@ import ytLink1 from "public/ytLink1.png";
 import cloudLink1 from "public/cloudLink1.png";
 import Image from "next/image";
 
+import CreatePlayerButton from "../players/_components/CreatePlayerButton";
 import EditUserButton from "./_components/EditLinkButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { usersTable } from "@/db/schema";
@@ -29,14 +30,14 @@ export default async function Navbar() {
   .execute();
   const user = users[0];
   return (
-    <div style={{ position: 'sticky', top: '0' }}>
+    <div className="flex flex-col">
       <div className="flex h-10 w-full flex-row bg-white bg-opacity-10 items-center justify-between gap-12 px-8 py-8 pt-8">
         <h2 className="text-2xl font-bold" data-testid="title">
           TeamProfiles
         </h2>
       </div>
       <Separator className="bg-primary "/>
-      <div className="flex items-center gap-2 bg-white bg-opacity-10 px-8 py-8 pt-4 justify-between;">
+      <div className="flex items-center gap-2 bg-white bg-opacity-10 px-8 py-8 pt-4 justify-between">
         <div className="flex h-10 w-full items-center">
           <div className="flex items-center gap-2">
             <Avatar>
@@ -48,8 +49,8 @@ export default async function Navbar() {
             </span>
           </div>
         </div>
-        <div className="flex h-10 w-full items-center justify-end">
-          <div className="grid grid-cols-5 h-10 items-center justify-end">
+        {/* <div className="flex h-10 w-full items-center justify-end"> */}
+          <div className="grid grid-cols-8 h-10 items-center justify-center w-full">
             {/* fb */}
             <div className="col-span-1 grid-column-start:1">
               {user.fbLink === "None" ? (
@@ -92,8 +93,12 @@ export default async function Navbar() {
             <div className="col-span-1 grid-column-start:5" style={{ placeSelf: 'center' }}>
               <EditUserButton photo={user.photo} name={user.name} fbLink={user.fbLink} ytLink={user.ytLink} igLink={user.igLink} cloudLink={user.cloudLink} />
             </div>
+            <div className="flex col-span-3 truncate h-10 w-full flex-row items-center justify-end gap-12 px-6 py-8 pt-8">
+              <CreatePlayerButton />
+            </div>
+            
           </div>
-        </div>
+       
       </div>
     </div>
   );
