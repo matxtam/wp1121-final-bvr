@@ -20,9 +20,8 @@ import React from "react";
 import { getPlayersTwo } from "@/app/settings/players/actions";
 import { auth } from "@/lib/auth";
 import { type Player } from "@/lib/types/db";
-// import { publicEnv } from "@/lib/env/public";
-// import { Shield } from "lucide-react";
 import { cn } from "@/lib/utils/shadcn";
+
 
 type Props = {
    params: {
@@ -32,10 +31,7 @@ type Props = {
         URLperiodId?: string;
     };
 }
-// interface GamePerformancesTable {
-//     id: number;
-//     [key: string]: any;
-// }
+
 
 
 async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: Props) {
@@ -142,13 +138,6 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
     
     const allPeriod = await getPeriod(gameId);
     const nowPeriod = allPeriod.filter((period) => period.displayId === URLperiodId);
-    // const allPlayer = await db
-    //     .select()
-    //     .from(playersTable)
-    //     .where(
-    //         eq(playersTable.userId, gameData[0].userId)
-    //     )
-    //     .execute();
     const allPlayer: Player[] = await getPlayersTwo(userId);
 
     const handleAddPlayer = async(inputName: string) => {
@@ -189,14 +178,12 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             )
             .execute();
         //revalidatePath(`/gameTime/${gameId}/?URLperiodId=${URLperiodId}`);
-        //BUG!!
     }
 
     const handleAddShooting = async(selectedItem: string, performanceId: string, newStatus: number, action: number) => {
         "use server";
         console.log("Add Shooting", selectedItem);
         // updateGamePerformance(selectedItem, performanceId, change, URLperiodId);
-
         await db
             .update(gamePerformancesTable)
             .set({
