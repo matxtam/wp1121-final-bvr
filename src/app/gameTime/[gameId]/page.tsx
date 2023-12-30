@@ -5,7 +5,7 @@ import StartPeriod from "./_components/startPeriod";
 import {createPerformance, getGamePerformances, finishGame} from "./actions";
 import AddShooting from "./_components/addShooting";
 import AddOther from "./_components/addOther";
-// import PlayNowButton from "./_components/playNowButton";
+import PlayNowButton from "./_components/playNowButton";
 import { redirect } from "next/navigation";
 import OnTimeRecord from "./_components/onTimeRecord";
 import { db } from "@/db";
@@ -20,7 +20,8 @@ import React from "react";
 import { getPlayersTwo } from "@/app/settings/players/actions";
 import { auth } from "@/lib/auth";
 import { type Player } from "@/lib/types/db";
-import { Shield } from "lucide-react";
+import { cn } from "@/lib/utils/shadcn";
+
 
 type Props = {
    params: {
@@ -472,7 +473,7 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
             </div>
             
         </nav>
-        <div className="grid grid-cols-3 gap-4 px-24 pb-24">
+        <div className="grid grid-cols-3 gap-4 px-24 pb-24 ">
 
                 <div className="flex flex-col items-center justify-center h-min gap-2 pt-2 border-ring border-2 rounded-xl text-center bg-ring">
                     
@@ -518,15 +519,31 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                 .sort((a, b) => a.id - b.id)
                 .sort((a, b) => (a.nowPlay === b.nowPlay ? 0 : a.nowPlay ? -1 : 1))
                 .map((performance, index) => (
-                    <div key={index} className="relative items-center border-2 rounded-xl border-ring overflow-hidden">
-                        <Shield size={52} className="absolute left-2 bottom-2 w-12 text-center text-ring"/>
-                        <p className="absolute left-2 bottom-6 w-12 text-center text-ring font-bold">{performance.player.number}</p>
-                        <div className="relative">
-                            
-                            <p className="font-bold text-center bg-ring text-background ">{performance.player.name}</p>
+                    <div key={index} className="relative items-center overflow-hidden w-80">
+                        {/* <Shield size={52} className="absolute left-2 bottom-2 w-12 text-center text-ring"/>
+                        <p className="absolute left-2 bottom-6 w-12 text-center text-ring font-bold">{` - ${performance.player.number}`}</p> */}
+                        <div className="relative flex gap-1 flex-nowrap ">
+                            {/* <div className="w-full h-8 bg-ring z-0 rounded-t-xl"></div> */}
+                            <p className={cn("w-full font-bold z-0 bg-ring w-full h-8 rounded-t-xl text-center align-text-bottom text-lg text-background justify-center",
+                                performance.nowPlay && "bg-destructive"
+                            )}>
+                                {`${performance.player.number} - ${performance.player.name}`}
+                            </p>
+                            <PlayNowButton
+                                performanceId={performance.displayId}
+                                nowPlay={performance.nowPlay}
+                                handlePlayNow={handleNowPlay}
+                            />
+                            <OpenCalculator
+                                performanceId={performance.displayId}
+                                openOrNot={performance.openCalculator}
+                                handleOpenCalculator={handleOpenCalculator}
+                            />
                         </div>
                         
-                        <div className="box-content p-3 flex items-center flex-wrap">                
+                        <div className={cn("box-content p-3 border-2 border-ring flex items-center flex-wrap rounded-b-xl", 
+                            performance.nowPlay && "border-destructive"
+                        )}>                
                         <div className="w-full my-2 flex flex-wrap justify-between items-center">
                             {/* <div> */}
                                 {/* <a><img src={performance.player.photo} className="w-20 h-20 rounded-full" /></a> */}
@@ -542,16 +559,8 @@ async function GameTimeIdPage({ params:{gameId}, searchParams:{URLperiodId} }: P
                                 nowPlay={performance.nowPlay}
                                 handlePlayNow={handleNowPlay}
                             />
-                            <OpenCalculator 
-                                performanceId={performance.displayId}
-                                openOrNot={performance.openCalculator}
-                                handleOpenCalculator={handleOpenCalculator}
-                            />
-                            {/* <PlayNowButton
-                                performanceId={performance.displayId}
-                                nowPlay={performance.nowPlay}
-                                handlePlayNow={handleNowPlay}
-                            /> */}
+                            
+                            
                         </div>
                         <div className="m-2 flex flex-col justify-between items-center">
                             <AddShooting
