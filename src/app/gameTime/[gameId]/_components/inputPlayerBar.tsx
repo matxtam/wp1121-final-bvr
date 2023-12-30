@@ -51,7 +51,7 @@ function InputPlayerBar({ handleAddPlayer, allPlayers }: Props) {
                     const result = await resultPromise;
                     console.log('result', result.toString());
                     if(result === "0") {
-                        alert('Player not found');
+                        alert('Player not found or not usable');
                     }
                     if(result === "1") {
                         alert('Player already exists');

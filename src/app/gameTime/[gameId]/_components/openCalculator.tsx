@@ -10,6 +10,7 @@ type Props = {
 }
 
 export default function openCalculator({ performanceId, openOrNot, handleOpenCalculator}: Props) {
+    // const router = useRouter();
     return (
         <div>
             <button
@@ -20,6 +21,7 @@ export default function openCalculator({ performanceId, openOrNot, handleOpenCal
             onClick={() => {
                 handleOpenCalculator(performanceId, !openOrNot);
                 console.log("openOrNot", openOrNot);
+                // router.refresh();
             }}
             >
                 <div className= "flex items-center gap-1 py-1.5 px-2 transition-colors">

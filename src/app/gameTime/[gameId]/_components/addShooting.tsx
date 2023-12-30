@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils/shadcn";
-import { set } from "zod";
+// import { set } from "zod";
+
 type Props = {
     performanceId: string;
     twoPt: number;
@@ -31,48 +32,48 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
       const handleButtonClick = (buttonType: ButtonType) => {
         setSelectedButton(buttonType);
         if(buttonType==="twoPt"){
-            // setSelectedButton("twoPt");
             setCountTwoPt(countTwoPt)
-            setCountTwoPt((prevNumber) => prevNumber + 1);
-            // setInCountTwoPt(inCountTwoPt)
-            // setInSelectedButton("inTwoPt")
-            handleAddShooting("twoPt", performanceId, countTwoPt+1, 2);
+            setInSelectedButton("inTwoPt")
+            if(!openCalculator){
+                setCountTwoPt((prevNumber) => prevNumber + 1);
+                handleAddShooting("twoPt", performanceId, countTwoPt+1, 2);
+            }
         }
         if(buttonType==="threePt"){
-            // setSelectedButton("threePt")
             setCountThreePt(countThreePt)
-            setCountThreePt((prevNumber) => prevNumber + 1);
-            // setInCountThreePt(inCountThreePt)
-            // setInSelectedButton("inThreePt")
-            handleAddShooting("threePt", performanceId, countThreePt+1, 3);
+            setInSelectedButton("inThreePt")
+            if(!openCalculator){
+                setCountThreePt((prevNumber) => prevNumber + 1);
+                handleAddShooting("threePt", performanceId, countThreePt+1, 3);
+            }
         }   
         if(buttonType==="ft"){
             setCountFt(countFt)
-            // setSelectedButton("ft")
-            setCountFt((prevNumber) => prevNumber + 1);
-            // setInCountFt(inCountFt)
-            // setInSelectedButton("inFt")
-            handleAddShooting("ft", performanceId, countFt+1, 1);
+            setInSelectedButton("inFt")
+            if(!openCalculator){
+                setCountFt((prevNumber) => prevNumber + 1);
+                handleAddShooting("ft", performanceId, countFt+1, 1);
+            }
         }
       }
       const handleInButtonClick = (buttonType: ButtonType) => {
         setInSelectedButton(buttonType);
         if(buttonType==="inTwoPt"){
+            setSelectedButton("twoPt");
             setInCountTwoPt(inCountTwoPt)
             setInCountTwoPt((prevNumber) => prevNumber + 1);
-            // setInSelectedButton("inTwoPt")
             handleAddShooting("inTwoPt", performanceId, inCountTwoPt+1, 2);
         }
         if(buttonType==="inThreePt"){
+            setSelectedButton("threePt")
             setInCountThreePt(inCountThreePt)
             setInCountThreePt((prevNumber) => prevNumber + 1);
-            // setInSelectedButton("inThreePt")
             handleAddShooting("inThreePt", performanceId, inCountThreePt+1, 3);
         }
         if(buttonType==="inFt"){
+            setSelectedButton("ft")
             setInCountFt(inCountFt)
             setInCountFt((prevNumber) => prevNumber + 1);
-            // setInSelectedButton("inFt")
             handleAddShooting("inFt", performanceId, inCountFt+1, 1);
         }
       };
@@ -128,29 +129,41 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
     };
     const handleInIncrement = () => {
         if(inSelectedButton==="inTwoPt"){
+            setCountTwoPt((prevNumber) => prevNumber + 1);
             setInCountTwoPt((prevNumber) => prevNumber + 1);
+            handleAddShooting(selectedButton, performanceId, countTwoPt+1, 2);
             handleAddShooting(inSelectedButton, performanceId, inCountTwoPt+1, 2);
         }
         if(inSelectedButton==="inThreePt"){
+            setCountThreePt((prevNumber) => prevNumber + 1);
             setInCountThreePt((prevNumber) => prevNumber + 1);
+            handleAddShooting(selectedButton, performanceId, countThreePt+1, 3);
             handleAddShooting(inSelectedButton, performanceId, inCountThreePt+1, 3);
         }
         if(inSelectedButton==="inFt"){
+            setCountFt((prevNumber) => prevNumber + 1);
             setInCountFt((prevNumber) => prevNumber + 1);
+            handleAddShooting(selectedButton, performanceId, countFt+1, 1);
             handleAddShooting(inSelectedButton, performanceId, inCountFt+1, 1);
         }
     }
     const handleInDecrement = () => {
         if(inSelectedButton==="inTwoPt"){
+            setCountTwoPt((prevNumber) => prevNumber - 1);
             setInCountTwoPt((prevNumber) => prevNumber - 1);
+            handleAddShooting(selectedButton, performanceId, countTwoPt-1, -2);
             handleAddShooting(inSelectedButton, performanceId, inCountTwoPt-1, -2);
         }
         if(inSelectedButton==="inThreePt"){
+            setCountThreePt((prevNumber) => prevNumber - 1);
             setInCountThreePt((prevNumber) => prevNumber - 1);
+            handleAddShooting(selectedButton, performanceId, countThreePt-1, -3);
             handleAddShooting(inSelectedButton, performanceId, inCountThreePt-1, -3);
         }
         if(inSelectedButton==="inFt"){
+            setCountFt((prevNumber) => prevNumber - 1);
             setInCountFt((prevNumber) => prevNumber - 1);
+            handleAddShooting(selectedButton, performanceId, countFt-1, -1);
             handleAddShooting(inSelectedButton, performanceId, inCountFt-1, -1);
         }
     }
@@ -171,7 +184,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                 selectedButton === 'twoPt' ? 'text-yellow-400' : ''
                 }`}><b>{`${inCountTwoPt}/${countTwoPt}`}</b></p>
             </Button>
-            {(selectedButton === 'twoPt') && (!inClicked) &&
+            {(selectedButton === 'twoPt') && (!inClicked) && (!openCalculator) &&
             <Button
                 onClick={() => {handleInButtonClick('inTwoPt'); setInClicked(true); }}
                 className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
@@ -196,7 +209,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                 selectedButton === 'threePt' ? 'text-yellow-400' : ''
                 }`}><b>{`${inCountThreePt}/${countThreePt}`}</b></p>
             </Button>
-            {(selectedButton === 'threePt') && (!inClicked) &&
+            {(selectedButton === 'threePt') && (!inClicked) && (!openCalculator) &&
             <Button
                 onClick={() => {handleInButtonClick('inThreePt'); setInClicked(true);}}
                 className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
@@ -221,7 +234,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
                 selectedButton === 'ft' ? 'text-yellow-400' : ''
                 }`}><b>{`${inCountFt}/${countFt}`}</b></p>
             </Button>
-            {(selectedButton === 'ft') && (!inClicked) &&
+            {(selectedButton === 'ft') && (!inClicked) && (!openCalculator) &&
             <Button
                 onClick={() => {handleInButtonClick('inFt'); setInClicked(true)}}
                 className={`absolute top-12 left-8 right-0 z-50 bg-ring/30 w-8 h-8  rounded-full border-none ${""
@@ -240,6 +253,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
             (inSelectedButton==="inTwoPt") && "col-start-1",
             (inSelectedButton==="inThreePt") && "col-start-2",
             (inSelectedButton==="inFt") && "col-start-3",
+            (inSelectedButton==="") && "col-start-1",
         )}>
             {/* <p className="p-1">
                 <b>進球數</b>
@@ -259,6 +273,7 @@ export default function AddShooting({ performanceId, twoPt, threePt, ft, inTwoPt
             (selectedButton==="twoPt") && "col-start-1",
             (selectedButton==="threePt") && "col-start-2",
             (selectedButton==="ft") && "col-start-3",
+            (selectedButton==="") && "col-start-3",
         )}>
             {/* <p className="p-1">
                 <b>投球數</b>
