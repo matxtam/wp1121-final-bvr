@@ -4,7 +4,7 @@ import { PlusCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { Contact } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import {Player} from "@/lib/types/db";
+import { type Player } from "@/lib/types/db";
 type Props = {
     handleAddPlayer: (inputName: string) => Promise<string>;
     allPlayers: Player[];

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils/shadcn";
-import { set } from "zod";
+
 type Props = {
     performanceId: string;
     twoPt: number;
