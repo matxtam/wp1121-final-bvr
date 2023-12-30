@@ -39,8 +39,6 @@
 
    ## NextAuth Setup
 
-    :::info
-
     1. Install next-auth
 
        ```bash
