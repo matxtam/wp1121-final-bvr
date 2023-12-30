@@ -79,10 +79,7 @@ export default CredentialsProvider({
       console.log("The email has registered with social account.");
       return null;
     }
-    // TODO: 2.2 Compare password with bcrypt
-    // const isValid = password === existedUser.hashedPassword; // change this line
     const isValid = await bcrypt.compare(password, existedUser.hashedPassword);
-    // TODO: 2.2 end
 
     if (!isValid) {
       console.log("Wrong password. Try again.");

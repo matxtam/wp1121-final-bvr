@@ -32,7 +32,6 @@ export async function createPlayer(
     redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
   }
 
-  //TODO: Validate input
   try {
     createPlayerSchema.parse({
       name: name,
@@ -87,9 +86,6 @@ export async function createPlayer(
   revalidatePath(`/settings`);
   return newPlayer;
 }
-
-
-
 
 // delete player
 const deletePlayerSchema = z.object({

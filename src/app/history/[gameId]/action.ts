@@ -21,7 +21,6 @@ export async function updateGamePhoto(
     if (!userId) {
       redirect(`${publicEnv.NEXT_PUBLIC_BASE_URL}`);
     }
-    //TODO: Validate input        
     const updatedGame: Omit<Game, "id"|"date"|"displayId"|"title"|"video"|"hashtag"|"totalScore"|"totalOpScore"|"possession"|"periodsNumber"|"display"> = await db.transaction(async (trx) => {
       const [updatedGame] = await trx
         .update(gamesTable)
