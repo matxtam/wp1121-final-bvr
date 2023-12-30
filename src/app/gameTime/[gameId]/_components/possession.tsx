@@ -9,9 +9,10 @@ type Props = {
 export default function Possession({ gamePossession, handlePossession }: Props) {
     const [possession, setPossession] = useState(gamePossession);
     return (
-
+        <div className='relative'>
+            <p className='absolute bottom-16 text-ring h-10 truncate'>Possession: {possession}</p>
             <button
-            className="flex items-center justify-center w-full h-10 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
+            className="flex flex-col items-center justify-center w-full h-16 gap-1 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
             onClick={() => {
                 setPossession(possession === "WE" ? "OP" : "WE");
                 const newPossession = possession === "WE" ? "OP" : "WE";
@@ -20,9 +21,11 @@ export default function Possession({ gamePossession, handlePossession }: Props) 
                 console.log('finish Possession')
             }}
             > 
-                    <Shuffle size={18}/>
-                    {/* Possession: {possession} */}
+                    <Shuffle size={20}/>
+                    <p>pos</p>
+                    
 
             </button>
+            </div>
     )
 }

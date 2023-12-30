@@ -171,10 +171,10 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
 
     return (
         <div className="flex flex-wrap flex-col items-center">
-            <div className="flex flex-wrap flex-row">
+            <div className="grid grid-rows-3 grid-flow-col place-items-center">
                 <Button
                     onClick={() => handleButtonClick('foul')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
+                    className={`bg-transparent px-4 m-2 py-2 w-20 ${
                     selectedButton === 'foul' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
@@ -184,8 +184,20 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     }`}><b>{countFoul}</b></p>
                 </Button>
                 <Button
+                    onClick={() => handleButtonClick('turnover')}
+                    className={`bg-transparent px-4 m-2 py-2 w-20 ${
+                    selectedButton === 'turnover' ? 'bg-batra-400 text-white' : ''
+                    }`}
+                >
+                    TO
+                    <p  className={`p-1 ${
+                    selectedButton === 'turnover' ? 'text-yellow-400' : ''
+                    }`}><b>{countTurnover}</b></p>
+                </Button>
+                
+                <Button
                     onClick={() => handleButtonClick('block')}
-                    className={`bg-gray-300 m-2 px-4 py-2 ${
+                    className={`bg-transparent px-4 m-2 py-2 w-20 row-start-1 ${
                     selectedButton === 'block' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
@@ -196,7 +208,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('assist')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
+                    className={`bg-transparent px-4 m-2 py-2 w-20 ${
                     selectedButton === 'assist' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
@@ -207,7 +219,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('steal')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
+                    className={`bg-transparent px-4 m-2 py-2 w-20 ${
                     selectedButton === 'steal' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
@@ -216,20 +228,10 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     selectedButton === 'steal' ? 'text-yellow-400' : ''
                     }`}><b>{countSteal}</b></p>
                 </Button>
-                <Button
-                    onClick={() => handleButtonClick('turnover')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
-                    selectedButton === 'turnover' ? 'bg-batra-400 text-white' : ''
-                    }`}
-                >
-                    TO
-                    <p  className={`p-1 ${
-                    selectedButton === 'turnover' ? 'text-yellow-400' : ''
-                    }`}><b>{countTurnover}</b></p>
-                </Button>
+                
                 <Button
                     onClick={() => handleButtonClick('offReb')}
-                    className={`bg-gray-300 m-2 px-4 py-2 ${
+                    className={`bg-transparent px-4 m-2 py-2 w-20 ${
                     selectedButton === 'offReb' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
@@ -240,7 +242,7 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                 </Button>
                 <Button
                     onClick={() => handleButtonClick('defReb')}
-                    className={`bg-gray-300 px-4 m-2 py-2 ${
+                    className={`bg-transparent px-4 m-2 py-2 w-20 ${
                     selectedButton === 'defReb' ? 'bg-batra-400 text-white' : ''
                     }`}
                 >
@@ -249,40 +251,40 @@ export default function AddOther({ performanceId, foul, block, turnover, steal, 
                     selectedButton === 'defReb' ? 'text-yellow-400' : ''
                     }`}><b>{countDefReb}</b></p>
                 </Button>
-            </div>
-
-            {openCalculator && <div className="flex items-center">
-                <p className="p-1">
+                {openCalculator && <div className="flex items-center justify-between w-20">
+                {/* <p className="p-1">
                     <b>投球數</b>
-                </p>
-                <button onClick={handleDecrement} className="p-2 m-2 bg-gray-300">
+                </p> */}
+                <button onClick={handleDecrement} className="bg-muted rounded-full w-8 h-8">
                     -
                 </button>
-                {selectedButton === "foul" && (
-                    <div className="p-4 bg-batra-100 m-2">{countFoul}</div>
+                {/* {selectedButton === "foul" && (
+                    <div className="p-4 bg-muted m-2 ">{countFoul}</div>
                 )}
                 {selectedButton === "block" && (
-                    <div className="p-4 bg-batra-100 m-2">{countBlock}</div>
+                    <div className="p-4 bg-muted m-2 ">{countBlock}</div>
                 )}
                 {selectedButton === "turnover" && (
-                    <div className="p-4 bg-batra-100 m-2">{countTurnover}</div>
+                    <div className="p-4 bg-muted m-2 ">{countTurnover}</div>
                 )}
                 {selectedButton === "steal" && (
-                    <div className="p-4 bg-batra-100 m-2">{countSteal}</div>
+                    <div className="p-4 bg-muted m-2 ">{countSteal}</div>
                 )}
                 {selectedButton === "assist" && (
-                    <div className="p-4 bg-batra-100 m-2">{countAssist}</div>
+                    <div className="p-4 bg-muted m-2 ">{countAssist}</div>
                 )}
                 {selectedButton === "defReb" && (
-                    <div className="p-4 bg-batra-100 m-2">{countDefReb}</div>
+                    <div className="p-4 bg-muted m-2 ">{countDefReb}</div>
                 )}
                 {selectedButton === "offReb" && (
-                    <div className="p-4 bg-batra-100 m-2">{countOffReb}</div>
-                )}
-                <button onClick={handleIncrement} className="p-2 m-2 bg-gray-300">
+                    <div className="p-4 bg-muted m-2 ">{countOffReb}</div>
+                )} */}
+                <button onClick={handleIncrement} className="bg-muted rounded-full w-8 h-8">
                     +
                 </button>
             </div>}
+            </div>
+
             
         </div>
     )

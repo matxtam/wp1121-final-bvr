@@ -70,39 +70,40 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
         
     
     return (
-        <div className="flex">
-            
-            <div className="flex items-center">
-            <h1>OnTime: </h1>
+        // <div className="flex">
+        <>
+        <div className="flex items-center overflow-hidden gap-1">
+        
+                <h1 className="truncate">On Time</h1>
                 <button
-                className={`rounded ${onP1Now ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP1Now ? 'bg-ring/40' : 'bg-ring/20'}  text-black-50 shadow-sm flex w-25 items-center p-1`}
                 onClick={()=>{
                     setOnP1Now(!onP1Now);
                     handleChangeOnTime(performanceId, "onP1", !onP1Now);
                 }}>P1</button>
                 <button
-                className={`rounded ${onP2Now ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP2Now ? 'bg-ring/40' : 'bg-ring/20'}  text-black-50 shadow-sm flex w-25 items-center p-1`}
                 onClick={()=>{
                     setOnP2Now(!onP2Now);
                     handleChangeOnTime(performanceId, "onP2", !onP2Now);
                     // router.refresh();
                 }}>P2</button>
                 <button
-                className={`rounded ${onP3Now ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP3Now ? 'bg-ring/40' : 'bg-ring/20'}  text-black-50 shadow-sm flex w-25 items-center p-1`}
                 onClick={()=>{
                     setOnP3Now(!onP3Now);
                     handleChangeOnTime(performanceId, "onP3", !onP3Now);
                     // router.refresh();
                 }}>P3</button>
                 <button
-                className={`rounded ${onP4Now? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded ${onP4Now? 'bg-ring/40' : 'bg-ring/20'}  text-black-50 shadow-sm flex w-25 items-center p-1`}
                 onClick={()=>{
                     setOnP4Now(!onP4Now);
                     handleChangeOnTime(performanceId, "onP4", !onP4Now);
                     // router.refresh();
                 }}>P4</button>
                 <button
-                className={`rounded ${onOtNow ? 'bg-amber-300' : 'bg-slate-50'}  text-black-50 shadow-sm flex w-25 items-center p-1 m-1`}
+                className={`rounded rounded-br-xl ${onOtNow ? 'bg-ring/40' : 'bg-ring/20'}  text-black-50 shadow-sm flex w-25 items-center p-1`}
                 onClick={()=>{
                     setOnOtNow(!onOtNow);
                     handleChangeOnTime(performanceId, "onOt", !onOtNow);
@@ -113,7 +114,7 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
                 <button
                 className={cn(
                     "rounded text-black-50 shadow-sm flex w-15 items-center p-1 m-1",
-                    nowPlay ? 'bg-rose-400' : 'bg-rose-100',
+                    nowPlay ? 'bg-rose-400' : 'bg-transparent border-2',
                 )}
                 onClick={() => {
                     // setNowPlay(!newNowPlay);
@@ -126,7 +127,9 @@ export default function OnTimeRecord({ performanceId, onP1, onP2, onP3, onP4, on
                         <Flame size={18}/>
                     </div>
                 </button>
-            </div>
+        
         </div>
+        </>
+        // </div> */}
     )
 }

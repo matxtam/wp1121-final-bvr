@@ -15,7 +15,7 @@ export default function openCalculator({ performanceId, openOrNot, handleOpenCal
             <button
             className={cn(
                 "rounded-full text-black-50 shadow-sm flex w-15 items-center p-1 m-1",
-                openOrNot ? 'bg-green-300' : 'bg-green-100',
+                openOrNot ? 'bg-blue-600' : 'bg-transparent border-2',
             )}
             onClick={() => {
                 handleOpenCalculator(performanceId, !openOrNot);

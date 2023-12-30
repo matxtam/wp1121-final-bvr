@@ -12,9 +12,10 @@ export default function FinishGame({ gameId, handleFinish}: Props) {
             <button onClick={() => {
                 handleFinish(gameId);
             }}
-            className="flex items-center justify-center w-full h-10 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
+            className="flex flex-col items-center justify-center w-full h-16 gap-1 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
             >
-                <Square size={18}/>
+                <Square size={20}/>
+                <p>finish</p>
             </button>
         </div>
     )

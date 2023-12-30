@@ -14,9 +14,9 @@ export default function StartPeriod({ gameId, handlePeriod, periodNumber }: Prop
     if(periodNumber === 4) {
         passInData = "OT"
     }
-    let nowPeriod = `Start Period ${(periodNumber+1).toString()}`;
+    let nowPeriod = `Start P${(periodNumber+1).toString()}`;
     if(periodNumber === 4) {
-        nowPeriod = "Start Period OT"
+        nowPeriod = "Start OT"
     }
     if(periodNumber === 5) {
         disabled=true
@@ -30,10 +30,11 @@ export default function StartPeriod({ gameId, handlePeriod, periodNumber }: Prop
             handlePeriod(gameId, passInData);
         }}
         disabled={disabled}
-        className="flex items-center justify-center w-full h-10 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
+        className="flex flex-col items-center justify-center w-full h-16 gap-1 rounded bg-secondary hover:bg-sky-200/80 hover:text-black transition-colors duration-300"
         >
                 {/* {nowPeriod} */}
-            <SkipForward size={18}/>
+            <SkipForward size={20}/>
+            <p>{nowPeriod}</p>
         </button>
         
     )

@@ -7,12 +7,12 @@ type Props = React.ComponentPropsWithoutRef<typeof Sw.Root>
 const Switch = React.forwardRef<HTMLInputElement, Props>(({...props}, ref) => (
    
   <Sw.Root
-    className="w-[30px] h-[16px] bg-blackA6 rounded-full relative shadow-[0_2px_6px] shadow-blackA4 focus:shadow-[0_0_0_2px] focus:shadow-black data-[state=checked]:bg-black outline-none cursor-default"
+    className="w-[34px] h-[20px] bg-background rounded-full relative data-[state=checked]:shadow-[0_1px_4px] data-[state=checked]:shadow-blackA4  data-[state=checked]:bg-muted outline-none cursor-default border-2 border-ring"
     // id="airplane-mode"
     // style={{ '-webkit-tap-highlight-color': 'rgba(0, 0, 0, 0)' }}
     {...props}
   >
-    <Sw.Thumb className="block w-[14px] h-[12px] bg-white rounded-full shadow-[0_2px_2px] shadow-blackA4 transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[16px]" />
+    <Sw.Thumb className="block w-[14px] h-[14px] bg-white rounded-full shadow-[0_2px_2px] shadow-black transition-transform translate-x-0.5 duration-100 will-change-transform data-[state=checked]:translate-x-[15px]" />
   </Sw.Root>
 )
 );

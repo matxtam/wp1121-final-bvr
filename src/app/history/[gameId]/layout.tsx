@@ -1,6 +1,6 @@
-export default function HomePageLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex flex-row">
+    <main className="flex flex-row overflow-hidden h-full">
       {children}
     </main>
   );

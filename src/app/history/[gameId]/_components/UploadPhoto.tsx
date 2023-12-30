@@ -69,7 +69,7 @@ export default function EditGameButton({ gameId, photo }: EditGameButtonProps) {
                     <Input
                         type="file"
                         accept="image/*"
-                        className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded-md border-black-600"
+                        className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded border-black-600"
                         onChange={handleFileChange}
                     />
                     </div>

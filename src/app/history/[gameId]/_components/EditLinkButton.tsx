@@ -10,14 +10,15 @@ import {
     DialogTrigger,
     } from "@/components/ui/dialog"
 
-import type { User } from "@/lib/types/db";
+import { User } from "@/lib/types/db";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from "@/components/ui/label"
-import { updateUser } from "../actions";
+// import { updateUser } from "../actions";
 
+import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 type EditUserButtonProps = {
@@ -57,7 +58,7 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
     try {
       // await updateUser( UserId, editUsername, editUserphoto, editUsernumber, editUserposition);
       console.log("editusername", editUsername);
-      await updateUser( editUsername, editUserphoto, editUserfbLink, editUserigLink, editUserytLink, editUsercloudLink);
+      // await updateUser( editUsername, editUserphoto, editUserfbLink, editUserigLink, editUserytLink, editUsercloudLink);
 
     } catch (error) {
       console.log("error is", error);
@@ -81,9 +82,7 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          Edit 
-        </Button>
+        <Button variant="outline">Edit</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -127,6 +126,7 @@ export default function EditUserButton({ photo, name, fbLink, igLink, ytLink, cl
                     type="file"
                     accept="image/*"
                     className="file:bg-black-50 file:text-black-700 hover:file:bg-black-100 file:border file:border-solid file:border-black-700 file:rounded border-black-600"
+
                     // onChange={(e) => setEditPlayerphoto(e.target.value)}
                     onChange={handleFileChange}
                   />
